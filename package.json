@@ -1,0 +1,34 @@
+{
+  "name": "root",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Root project for rcp and plan",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "pnpm run --filter @rcp-and-plan/fe dev "
+  },
+  "keywords": [],
+  "author": "Dani Garcia",
+  "license": "ISC",
+  "engines": {
+    "node": ">=20.11.1"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
+    "@types/node": "20.11.25",
+    "@typescript-eslint/eslint-plugin": "7.2.0",
+    "eslint": "8.57.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-import": "2.25.2",
+    "eslint-plugin-n": "16.0.0",
+    "eslint-plugin-promise": "6.0.0",
+    "eslint-plugin-simple-import-sort": "12.0.0",
+    "prettier": "3.2.5",
+    "ts-node": "10.9.2",
+    "typescript": "5.4.2"
+  },
+  "dependencies": {
+    "axios": "^1.6.8"
+  }
+}
