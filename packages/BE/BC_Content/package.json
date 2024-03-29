@@ -1,5 +1,5 @@
 {
-  "name": "@rcp-and-plan/bc_social",
+  "name": "@rcp-and-plan/bc_content",
   "version": "0.0.1",
   "description": "",
   "license": "",
@@ -12,12 +12,13 @@
     "express": "4.18.3",
     "glob": "^7.2.0",
     "helmet": "^4.6.0",
+    "mysql2": "^3.9.3",
     "node-dependency-injection": "3.1.2",
     "node-dependency-injection-express-middleware": "^1.2.2",
     "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.1",
     "sequelize-typescript": "^2.1.6",
-    "swagger-autogen": "^2.23.7",
+    "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "tsconfig-paths": "^4.2.0"
   },

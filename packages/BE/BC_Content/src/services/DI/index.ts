@@ -23,15 +23,15 @@ export default class Container {
     );
     await autowire.process();
 
-    const { default: ExampleRoute } = await import(
-      "@services/routes/example.route"
+    const { default: RecipeRouter } = await import(
+      "@services/routes/recipes.route"
     );
-    const { ExampleApplication } = await import(
-      "@application/example/ExampleApplication"
+    const { RecipeQueries } = await import(
+      "@application/queries/recipes/IRecipeQueries"
     );
 
-    this._container.register("ExampleRoute", ExampleRoute);
-    this._container.register("ExampleApplication", ExampleApplication);
+    this._container.register("RecipeRouter", RecipeRouter);
+    this._container.register("RecipeQueries", RecipeQueries);
   }
 
   public get container(): ContainerBuilder {

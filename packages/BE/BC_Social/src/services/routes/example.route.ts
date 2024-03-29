@@ -10,6 +10,12 @@ class ExampleRoute {
     this.routes();
   }
 
+  /**
+   * Sets up the routes for the ExampleRoute class.
+   *
+   * This method configures the routes for the ExampleRoute class by assigning the appropriate request handlers to the corresponding HTTP methods and paths.
+   *
+   */
   private routes(): void {
     this.router.get("/", this.getExample);
     this.router.get("/:id", this.getExampleById);
