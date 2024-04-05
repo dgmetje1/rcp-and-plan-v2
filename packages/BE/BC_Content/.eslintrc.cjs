@@ -1,8 +1,19 @@
 module.exports = {
-  extends: ["../../eslintrc.cjs"],
+  extends: ["../../../.eslintrc.json"],
   rules: {
     "no-console": "warn",
     "@typescript-eslint/no-unsafe-argument": "warn",
+    "simple-import-sort/imports": [
+      "warn",
+      {
+        groups: [
+          ["^\\u0000", "^node:", "^@\\w", "^[^.]"],
+          ["^@/(application|domain|infrastructure|service|dtos)(.*|$)*"],
+          ["^\\."],
+        ],
+      },
+    ],
+    "simple-import-sort/exports": "error",
   },
   overrides: [
     {

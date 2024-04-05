@@ -1,5 +1,5 @@
 import { SqlBuilder } from "@infrastructure/common/sqlBuilder";
-import { DataTypes, Optional } from "sequelize";
+import { DataTypes } from "sequelize";
 import {
   AutoIncrement,
   Column,
@@ -7,6 +7,7 @@ import {
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
+
 import { RecipeAttributes, RecipeCreationAttributes } from "./types";
 
 const { db: sequelize } = new SqlBuilder(
@@ -18,7 +19,7 @@ export class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataTypes.INTEGER)
-  recipe_id: number;
+  declare id: number;
 
   @Column(DataTypes.STRING)
   title: string;
@@ -32,7 +33,7 @@ export class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> {
   @Column(DataTypes.STRING)
   header_img: string;
 
-  @Column(DataTypes.UUIDV4)
+  @Column(DataTypes.STRING)
   unique_id: string;
 
   @Column(DataTypes.STRING(3))

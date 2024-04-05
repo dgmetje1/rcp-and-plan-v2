@@ -1,7 +1,7 @@
 import { Optional } from "sequelize";
 
 export interface RecipeAttributes {
-  recipe_id: number;
+  id: number;
   title: string;
   description: string;
   thumbnail_url: string;
@@ -17,4 +17,4 @@ export interface RecipeAttributes {
 }
 
 export interface RecipeCreationAttributes
-  extends Optional<RecipeAttributes, "recipe_id"> {}
+  extends Optional<RecipeAttributes, "id"> {}

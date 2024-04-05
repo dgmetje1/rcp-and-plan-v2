@@ -1,11 +1,12 @@
-import express from "express";
-import swaggerUi from "swagger-ui-express";
-import compress from "compression";
-import helmet from "helmet";
 import "dotenv/config";
+import compress from "compression";
+import cors from "cors";
+import express from "express";
+import helmet from "helmet";
+import swaggerUi from "swagger-ui-express";
 
-import swaggerDocument from "./documentation.json";
 import Container from "./DI";
+import swaggerDocument from "./documentation.json";
 
 const PORT = process.env.PORT || 3000;
 
@@ -22,6 +23,7 @@ class App {
   private config(): void {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
+    this.app.use(cors());
     this.app.use(helmet.xssFilter());
     this.app.use(helmet.noSniff());
     this.app.use(helmet.hidePoweredBy());

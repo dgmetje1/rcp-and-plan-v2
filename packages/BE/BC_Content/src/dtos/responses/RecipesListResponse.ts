@@ -1,5 +1,5 @@
 export type RecipesListResponse = {
-  recipe_id: number;
+  id: number;
   title: string;
   thumbnail_url: string;
 }[];

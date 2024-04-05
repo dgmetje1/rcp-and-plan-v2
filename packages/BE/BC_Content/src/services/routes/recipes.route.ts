@@ -1,6 +1,6 @@
 import { IRecipeQueries } from "@application/queries/recipes/IRecipeQueries";
 import Container from "@services/DI";
-import { Application, Router, type Request, type Response } from "express";
+import { Application, type Request, type Response, Router } from "express";
 
 /**
  * @openapi

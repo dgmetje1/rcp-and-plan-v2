@@ -1,6 +1,6 @@
 import {
-  ContainerBuilder,
   Autowire,
+  ContainerBuilder,
   ServiceFile,
 } from "node-dependency-injection";
 import path from "path";

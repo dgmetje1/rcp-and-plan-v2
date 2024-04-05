@@ -1,4 +1,4 @@
 export {
-  RecipeQueries,
   type IRecipeQueries,
+  RecipeQueries,
 } from "@infrastructure/recipes/queries";
