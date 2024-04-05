@@ -1,10 +1,14 @@
 import { Box, Typography } from "@mui/material";
 
+import { useGetRecipes } from "@/queries/recipes";
+
 import RecipeCard from "../RecipeCard";
 import StyledCategory from "./styled";
 import { CategoryProps } from "./types";
 
 const Category = ({ title }: CategoryProps) => {
+  const { data = [] } = useGetRecipes();
+
   return (
     <Box>
       {!!title && (
@@ -13,19 +17,9 @@ const Category = ({ title }: CategoryProps) => {
         </Typography>
       )}
       <StyledCategory>
-        <RecipeCard />
-        <RecipeCard />
-        <RecipeCard />
-        <RecipeCard />
-        <RecipeCard />
-        <RecipeCard />
-        <RecipeCard />
-        <RecipeCard />
-        <RecipeCard />
-        <RecipeCard />
-        <RecipeCard />
-        <RecipeCard />
-        <RecipeCard />
+        {data.map(value => (
+          <RecipeCard {...value} />
+        ))}
       </StyledCategory>
     </Box>
   );

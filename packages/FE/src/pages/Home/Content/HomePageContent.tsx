@@ -7,9 +7,9 @@ import { useGetRecipes } from "@/queries/recipes";
 import HomePageRecipePreviewCard from "../RecipePreviewCard";
 
 const HomePageContent = React.memo(() => {
-  const { data, isLoading } = useGetRecipes();
-  console.log(data);
-  console.log(isLoading);
+  const { isLoading } = useGetRecipes();
+
+  if (isLoading) return null;
   return (
     <Container
       maxWidth="xl"

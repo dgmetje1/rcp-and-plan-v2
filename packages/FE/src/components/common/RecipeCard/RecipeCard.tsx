@@ -1,12 +1,14 @@
-import { faker } from "@faker-js/faker";
 import { Typography } from "@mui/material";
 
-import StyledRecipeCard, { StyledRecipeCardOverlay } from "./styled";
+import config from "@/config";
 
-const RecipeCard = () => {
+import StyledRecipeCard, { StyledRecipeCardOverlay } from "./styled";
+import { RecipeCardProps } from "./types";
+
+const RecipeCard = ({ title, thumbnail_url }: RecipeCardProps) => {
   return (
     <StyledRecipeCard>
-      <img src={faker.image.urlLoremFlickr()} width="100%" />
+      <img src={`${config.cdnUrl}/${thumbnail_url}`} width="100%" />
       <StyledRecipeCardOverlay>
         <Typography
           sx={{
@@ -18,7 +20,7 @@ const RecipeCard = () => {
           }}
           variant="body2"
         >
-          {faker.lorem.words(4)}
+          {title}
         </Typography>
       </StyledRecipeCardOverlay>
     </StyledRecipeCard>

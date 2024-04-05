@@ -14,6 +14,7 @@ const config: Config = {
   environment: definedEnvironment,
   webUrl: "url",
   apiUrl: "url",
+  cdnUrl: "url",
   auth0Domain: "url",
   auth0ClientId: "id",
 };
@@ -22,6 +23,7 @@ const envConfig: Partial<Config> = omitBy(
   {
     webUrl: get(import.meta.env, "VITE_WEB_URL"),
     apiUrl: get(import.meta.env, "VITE_API_URL"),
+    cdnUrl: get(import.meta.env, "VITE_CDN_URL"),
     auth0Domain: get(import.meta.env, "VITE_AUTH0_DOMAIN"),
     auth0ClientId: get(import.meta.env, "VITE_AUTH0_CLIENT_ID"),
   },

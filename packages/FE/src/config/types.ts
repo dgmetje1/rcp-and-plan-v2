@@ -11,6 +11,7 @@ export type Config = {
   environment: Environment;
   webUrl: string;
   apiUrl: string;
+  cdnUrl: string;
   auth0Domain: string;
   auth0ClientId: string;
 };
