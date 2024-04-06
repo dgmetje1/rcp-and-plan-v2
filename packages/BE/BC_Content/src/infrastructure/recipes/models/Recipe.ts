@@ -22,40 +22,40 @@ export class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> {
   declare id: number;
 
   @Column(DataTypes.STRING)
-  title: string;
+  declare title: string;
 
   @Column(DataTypes.TEXT)
-  description: string;
+  declare description: string;
 
   @Column(DataTypes.STRING)
-  thumbnail_url: string;
+  declare thumbnail_url: string;
 
   @Column(DataTypes.STRING)
-  header_img: string;
+  declare header_img: string;
 
   @Column(DataTypes.STRING)
-  unique_id: string;
+  declare unique_id: string;
 
   @Column(DataTypes.STRING(3))
-  language: string;
+  declare language: string;
 
   @Column(DataTypes.INTEGER)
-  difficulty: number;
+  declare difficulty: number;
 
   @Column(DataTypes.INTEGER)
-  time: number;
+  declare time: number;
 
   @Column(DataTypes.INTEGER)
-  portions: number;
+  declare portions: number;
 
   @Column(DataTypes.TINYINT)
-  visibility: number;
+  declare visibility: number;
 
   @Column(DataTypes.STRING)
-  author: string;
+  declare author: string;
 
   @Column(DataTypes.DATE)
-  publication_date: Date;
+  declare publication_date: Date;
 }
 
 sequelize.addModels([Recipe]);

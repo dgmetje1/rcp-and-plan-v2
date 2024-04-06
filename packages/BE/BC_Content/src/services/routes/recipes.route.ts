@@ -16,12 +16,42 @@ import { Application, type Request, type Response, Router } from "express";
  *   RecipeListResponse:
  *     type: object
  *     properties:
- *       recipe_id:
+ *       id:
  *         type: integer
  *       title:
  *         type: string
- *       thumbnail_url:
+ *       thumbnailUrl:
  *         type: string
+ *   RecipeResponse:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       title:
+ *         type: string
+ *       description:
+ *         type: string
+ *       thumbnailUrl:
+ *         type: string
+ *       headerImg:
+ *         type: string
+ *       uniqueId:
+ *         type: string
+ *       language:
+ *         type: string
+ *       difficulty:
+ *         type: integer
+ *       time:
+ *         type: integer
+ *       portions:
+ *         type: integer
+ *       visibility:
+ *         type: integer
+ *       author:
+ *         type: string
+ *       publicationDate:
+ *         type: string
+ *         format: date-time
  */
 
 class RecipesRouter {
@@ -44,6 +74,7 @@ class RecipesRouter {
    */
   private routes(): void {
     this.router.get("/", this.getRecipes);
+    this.router.get("/:id", this.getRecipeById);
   }
 
   /**
@@ -60,13 +91,38 @@ class RecipesRouter {
    *               $ref: '#/components/schemas/RecipesListResponse'
    */
   private async getRecipes(req: Request, res: Response) {
-    //#swagger.tags = ["Recipes"]
-
     const { container } = await Container.getInstance();
 
     const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
-    const exampleData = await recipesQueries.getData();
-    res.send(exampleData);
+    const response = await recipesQueries.getData();
+    res.send(response);
+  }
+
+  /**
+   * @openapi
+   * /recipes/{id}:
+   *   get:
+   *     summary: Returns a recipe detail.
+   *     tags: [Recipes]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         type: integer
+   *         required: true
+   *         description: Numeric ID of the user to get.
+   *     responses:
+   *       200:
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/RecipeResponse'
+   */
+  private async getRecipeById(req: Request, res: Response) {
+    const { container } = await Container.getInstance();
+
+    const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
+    const response = await recipesQueries.getDataById(+req.params.id);
+    res.send(response);
   }
 }
 
