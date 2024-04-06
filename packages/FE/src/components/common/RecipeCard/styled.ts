@@ -1,6 +1,36 @@
 import { Box, styled } from "@mui/material";
 
-const StyledRecipeCard = styled(Box)``;
+export const StyledRecipeCardOverlay = styled(Box)`
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(4px);
+`;
+
+StyledRecipeCardOverlay.defaultProps = {
+  display: "flex",
+  position: "absolute",
+  bottom: "-1px",
+  width: "100%",
+  maxWidth: 250,
+  p: 1,
+};
+
+const StyledRecipeCard = styled(Box)`
+  a {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    color: inherit;
+  }
+
+  a:hover .overlay {
+    transform: scaleY(1.05);
+  }
+
+  img {
+    object-fit: cover;
+  }
+`;
 
 StyledRecipeCard.defaultProps = {
   display: "flex",
@@ -13,16 +43,3 @@ StyledRecipeCard.defaultProps = {
 };
 
 export default StyledRecipeCard;
-
-export const StyledRecipeCardOverlay = styled(Box)`
-  background-color: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(4px);
-`;
-
-StyledRecipeCardOverlay.defaultProps = {
-  display: "flex",
-  position: "absolute",
-  bottom: "-1px",
-  width: "100%",
-  p: 1,
-};

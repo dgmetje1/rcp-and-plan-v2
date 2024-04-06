@@ -6,9 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "@tanstack/react-router";
 
 import config from "@/config";
-import router from "@/config/routes";
-
-import themeOptions from "./config/theme";
+import getRouter from "@/config/routing";
+import themeOptions from "@/config/theme";
 
 const theme = createTheme(themeOptions);
 
@@ -20,21 +19,32 @@ const auth0configProps: Auth0ProviderOptions = {
   },
 };
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-    },
-  },
-});
+// const queryClient = new QueryClient({
+//   defaultOptions: {
+//     queries: {
+//       staleTime: 5 * 60 * 1000, // 5 minutes
+//     },
+//   },
+// });
+
+const queryClient = new QueryClient();
+const router = getRouter(queryClient);
+
+// Register things for typesafety
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
 
 const Main: FC = () => (
   <ThemeProvider theme={theme}>
     <CssBaseline />
     <GlobalStyles
       styles={{
+        "*": { boxSizing: "border-box" },
         body: {
-          "-ms-overflow-style": "none",
+          msOverflowStyle: "none",
           scrollbarWidth: "none",
         },
         "::-webkit-scrollbar": {

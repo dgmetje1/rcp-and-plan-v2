@@ -1,13 +1,5 @@
 import { Api } from "@/lib/api";
-import { useApiQuery } from "@/middleware/api";
-import { RecipeList } from "@/types/recipe";
+import { Recipe, RecipeList } from "@/types/recipe";
 
-import { getRecipesKeys } from "./keys";
-
-export const useGetRecipes = () => {
-  const { key, queryKey } = getRecipesKeys();
-  const getRecipes = async () => {
-    return await new Api().get<RecipeList>("recipes");
-  };
-  return useApiQuery(key, queryKey, getRecipes);
-};
+export const getRecipes = () => new Api().get<RecipeList>("recipes");
+export const getRecipe = (id: string) => new Api().get<Recipe>(`recipes/${id}`);

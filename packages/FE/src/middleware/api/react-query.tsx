@@ -3,6 +3,8 @@ import {
   QueryKey,
   UndefinedInitialDataOptions,
   useQuery,
+  useSuspenseQuery,
+  UseSuspenseQueryOptions,
 } from "@tanstack/react-query";
 
 export const useApiQuery = <T,>(
@@ -13,4 +15,12 @@ export const useApiQuery = <T,>(
 ) => {
   console.log(actionKey);
   return useQuery({ queryKey, queryFn, ...queryConfig });
+};
+
+export const useSuspenseApiQuery = <T, Q extends QueryKey>(
+  actionKey: string,
+  queryOptions: UseSuspenseQueryOptions<T, Error, T, Q>,
+) => {
+  console.log(actionKey);
+  return useSuspenseQuery(queryOptions);
 };

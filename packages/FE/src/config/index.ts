@@ -1,4 +1,5 @@
 import { get, isUndefined, omitBy } from "@/lib/imports/lodash";
+
 import { Config, Environment, Environments } from "./types";
 
 const definedEnvironment = get(import.meta.env, "VITE_ENVIRONMENT", "");
