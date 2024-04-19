@@ -1,6 +1,7 @@
+import { Application, type Request, type Response, Router } from "express";
+
 import { IRecipeQueries } from "@application/queries/recipes/IRecipeQueries";
 import Container from "@services/DI";
-import { Application, type Request, type Response, Router } from "express";
 
 /**
  * @openapi
@@ -52,6 +53,22 @@ import { Application, type Request, type Response, Router } from "express";
  *       publicationDate:
  *         type: string
  *         format: date-time
+ *   RecipeDailyResponse:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       title:
+ *         type: string
+ *       thumbnailUrl:
+ *         type: string
+ *       time:
+ *         type: integer
+ *       author:
+ *         type: string
+ *       publicationDate:
+ *         type: string
+ *         format: date-time
  */
 
 class RecipesRouter {
@@ -74,6 +91,7 @@ class RecipesRouter {
    */
   private routes(): void {
     this.router.get("/", this.getRecipes);
+    this.router.get("/daily", this.getDailyRecipe);
     this.router.get("/:id", this.getRecipeById);
   }
 
@@ -98,6 +116,26 @@ class RecipesRouter {
     res.send(response);
   }
 
+  /**
+   * @openapi
+   * /recipes/daily:
+   *   get:
+   *     summary: Returns a daily highlighted recipe.
+   *     tags: [Recipes]
+   *     responses:
+   *       200:
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/RecipeDailyResponse'
+   */
+  private async getDailyRecipe(req: Request, res: Response) {
+    const { container } = await Container.getInstance();
+
+    const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
+    const response = await recipesQueries.getDailyData();
+    res.send(response);
+  }
   /**
    * @openapi
    * /recipes/{id}:

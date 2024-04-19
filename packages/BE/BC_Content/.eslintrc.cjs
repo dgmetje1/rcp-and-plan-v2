@@ -8,7 +8,7 @@ module.exports = {
       {
         groups: [
           ["^\\u0000", "^node:", "^@\\w", "^[^.]"],
-          ["^@/(application|domain|infrastructure|service|dtos)(.*|$)*"],
+          ["^@(application|domain|infrastructure|service|dtos)(.*|$)*"],
           ["^\\."],
         ],
       },

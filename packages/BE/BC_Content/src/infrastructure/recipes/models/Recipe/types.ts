@@ -1,5 +1,7 @@
 import { Optional } from "sequelize";
 
+import { Category } from "../Category";
+
 export interface RecipeAttributes {
   id: number;
   title: string;
@@ -14,6 +16,7 @@ export interface RecipeAttributes {
   visibility: number;
   author: string;
   publication_date: Date;
+  categories: Category[];
 }
 
 export interface RecipeCreationAttributes

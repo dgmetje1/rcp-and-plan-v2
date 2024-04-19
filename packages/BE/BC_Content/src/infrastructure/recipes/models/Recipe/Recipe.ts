@@ -1,18 +1,16 @@
-import { SqlBuilder } from "@infrastructure/common/sqlBuilder";
 import { DataTypes } from "sequelize";
 import {
   AutoIncrement,
+  BelongsToMany,
   Column,
   Model,
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
 
+import { Category } from "../Category";
+import { RecipeCategory } from "../RecipeCategory";
 import { RecipeAttributes, RecipeCreationAttributes } from "./types";
-
-const { db: sequelize } = new SqlBuilder(
-  process.env.CONNECTION_STRING_CONTENT!,
-);
 
 @Table({ tableName: "recipes" })
 export class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> {
@@ -56,6 +54,7 @@ export class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> {
 
   @Column(DataTypes.DATE)
   declare publication_date: Date;
-}
 
-sequelize.addModels([Recipe]);
+  @BelongsToMany(() => Category, () => RecipeCategory)
+  declare categories: Category[];
+}
