@@ -6,12 +6,12 @@ export const StyledRecipeCardOverlay = styled(Box)`
 `;
 
 StyledRecipeCardOverlay.defaultProps = {
+  bottom: 0,
   display: "flex",
   position: "absolute",
-  bottom: "-1px",
-  width: "100%",
   maxWidth: 250,
   p: 1,
+  width: "100%",
 };
 
 const StyledRecipeCard = styled(Box)`
@@ -23,8 +23,13 @@ const StyledRecipeCard = styled(Box)`
     color: inherit;
   }
 
-  a:hover .overlay {
-    transform: scaleY(1.05);
+  a .overlay .MuiTypography-root {
+    transition: all 150ms ease-in-out;
+    color: #333;
+  }
+
+  a:hover .overlay .MuiTypography-root {
+    font-weight: 600;
   }
 
   img {
@@ -38,7 +43,7 @@ StyledRecipeCard.defaultProps = {
   flex: "0 0 250px",
   maxWidth: 250,
   maxHeight: 250,
-  borderRadius: 0.5,
+  borderRadius: 1,
   overflow: "hidden",
 };
 

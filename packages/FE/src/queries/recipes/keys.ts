@@ -6,6 +6,12 @@ export const getRecipesKeys = () => {
 
   return { key, queryKey };
 };
+export const getDailyRecipeKeys = () => {
+  const queryKey = [API_ACTION_BASE, "getDailyRecipe"];
+  const key = queryKey.join("/");
+
+  return { key, queryKey };
+};
 export const getRecipeKeys = (id: string) => {
   const baseQueryKey = [API_ACTION_BASE, "getRecipe"];
   const key = baseQueryKey.join("/");

@@ -6,11 +6,11 @@ import config from "@/config";
 import StyledRecipeCard, { StyledRecipeCardOverlay } from "./styled";
 import { RecipeCardProps } from "./types";
 
-const RecipeCard = ({ id, title, thumbnail_url }: RecipeCardProps) => {
+const RecipeCard = ({ id, title, thumbnailUrl }: RecipeCardProps) => {
   return (
     <StyledRecipeCard>
       <Link params={{ id: id.toString() }} to="/recipe/$id">
-        <img src={`${config.cdnUrl}/${thumbnail_url}`} width="100%" />
+        <img src={`${config.cdnUrl}/${thumbnailUrl}`} width="100%" />
         <StyledRecipeCardOverlay className="overlay">
           <Typography
             sx={{
