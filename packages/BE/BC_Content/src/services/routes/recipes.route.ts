@@ -69,6 +69,48 @@ import Container from "@services/DI";
  *       publicationDate:
  *         type: string
  *         format: date-time
+ *       difficulty:
+ *         type: integer
+ *       portions:
+ *         type: integer
+ *       categories:
+ *         type: array
+ *         items:
+ *            $ref: '#/components/schemas/RecipeCategoryResponse'
+ *       ingredients:
+ *         type: array
+ *         items:
+ *            $ref: '#/components/schemas/RecipeIngredientResponse'
+ *   RecipeCategoryResponse:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       name:
+ *         type: string
+ *   RecipeIngredientResponse:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       name:
+ *         type: string
+ *       singularName:
+ *         type: string
+ *       quantity:
+ *         type: integer
+ *       optional:
+ *         type: boolean
+ *       unit:
+ *         type: object
+ *         properties:
+ *            id:
+ *              type: integer
+ *            name:
+ *              type: string
+ *            shortName:
+ *              type: string
+ *
  */
 
 class RecipesRouter {

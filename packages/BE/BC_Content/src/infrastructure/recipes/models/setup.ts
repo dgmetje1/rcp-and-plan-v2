@@ -1,15 +1,31 @@
 import { SqlBuilder } from "@infrastructure/common/sqlBuilder";
 
 import { Category } from "./Category";
+import { Ingredient } from "./Ingredient";
 import { Recipe } from "./Recipe";
 import { RecipeCategory } from "./RecipeCategory";
+import { RecipeIngredient } from "./RecipeIngredient";
+import { Unit } from "./Unit";
 
-export const setupModels = () => {
+export const setupModels = async () => {
   const { db: sequelize } = new SqlBuilder(
     process.env.CONNECTION_STRING_CONTENT!,
   );
 
-  sequelize.addModels([RecipeCategory, Recipe, Category]);
-  RecipeCategory.sync();
-  Category.sync();
+  sequelize.addModels([
+    RecipeCategory,
+    Recipe,
+    Category,
+    RecipeIngredient,
+    Ingredient,
+    Unit,
+  ]);
+
+  await Promise.all([
+    Recipe.sync(),
+    RecipeCategory.sync(),
+    RecipeIngredient.sync(),
+    Ingredient.sync(),
+    Unit.sync(),
+  ]);
 };

@@ -19,15 +19,14 @@ const auth0configProps: Auth0ProviderOptions = {
   },
 };
 
-// const queryClient = new QueryClient({
-//   defaultOptions: {
-//     queries: {
-//       staleTime: 5 * 60 * 1000, // 5 minutes
-//     },
-//   },
-// });
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    },
+  },
+});
 
-const queryClient = new QueryClient();
 const router = getRouter(queryClient);
 
 // Register things for typesafety

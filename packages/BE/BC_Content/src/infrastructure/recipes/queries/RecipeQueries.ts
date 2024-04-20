@@ -3,6 +3,8 @@ import { RecipesDailyResponse } from "@dtos/responses/RecipesDailyResponse";
 import { RecipesListResponse } from "@dtos/responses/RecipesListResponse";
 import { Category, Recipe } from "@infrastructure/recipes/models";
 
+import { Ingredient } from "../models/Ingredient";
+import { Unit } from "../models/Unit";
 import { IRecipeQueries } from "./types";
 
 export class RecipeQueries implements IRecipeQueries {
@@ -61,7 +63,13 @@ export class RecipeQueries implements IRecipeQueries {
         "portions",
       ],
       where: { visibility: 1 },
-      include: [{ model: Category, required: true }],
+      include: [
+        { model: Category, required: true },
+        {
+          model: Ingredient,
+          required: true,
+        },
+      ],
     });
     if (!result) throw new Error("Recipe not found");
 
@@ -78,6 +86,29 @@ export class RecipeQueries implements IRecipeQueries {
         id: category.dataValues.id,
         name: category.dataValues.name,
       })),
+      ingredients: await Promise.all(
+        result.dataValues.ingredients.map(async ingredient => {
+          const unit = await Unit.findOne({
+            where: {
+              id: ingredient.RecipeIngredient.unit_id,
+              language: "ca",
+            },
+            rejectOnEmpty: true,
+          });
+          return {
+            id: ingredient.dataValues.id,
+            name: ingredient.dataValues.name,
+            singularName: ingredient.dataValues.singular_name,
+            quantity: ingredient.RecipeIngredient.dataValues.quantity,
+            optional: ingredient.RecipeIngredient.dataValues.optional,
+            units: {
+              id: unit.dataValues.id,
+              name: unit.dataValues.name,
+              shortName: unit.dataValues.short_name,
+            },
+          };
+        }),
+      ),
     };
 
     return response;

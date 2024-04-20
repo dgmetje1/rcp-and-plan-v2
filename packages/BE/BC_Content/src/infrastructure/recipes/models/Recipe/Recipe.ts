@@ -9,7 +9,9 @@ import {
 } from "sequelize-typescript";
 
 import { Category } from "../Category";
+import { Ingredient } from "../Ingredient";
 import { RecipeCategory } from "../RecipeCategory";
+import { RecipeIngredient } from "../RecipeIngredient";
 import { RecipeAttributes, RecipeCreationAttributes } from "./types";
 
 @Table({ tableName: "recipes" })
@@ -57,4 +59,9 @@ export class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> {
 
   @BelongsToMany(() => Category, () => RecipeCategory)
   declare categories: Category[];
+
+  @BelongsToMany(() => Ingredient, () => RecipeIngredient)
+  declare ingredients: Array<
+    Ingredient & { RecipeIngredient: RecipeIngredient }
+  >;
 }
