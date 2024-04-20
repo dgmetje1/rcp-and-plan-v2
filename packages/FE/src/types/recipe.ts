@@ -1,4 +1,5 @@
 import { Category } from "./category";
+import { Ingredient } from "./ingredients";
 
 export enum RecipeDifficulty {
   EASY = 1,
@@ -21,6 +22,7 @@ export type Recipe = {
   author: string;
   publicationDate: Date;
   categories: Category[];
+  ingredients: Ingredient[];
 };
 
 export type RecipeListItem = Pick<Recipe, "id" | "title" | "thumbnailUrl">;
@@ -38,4 +40,5 @@ export type DailyRecipe = Pick<
   | "difficulty"
   | "portions"
   | "categories"
+  | "ingredients"
 >;

@@ -1,6 +1,6 @@
 import React from "react";
-import { faker } from "@faker-js/faker";
 import { Box, Chip, Grid, Paper, Typography } from "@mui/material";
+import { Link } from "@tanstack/react-router";
 
 import config from "@/config";
 import { printTime } from "@/lib/parsers/time";
@@ -43,12 +43,16 @@ const HomePageRecipePreviewCard = () => {
           sx={{ img: { borderRadius: 2, boxShadow: "2px 1px 3px #aaa" } }}
           xs={4}
         >
-          <img src={`${config.cdnUrl}/${recipe.thumbnailUrl}`} width="100%" />
+          <Link params={{ id: recipe.id.toString() }} to="/recipe/$id">
+            <img src={`${config.cdnUrl}/${recipe.thumbnailUrl}`} width="100%" />
+          </Link>
         </Grid>
         <Grid display="flex" flexDirection="column" gap={2} item xs={8}>
-          <Typography fontWeight={600} variant="h5">
-            {recipe.title}
-          </Typography>
+          <Link params={{ id: recipe.id.toString() }} to="/recipe/$id">
+            <Typography fontWeight={600} variant="h5">
+              {recipe.title}
+            </Typography>
+          </Link>
           <Grid container spacing={2}>
             <Grid display="flex" flexDirection="column" gap={2} item xs>
               <Box display="flex" gap={1}>
@@ -58,7 +62,7 @@ const HomePageRecipePreviewCard = () => {
               </Box>
               <Box display="flex" flexDirection="column" rowGap={2}>
                 {CARD_FIELDS.map(field => (
-                  <Typography>
+                  <Typography key={field.key}>
                     <strong>{field.key}: </strong>
                     {field.getValue(recipe)}
                   </Typography>
@@ -70,16 +74,18 @@ const HomePageRecipePreviewCard = () => {
                 Ingredients
               </Typography>
               <Box component="ul" display="flex" flexDirection="column">
-                {Array(6)
-                  .fill("")
-                  .map(() => (
-                    <Box component="li">
-                      <Typography>
-                        {faker.number.int({ min: 1, max: 400 })} of{" "}
-                        {faker.lorem.word()}
-                      </Typography>
-                    </Box>
-                  ))}
+                {recipe.ingredients.slice(0, 5).map(ingredient => (
+                  <Box component="li" key={ingredient.id}>
+                    <Typography>
+                      {`${ingredient.quantity} ${ingredient.units.shortName} de ${ingredient.name.toLocaleLowerCase()}`}
+                    </Typography>
+                  </Box>
+                ))}
+                {recipe.ingredients.length > 5 && (
+                  <Box component="li">
+                    <Typography fontWeight={600}>...</Typography>
+                  </Box>
+                )}
               </Box>
             </Grid>
           </Grid>
