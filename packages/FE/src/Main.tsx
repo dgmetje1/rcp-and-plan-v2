@@ -46,6 +46,10 @@ const Main: FC = () => (
           msOverflowStyle: "none",
           scrollbarWidth: "none",
         },
+        a: {
+          color: "inherit",
+          textDecoration: "inherit",
+        },
         "::-webkit-scrollbar": {
           width: "0.5em",
           height: "0.5em",

@@ -1,4 +1,4 @@
-import React from "react";
+import { useMemo } from "react";
 import { Box, Chip, Grid, Paper, Typography } from "@mui/material";
 import { Link } from "@tanstack/react-router";
 
@@ -28,7 +28,7 @@ const CARD_FIELDS: {
 
 const HomePageRecipePreviewCard = () => {
   const { data: recipe, isLoading } = useGetDailyRecipe();
-  const recipeContent = React.useMemo(() => {
+  const recipeContent = useMemo(() => {
     if (isLoading || !recipe) return null;
 
     return (
