@@ -24,7 +24,15 @@ export class RecipeQueries implements IRecipeQueries {
   }
 
   async getDataById(id: number) {
-    const result = await Recipe.findByPk(id);
+    const result = await Recipe.findByPk(id, {
+      include: [
+        { model: Category, required: true },
+        {
+          model: Ingredient,
+          required: true,
+        },
+      ],
+    });
     if (!result) throw new Error("Recipe not found");
 
     const response: RecipeResponse = {
@@ -41,6 +49,33 @@ export class RecipeQueries implements IRecipeQueries {
       visibility: result.dataValues.visibility,
       author: result.dataValues.author,
       publicationDate: result.dataValues.publication_date,
+      categories: result.dataValues.categories.map(category => ({
+        id: category.dataValues.id,
+        name: category.dataValues.name,
+      })),
+      ingredients: await Promise.all(
+        result.dataValues.ingredients.map(async ingredient => {
+          const unit = await Unit.findOne({
+            where: {
+              id: ingredient.RecipeIngredient.unit_id,
+              language: "ca",
+            },
+            rejectOnEmpty: true,
+          });
+          return {
+            id: ingredient.dataValues.id,
+            name: ingredient.dataValues.name,
+            singularName: ingredient.dataValues.singular_name,
+            quantity: ingredient.RecipeIngredient.dataValues.quantity,
+            optional: ingredient.RecipeIngredient.dataValues.optional,
+            units: {
+              id: unit.dataValues.id,
+              name: unit.dataValues.name,
+              shortName: unit.dataValues.short_name,
+            },
+          };
+        }),
+      ),
     };
 
     return response;

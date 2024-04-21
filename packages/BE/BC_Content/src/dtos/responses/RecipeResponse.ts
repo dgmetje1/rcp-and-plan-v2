@@ -1,3 +1,6 @@
+import { RecipeCategoryResponse } from "./RecipeCategoryResponse";
+import { RecipeIngredientResponse } from "./RecipeIngredientResponse";
+
 export type RecipeResponse = {
   id: number;
   title: string;
@@ -12,4 +15,6 @@ export type RecipeResponse = {
   visibility: number;
   author: string;
   publicationDate: Date;
+  categories: RecipeCategoryResponse[];
+  ingredients: RecipeIngredientResponse[];
 };
