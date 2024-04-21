@@ -15,6 +15,24 @@ const options = {
       title: "BC_Content",
       version: "1.0.0",
     },
+    components: {
+      schemas: {
+        Exception: {
+          type: "object",
+          properties: {
+            exceptionMessage: {
+              type: "string",
+            },
+            params: {
+              type: "array",
+              items: {
+                type: "object",
+              },
+            },
+          },
+        },
+      },
+    },
   },
   apis: [`${serviceBaseURI}/routes/*.route.*`],
 };

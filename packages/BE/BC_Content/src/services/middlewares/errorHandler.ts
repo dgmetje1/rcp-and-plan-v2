@@ -1,15 +1,12 @@
-import { NextFunction, Request, Response } from "express";
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 
-export const errorHandlerMiddleware = (
-  req: Request,
+export const errorHandler: ErrorRequestHandler = (
+  err: Error,
+  _req: Request,
   res: Response,
-  next: NextFunction,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _next: NextFunction,
 ) => {
-  try {
-    next();
-  } catch (exception: unknown) {
-    // eslint-disable-next-line no-console
-    console.error(exception);
-    res.status(500).send({});
-  }
+  console.error(err.stack);
+  res.status(500).send({ message: "Something went wrong", stack: err.stack });
 };

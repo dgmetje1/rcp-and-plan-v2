@@ -1,3 +1,5 @@
+import { EntityNotFoundError } from "common/EntityNotFoundError";
+
 import { RecipeResponse } from "@dtos/responses/RecipeResponse";
 import { RecipesDailyResponse } from "@dtos/responses/RecipesDailyResponse";
 import { RecipesListResponse } from "@dtos/responses/RecipesListResponse";
@@ -33,7 +35,8 @@ export class RecipeQueries implements IRecipeQueries {
         },
       ],
     });
-    if (!result) throw new Error("Recipe not found");
+    if (!result)
+      throw new EntityNotFoundError("Recipe not found", "Recipe", [{ id }]);
 
     const response: RecipeResponse = {
       id: result.dataValues.id,

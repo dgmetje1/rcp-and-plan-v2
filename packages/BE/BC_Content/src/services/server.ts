@@ -7,6 +7,7 @@ import swaggerUi from "swagger-ui-express";
 
 import Container from "./DI";
 import swaggerDocument from "./documentation.json";
+import { errorHandler } from "./middlewares/errorHandler";
 
 const PORT = process.env.PORT || 3000;
 
@@ -16,8 +17,16 @@ class App {
   constructor() {
     this.app = express();
     this.config();
-    this.routes();
-    this.swagger();
+    void this.routes().then(() => {
+      this.swagger();
+      this.app.get("*", function (_req, res) {
+        res.status(404).send("Not existing url!");
+      });
+      this.app.use(errorHandler);
+      this.app.listen(PORT, () =>
+        console.log(`Example app listening on port ${PORT}`),
+      );
+    });
   }
 
   private config(): void {
@@ -29,9 +38,6 @@ class App {
     this.app.use(helmet.hidePoweredBy());
     this.app.use(helmet.frameguard({ action: "deny" }));
     this.app.use(compress());
-    this.app.listen(PORT, () =>
-      console.log(`Example app listening on port ${PORT}`),
-    );
   }
 
   private async routes() {
@@ -39,10 +45,6 @@ class App {
 
     const recipeRouter = container.get("RecipeRouter");
     recipeRouter.setupRouter(this.app);
-
-    this.app.get("*", function (req, res) {
-      res.status(404).send("Not existing url!");
-    });
   }
 
   private swagger(): void {

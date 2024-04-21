@@ -1,7 +1,14 @@
-import { Application, type Request, type Response, Router } from "express";
+import {
+  Application,
+  NextFunction,
+  type Request,
+  type Response,
+  Router,
+} from "express";
 
 import { IRecipeQueries } from "@application/queries/recipes/IRecipeQueries";
 import Container from "@services/DI";
+import { EntityNotFoundError } from "common/EntityNotFoundError";
 
 /**
  * @openapi
@@ -196,13 +203,27 @@ class RecipesRouter {
    *           application/json:
    *             schema:
    *               $ref: '#/components/schemas/RecipeResponse'
+   *       400:
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Exception'
    */
-  private async getRecipeById(req: Request, res: Response) {
-    const { container } = await Container.getInstance();
+  private async getRecipeById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { container } = await Container.getInstance();
 
-    const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
-    const response = await recipesQueries.getDataById(+req.params.id);
-    res.send(response);
+      const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
+      const response = await recipesQueries.getDataById(+req.params.id);
+      res.send(response);
+    } catch (err) {
+      if (err instanceof EntityNotFoundError) {
+        res
+          .status(404)
+          .send({ exceptionMessage: err.message, params: err.params });
+      }
+      next(err);
+    }
   }
 }
 
