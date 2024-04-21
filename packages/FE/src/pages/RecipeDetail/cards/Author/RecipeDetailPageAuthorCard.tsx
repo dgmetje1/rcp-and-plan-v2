@@ -18,4 +18,5 @@ const RecipeDetailPageAuthorCard = () => {
     </RecipeDetailPageCard>
   );
 };
+
 export default RecipeDetailPageAuthorCard;

@@ -1,0 +1,34 @@
+{
+  "api": {
+    "default_error": "Hi ha hagut un error en accedir a l'API"
+  },
+  "common": {
+    "of": "of"
+  },
+  "pages": {
+    "home": {
+      "searcher": {
+        "placeholder": "Search for recipes, categories or users"
+      },
+      "recipe_preview": {
+        "title": "Recipe of the day",
+        "ingredients_title": "Ingredients"
+      }
+    },
+    "recipe": {
+      "ingredients_title": "Ingredients"
+    }
+  },
+  "recipe": {
+    "fields": {
+      "difficulty": "Difficulty",
+      "time": "Time",
+      "portions": "Portions"
+    },
+    "difficulty": {
+      "1": "easy",
+      "2": "medium",
+      "3": "hard"
+    }
+  }
+}

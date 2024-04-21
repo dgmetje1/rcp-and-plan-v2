@@ -1,8 +1,8 @@
+import React from "react";
 import { AccountCircle } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import React from "react";
 
 const HeaderProfileMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -16,19 +16,19 @@ const HeaderProfileMenu = () => {
   return (
     <>
       <IconButton
-        aria-label="account of current user"
         aria-controls="menu-appbar"
         aria-haspopup="true"
-        onClick={handleMenu}
+        aria-label="account of current user"
         color="inherit"
+        onClick={handleMenu}
       >
         <AccountCircle fontSize="large" />
       </IconButton>
       <Menu
-        id="menu-appbar"
         anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
+        id="menu-appbar"
         onClose={handleClose}
+        open={Boolean(anchorEl)}
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>My account</MenuItem>

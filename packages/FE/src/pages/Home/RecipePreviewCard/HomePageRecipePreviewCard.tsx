@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Box, Chip, Grid, Paper, Typography } from "@mui/material";
 import { Link } from "@tanstack/react-router";
 
@@ -28,6 +29,7 @@ const CARD_FIELDS: {
 ];
 
 const HomePageRecipePreviewCard = () => {
+  const { t } = useTranslation();
   const { data: recipe, isLoading } = useGetDailyRecipe();
   const recipeContent = useMemo(() => {
     if (isLoading || !recipe) return null;
@@ -37,7 +39,7 @@ const HomePageRecipePreviewCard = () => {
       <Grid columnSpacing={4} container spacing={2}>
         <Grid item xs={12}>
           <Typography color="#444" fontWeight="600" variant="h4">
-            Recipe of the day
+            {t("pages.home.recipe_preview.title")}
           </Typography>
         </Grid>
         <Grid
@@ -65,7 +67,7 @@ const HomePageRecipePreviewCard = () => {
               <Box display="flex" flexDirection="column" rowGap={2}>
                 {CARD_FIELDS.map(field => (
                   <Typography key={field.key}>
-                    <strong>{field.key}: </strong>
+                    <strong>{t(`recipe.fields.${field.key}`)}: </strong>
                     {field.getValue(recipe)}
                   </Typography>
                 ))}
@@ -77,7 +79,7 @@ const HomePageRecipePreviewCard = () => {
                 shouldSeeMoreBeShown={recipe.ingredients.length > 5}
                 title={
                   <Typography fontWeight={600} variant="subtitle1">
-                    Ingredients
+                    {t("pages.home.recipe_preview.ingredients_title")}
                   </Typography>
                 }
               />
@@ -86,7 +88,7 @@ const HomePageRecipePreviewCard = () => {
         </Grid>
       </Grid>
     );
-  }, [isLoading, recipe]);
+  }, [isLoading, recipe, t]);
 
   return (
     <Paper component="section" sx={{ p: 5, bgcolor: "#f0efef" }}>

@@ -11,6 +11,8 @@ const isDefinedEnvironment = (value: string): value is Environment => {
 if (!isDefinedEnvironment(definedEnvironment))
   throw new Error("Environment not defined!!");
 
+const isDevEnvironment = () => definedEnvironment === Environments.local;
+
 const config: Config = {
   environment: definedEnvironment,
   webUrl: "url",
@@ -34,4 +36,5 @@ const envConfig: Partial<Config> = omitBy(
 export default {
   ...config,
   ...envConfig,
+  isDevEnvironment,
 };

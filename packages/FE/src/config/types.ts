@@ -1,6 +1,6 @@
 export enum Environments {
+  local = "local",
   dev = "dev",
-  pre = "pre",
   staging = "staging",
   prod = "prod",
 }

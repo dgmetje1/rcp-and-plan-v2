@@ -1,0 +1,12 @@
+{
+  "api": {
+    "default_error": "Hi ha hagut un error en accedir a l'API"
+  },
+  "pages": {
+    "home": {
+      "searcher": {
+        "placeholder": "Search for recipes, categories or users"
+      }
+    }
+  }
+}

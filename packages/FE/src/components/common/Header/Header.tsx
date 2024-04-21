@@ -1,9 +1,11 @@
 import { Toolbar } from "@mui/material";
-import StyledHeader from "./styled";
+import { Link } from "@tanstack/react-router";
+
+import logo from "@/assets/Logo.svg";
+
 import HeaderBurgerMenu from "./BurgerMenu";
 import HeaderProfileMenu from "./ProfileMenu";
-import logo from "@/assets/Logo.svg";
-import { Link } from "@tanstack/react-router";
+import StyledHeader from "./styled";
 
 const Header = () => (
   <StyledHeader>
@@ -16,7 +18,7 @@ const Header = () => (
     >
       <HeaderBurgerMenu />
       <Link to="/">
-        <img src={logo} alt="logo Rcp & Plan" height={56} />
+        <img alt="logo Rcp & Plan" height={56} src={logo} />
       </Link>
       <HeaderProfileMenu />
     </Toolbar>

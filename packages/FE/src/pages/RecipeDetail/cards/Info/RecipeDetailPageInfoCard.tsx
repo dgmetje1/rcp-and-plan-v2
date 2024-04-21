@@ -1,15 +1,36 @@
+import { useTranslation } from "react-i18next";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
+import { TFunction } from "i18next";
 
 import { RecipeDetailRoute } from "@/config/routing";
 import { printTime } from "@/lib/parsers/time";
 import { useSuspenseGetRecipe } from "@/queries/recipes";
-import { RecipeDifficulty } from "@/types/recipe";
+import { Recipe } from "@/types/recipe";
 
 import RecipeDetailPageCard from "../RecipeDetailPageCard";
 
+const CARD_FIELDS: {
+  key: keyof Recipe;
+  getValue: (recipe: Recipe, t: TFunction) => string;
+}[] = [
+  {
+    key: "difficulty",
+    getValue: (recipe, t) => t(`recipe.difficulty.${recipe.difficulty}`),
+  },
+  {
+    key: "time",
+    getValue: recipe => printTime(recipe.time),
+  },
+  {
+    key: "portions",
+    getValue: (recipe: Recipe) => recipe["portions"].toString(),
+  },
+];
+
 const RecipeDetailPageInfoCard = () => {
+  const { t } = useTranslation();
   const { id } = RecipeDetailRoute.useParams();
   const { data: recipe } = useSuspenseGetRecipe(id);
 
@@ -23,26 +44,14 @@ const RecipeDetailPageInfoCard = () => {
           <Chip key={category.id} label={category.name} />
         ))}
       </Box>
-      <Box alignItems="center" display="inline-flex" gap={1}>
-        <Typography color="grey.800" fontWeight={600} variant="subtitle1">
-          Difficulty:
-        </Typography>
-        <Typography variant="body1">
-          {RecipeDifficulty[recipe.difficulty].toLocaleLowerCase()}
-        </Typography>
-      </Box>
-      <Box alignItems="center" display="inline-flex" gap={1}>
-        <Typography color="grey.800" fontWeight={600} variant="subtitle1">
-          Time:
-        </Typography>
-        <Typography variant="body1">{printTime(recipe.time)}</Typography>
-      </Box>
-      <Box alignItems="center" display="inline-flex" gap={1}>
-        <Typography color="grey.800" fontWeight={600} variant="subtitle1">
-          Portions:
-        </Typography>
-        <Typography variant="body1">{recipe.portions}</Typography>
-      </Box>
+      {CARD_FIELDS.map(field => (
+        <Box alignItems="center" display="inline-flex" gap={1}>
+          <Typography color="grey.800" fontWeight={600} variant="subtitle1">
+            {t(`recipe.fields.${field.key}`)}:
+          </Typography>
+          <Typography variant="body1">{field.getValue(recipe, t)}</Typography>
+        </Box>
+      ))}
     </RecipeDetailPageCard>
   );
 };

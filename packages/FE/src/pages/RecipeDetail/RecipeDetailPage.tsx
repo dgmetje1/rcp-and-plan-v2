@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Box, Container, Grid, Typography } from "@mui/material";
 
 import IngredientsList from "@/components/common/IngredientsList";
@@ -10,6 +11,7 @@ import RecipeDetailPageAuthorCard from "./cards/Author";
 import RecipeDetailPageInfoCard from "./cards/Info";
 
 const RecipeDetailPage = () => {
+  const { t } = useTranslation();
   const { id } = RecipeDetailRoute.useParams();
   const { data: recipe } = useSuspenseGetRecipe(id);
 
@@ -57,7 +59,11 @@ const RecipeDetailPage = () => {
         <Box display="flex" flexDirection="column">
           <IngredientsList
             items={recipe.ingredients}
-            title={<Typography variant="h4">Ingredients</Typography>}
+            title={
+              <Typography variant="h4">
+                {t("pages.recipe.ingredients_title")}
+              </Typography>
+            }
           />
         </Box>
       </Container>

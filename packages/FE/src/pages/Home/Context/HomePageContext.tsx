@@ -1,4 +1,5 @@
 import React from "react";
+
 import { HomePageContextValues } from "./types";
 
 const HomePageContext = React.createContext<HomePageContextValues | undefined>(
