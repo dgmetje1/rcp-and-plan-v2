@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Box, Chip, Grid, Paper, Typography } from "@mui/material";
 import { Link } from "@tanstack/react-router";
 
+import IngredientsList from "@/components/common/IngredientsList";
 import config from "@/config";
 import { printTime } from "@/lib/parsers/time";
 import { useGetDailyRecipe } from "@/queries/recipes";
@@ -31,6 +32,7 @@ const HomePageRecipePreviewCard = () => {
   const recipeContent = useMemo(() => {
     if (isLoading || !recipe) return null;
 
+    //TODO review layout on mobile devices
     return (
       <Grid columnSpacing={4} container spacing={2}>
         <Grid item xs={12}>
@@ -57,7 +59,7 @@ const HomePageRecipePreviewCard = () => {
             <Grid display="flex" flexDirection="column" gap={2} item xs>
               <Box display="flex" gap={1}>
                 {recipe.categories?.map(category => (
-                  <Chip label={category.name} />
+                  <Chip key={category.id} label={category.name} />
                 ))}
               </Box>
               <Box display="flex" flexDirection="column" rowGap={2}>
@@ -70,23 +72,15 @@ const HomePageRecipePreviewCard = () => {
               </Box>
             </Grid>
             <Grid item xs>
-              <Typography fontWeight={600} variant="subtitle1">
-                Ingredients
-              </Typography>
-              <Box component="ul" display="flex" flexDirection="column">
-                {recipe.ingredients.slice(0, 5).map(ingredient => (
-                  <Box component="li" key={ingredient.id}>
-                    <Typography>
-                      {`${ingredient.quantity} ${ingredient.units.shortName} de ${ingredient.name.toLocaleLowerCase()}`}
-                    </Typography>
-                  </Box>
-                ))}
-                {recipe.ingredients.length > 5 && (
-                  <Box component="li">
-                    <Typography fontWeight={600}>...</Typography>
-                  </Box>
-                )}
-              </Box>
+              <IngredientsList
+                items={recipe.ingredients.slice(0, 5)}
+                shouldSeeMoreBeShown={recipe.ingredients.length > 5}
+                title={
+                  <Typography fontWeight={600} variant="subtitle1">
+                    Ingredients
+                  </Typography>
+                }
+              />
             </Grid>
           </Grid>
         </Grid>
