@@ -1,5 +1,6 @@
 import { Category } from "./category";
 import { Ingredient } from "./ingredients";
+import { Tool } from "./kitchenware";
 
 export enum RecipeDifficulty {
   EASY = 1,
@@ -23,6 +24,7 @@ export type Recipe = {
   publicationDate: Date;
   categories: Category[];
   ingredients: Ingredient[];
+  kitchenware: Tool[];
 };
 
 export type RecipeListItem = Pick<Recipe, "id" | "title" | "thumbnailUrl">;

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Box, Container, Grid, Typography } from "@mui/material";
 
-import IngredientsList from "@/components/common/IngredientsList";
+import List from "@/components/common/List";
 import RichTextContent from "@/components/common/RichTextContent";
 import config from "@/config";
 import { RecipeDetailRoute } from "@/config/routing";
@@ -56,15 +56,33 @@ const RecipeDetailPage = () => {
         <Typography component="div" variant="body1">
           <RichTextContent content={recipe.description} />
         </Typography>
-        <Box display="flex" flexDirection="column">
-          <IngredientsList
-            items={recipe.ingredients}
-            title={
-              <Typography variant="h4">
-                {t("pages.recipe.ingredients_title")}
-              </Typography>
-            }
-          />
+        <Box component="section" display="flex">
+          <Box display="flex" flexDirection="column" flexGrow={1}>
+            <List
+              items={recipe.ingredients}
+              renderItem={ingredient =>
+                `${ingredient.quantity} ${ingredient.units.shortName} de ${ingredient.name.toLocaleLowerCase()}`
+              }
+              title={
+                <Typography variant="h4">
+                  {t("pages.recipe.ingredients_title")}
+                </Typography>
+              }
+            />
+          </Box>
+          <Box display="flex" flexDirection="column" flexGrow={1}>
+            <List
+              items={recipe.kitchenware}
+              renderItem={kitchenware =>
+                `${kitchenware.quantity} ${kitchenware.name.toLocaleLowerCase()}`
+              }
+              title={
+                <Typography variant="h4">
+                  {t("pages.recipe.kitchenware_title")}
+                </Typography>
+              }
+            />
+          </Box>
         </Box>
       </Container>
     </Box>
