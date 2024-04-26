@@ -2,9 +2,11 @@ import { SqlBuilder } from "@infrastructure/common/sqlBuilder";
 
 import { Category } from "./Category";
 import { Ingredient } from "./Ingredient";
+import { Kitchenware } from "./Kitchenware";
 import { Recipe } from "./Recipe";
 import { RecipeCategory } from "./RecipeCategory";
 import { RecipeIngredient } from "./RecipeIngredient";
+import { RecipeKitchenware } from "./RecipeKitchenware";
 import { Unit } from "./Unit";
 
 export const setupModels = async () => {
@@ -17,6 +19,8 @@ export const setupModels = async () => {
     Recipe,
     Category,
     RecipeIngredient,
+    RecipeKitchenware,
+    Kitchenware,
     Ingredient,
     Unit,
   ]);
@@ -25,6 +29,8 @@ export const setupModels = async () => {
     Recipe.sync(),
     RecipeCategory.sync(),
     RecipeIngredient.sync(),
+    RecipeKitchenware.sync(),
+    Kitchenware.sync(),
     Ingredient.sync(),
     Unit.sync(),
   ]);

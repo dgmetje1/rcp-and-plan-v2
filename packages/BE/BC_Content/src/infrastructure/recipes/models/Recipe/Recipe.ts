@@ -10,8 +10,10 @@ import {
 
 import { Category } from "../Category";
 import { Ingredient } from "../Ingredient";
+import { Kitchenware } from "../Kitchenware";
 import { RecipeCategory } from "../RecipeCategory";
 import { RecipeIngredient } from "../RecipeIngredient";
+import { RecipeKitchenware } from "../RecipeKitchenware";
 import { RecipeAttributes, RecipeCreationAttributes } from "./types";
 
 @Table({ tableName: "recipes" })
@@ -63,5 +65,10 @@ export class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> {
   @BelongsToMany(() => Ingredient, () => RecipeIngredient)
   declare ingredients: Array<
     Ingredient & { RecipeIngredient: RecipeIngredient }
+  >;
+
+  @BelongsToMany(() => Kitchenware, () => RecipeKitchenware)
+  declare kitchenware: Array<
+    Kitchenware & { RecipeKitchenware: RecipeKitchenware }
   >;
 }

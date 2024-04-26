@@ -6,6 +6,7 @@ import { RecipesListResponse } from "@dtos/responses/RecipesListResponse";
 import { Category, Recipe } from "@infrastructure/recipes/models";
 
 import { Ingredient } from "../models/Ingredient";
+import { Kitchenware } from "../models/Kitchenware";
 import { Unit } from "../models/Unit";
 import { IRecipeQueries } from "./types";
 
@@ -31,7 +32,9 @@ export class RecipeQueries implements IRecipeQueries {
         { model: Category, required: true },
         {
           model: Ingredient,
-          required: true,
+        },
+        {
+          model: Kitchenware,
         },
       ],
     });
@@ -79,6 +82,12 @@ export class RecipeQueries implements IRecipeQueries {
           };
         }),
       ),
+      kitchenware: result.dataValues.kitchenware.map(tool => ({
+        id: tool.dataValues.id,
+        name: tool.dataValues.name,
+        singularName: tool.dataValues.singular_name,
+        quantity: tool.RecipeKitchenware.dataValues.quantity,
+      })),
     };
 
     return response;

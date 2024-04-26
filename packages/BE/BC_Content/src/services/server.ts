@@ -3,6 +3,7 @@ import compress from "compression";
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
+import responseTime from "response-time";
 import swaggerUi from "swagger-ui-express";
 
 import Container from "./DI";
@@ -30,6 +31,7 @@ class App {
   }
 
   private config(): void {
+    this.app.use(responseTime());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(cors());

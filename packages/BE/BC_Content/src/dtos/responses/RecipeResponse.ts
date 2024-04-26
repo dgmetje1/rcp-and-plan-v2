@@ -1,5 +1,6 @@
 import { RecipeCategoryResponse } from "./RecipeCategoryResponse";
 import { RecipeIngredientResponse } from "./RecipeIngredientResponse";
+import { RecipeToolResponse } from "./RecipeToolResponse";
 
 export type RecipeResponse = {
   id: number;
@@ -17,4 +18,5 @@ export type RecipeResponse = {
   publicationDate: Date;
   categories: RecipeCategoryResponse[];
   ingredients: RecipeIngredientResponse[];
+  kitchenware: RecipeToolResponse[];
 };
