@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Box, Chip, Grid, Paper, Typography } from "@mui/material";
 import { Link } from "@tanstack/react-router";
 
-import IngredientsList from "@/components/common/IngredientsList";
+import List from "@/components/common/List";
 import config from "@/config";
 import { printTime } from "@/lib/parsers/time";
 import { useGetDailyRecipe } from "@/queries/recipes";
@@ -74,8 +74,11 @@ const HomePageRecipePreviewCard = () => {
               </Box>
             </Grid>
             <Grid item xs>
-              <IngredientsList
+              <List
                 items={recipe.ingredients.slice(0, 5)}
+                renderItem={ingredient =>
+                  `${ingredient.quantity} ${ingredient.units.shortName} de ${ingredient.name.toLocaleLowerCase()}`
+                }
                 shouldSeeMoreBeShown={recipe.ingredients.length > 5}
                 title={
                   <Typography fontWeight={600} variant="subtitle1">

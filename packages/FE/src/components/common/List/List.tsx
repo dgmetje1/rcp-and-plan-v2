@@ -1,21 +1,20 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-import { IngredientsListProps } from "./types";
+import { ListItem, ListProps } from "./types";
 
-const IngredientsList = ({
+const List = <T extends ListItem>({
   items,
+  renderItem,
   title,
   shouldSeeMoreBeShown,
-}: IngredientsListProps) => (
+}: ListProps<T>) => (
   <>
     {title}
     <Box component="ul" display="flex" flexDirection="column">
-      {items.map(ingredient => (
-        <Box component="li" key={ingredient.id}>
-          <Typography>
-            {`${ingredient.quantity} ${ingredient.units.shortName} de ${ingredient.name.toLocaleLowerCase()}`}
-          </Typography>
+      {items.map(item => (
+        <Box component="li" key={item.id}>
+          <Typography>{renderItem(item)}</Typography>
         </Box>
       ))}
       {shouldSeeMoreBeShown && (
@@ -27,4 +26,4 @@ const IngredientsList = ({
   </>
 );
 
-export default IngredientsList;
+export default List;
