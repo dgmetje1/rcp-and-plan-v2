@@ -7,8 +7,8 @@ import { Recipe } from "./Recipe";
 import { RecipeCategory } from "./RecipeCategory";
 import { RecipeIngredient } from "./RecipeIngredient";
 import { RecipeKitchenware } from "./RecipeKitchenware";
-import { Unit } from "./Unit";
 import { RecipeStep } from "./RecipeStep";
+import { Unit } from "./Unit";
 
 export const setupModels = async () => {
   const { db: sequelize } = new SqlBuilder(

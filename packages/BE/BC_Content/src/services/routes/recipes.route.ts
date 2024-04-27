@@ -1,3 +1,4 @@
+import { EntityNotFoundError } from "common/EntityNotFoundError";
 import {
   Application,
   NextFunction,
@@ -7,8 +8,8 @@ import {
 } from "express";
 
 import { IRecipeQueries } from "@application/queries/recipes/IRecipeQueries";
+import { RecipesListQueryRequest } from "@dtos/requests/RecipesListQueryRequest";
 import Container from "@services/DI";
-import { EntityNotFoundError } from "common/EntityNotFoundError";
 
 /**
  * @openapi
@@ -150,6 +151,12 @@ class RecipesRouter {
    *   get:
    *     summary: Returns a list of recipes.
    *     tags: [Recipes]
+   *     parameters:
+   *       - in: query
+   *         name: category
+   *         type: integer
+   *         required: false
+   *         description: Numeric ID of the category to get.
    *     responses:
    *       200:
    *         content:
@@ -157,11 +164,14 @@ class RecipesRouter {
    *             schema:
    *               $ref: '#/components/schemas/RecipesListResponse'
    */
-  private async getRecipes(req: Request, res: Response) {
+  private async getRecipes(
+    req: Request<unknown, unknown, unknown, RecipesListQueryRequest>,
+    res: Response,
+  ) {
     const { container } = await Container.getInstance();
 
     const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
-    const response = await recipesQueries.getData();
+    const response = await recipesQueries.getData(req.query);
     res.send(response);
   }
 

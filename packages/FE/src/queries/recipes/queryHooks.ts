@@ -3,11 +3,12 @@ import { useApiQuery, useSuspenseApiQuery } from "@/middleware/api";
 import { getDailyRecipeKeys, getRecipeKeys, getRecipesKeys } from "./keys";
 import { getRecipeOptions } from "./options";
 import { getDailyRecipe, getRecipe, getRecipes } from "./queries";
+import { RecipeListQueryFilters } from "./types";
 
-export const useGetRecipes = () => {
-  const { key, queryKey } = getRecipesKeys();
+export const useGetRecipes = (filters: RecipeListQueryFilters = {}) => {
+  const { key, queryKey } = getRecipesKeys(filters);
 
-  return useApiQuery(key, queryKey, () => getRecipes());
+  return useApiQuery(key, queryKey, () => getRecipes(filters));
 };
 
 export const useGetRecipe = (id: string) => {

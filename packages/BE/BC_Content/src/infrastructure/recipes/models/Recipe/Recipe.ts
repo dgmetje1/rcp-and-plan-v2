@@ -15,8 +15,8 @@ import { Kitchenware } from "../Kitchenware";
 import { RecipeCategory } from "../RecipeCategory";
 import { RecipeIngredient } from "../RecipeIngredient";
 import { RecipeKitchenware } from "../RecipeKitchenware";
-import { RecipeAttributes, RecipeCreationAttributes } from "./types";
 import { RecipeStep } from "../RecipeStep";
+import { RecipeAttributes, RecipeCreationAttributes } from "./types";
 
 @Table({ tableName: "recipes" })
 export class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> {

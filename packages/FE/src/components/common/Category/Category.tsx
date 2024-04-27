@@ -6,9 +6,10 @@ import RecipeCard from "../RecipeCard";
 import StyledCategory from "./styled";
 import { CategoryProps } from "./types";
 
-const Category = ({ title }: CategoryProps) => {
-  const { data = [] } = useGetRecipes();
+const Category = ({ title, id }: CategoryProps) => {
+  const { data = [], isLoading } = useGetRecipes({ categoryId: id });
 
+  if (isLoading) return null;
   return (
     <Box>
       {!!title && (

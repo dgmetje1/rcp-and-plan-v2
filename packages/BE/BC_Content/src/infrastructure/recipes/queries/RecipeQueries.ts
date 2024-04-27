@@ -1,21 +1,32 @@
 import { EntityNotFoundError } from "common/EntityNotFoundError";
+import { WhereOptions } from "sequelize";
 
+import { RecipesListQueryRequest } from "@dtos/requests/RecipesListQueryRequest";
 import { RecipeResponse } from "@dtos/responses/RecipeResponse";
 import { RecipesDailyResponse } from "@dtos/responses/RecipesDailyResponse";
 import { RecipesListResponse } from "@dtos/responses/RecipesListResponse";
 import { Category, Recipe } from "@infrastructure/recipes/models";
 
+import { CategoryAttributes } from "../models/Category/types";
 import { Ingredient } from "../models/Ingredient";
 import { Kitchenware } from "../models/Kitchenware";
+import { RecipeAttributes } from "../models/Recipe/types";
 import { RecipeStep } from "../models/RecipeStep";
 import { Unit } from "../models/Unit";
 import { IRecipeQueries } from "./types";
 
 export class RecipeQueries implements IRecipeQueries {
-  async getData() {
+  async getData(params: RecipesListQueryRequest) {
+    const where: WhereOptions<RecipeAttributes> = { visibility: 1 };
+    const subQueryWhere: WhereOptions<CategoryAttributes> = params.category
+      ? {
+          id: params.category,
+        }
+      : {};
     const result = await Recipe.findAll({
       attributes: ["id", "title", "thumbnail_url"],
-      where: { visibility: 1 },
+      where,
+      include: [{ model: Category, required: true, where: subQueryWhere }],
     });
 
     const response = result.map<RecipesListResponse[number]>(recipe => ({
