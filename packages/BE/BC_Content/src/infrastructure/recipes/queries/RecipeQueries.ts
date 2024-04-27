@@ -7,6 +7,7 @@ import { Category, Recipe } from "@infrastructure/recipes/models";
 
 import { Ingredient } from "../models/Ingredient";
 import { Kitchenware } from "../models/Kitchenware";
+import { RecipeStep } from "../models/RecipeStep";
 import { Unit } from "../models/Unit";
 import { IRecipeQueries } from "./types";
 
@@ -35,6 +36,10 @@ export class RecipeQueries implements IRecipeQueries {
         },
         {
           model: Kitchenware,
+        },
+        {
+          model: RecipeStep,
+          order: ["number", "ASC"],
         },
       ],
     });
@@ -87,6 +92,12 @@ export class RecipeQueries implements IRecipeQueries {
         name: tool.dataValues.name,
         singularName: tool.dataValues.singular_name,
         quantity: tool.RecipeKitchenware.dataValues.quantity,
+      })),
+      steps: result.dataValues.steps.map(step => ({
+        id: step.dataValues.id,
+        title: step.dataValues.title,
+        body: step.dataValues.body,
+        number: step.dataValues.number,
       })),
     };
 

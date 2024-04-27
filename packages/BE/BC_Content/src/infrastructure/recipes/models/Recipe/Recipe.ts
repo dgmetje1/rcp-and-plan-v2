@@ -3,6 +3,7 @@ import {
   AutoIncrement,
   BelongsToMany,
   Column,
+  HasMany,
   Model,
   PrimaryKey,
   Table,
@@ -15,6 +16,7 @@ import { RecipeCategory } from "../RecipeCategory";
 import { RecipeIngredient } from "../RecipeIngredient";
 import { RecipeKitchenware } from "../RecipeKitchenware";
 import { RecipeAttributes, RecipeCreationAttributes } from "./types";
+import { RecipeStep } from "../RecipeStep";
 
 @Table({ tableName: "recipes" })
 export class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> {
@@ -71,4 +73,6 @@ export class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> {
   declare kitchenware: Array<
     Kitchenware & { RecipeKitchenware: RecipeKitchenware }
   >;
+  @HasMany(() => RecipeStep)
+  declare steps: Array<RecipeStep>;
 }

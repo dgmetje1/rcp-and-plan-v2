@@ -6,6 +6,7 @@ import { Kitchenware } from "../Kitchenware";
 import { RecipeCategory } from "../RecipeCategory";
 import { RecipeIngredient } from "../RecipeIngredient";
 import { RecipeKitchenware } from "../RecipeKitchenware";
+import { RecipeStep } from "../RecipeStep";
 
 export interface RecipeAttributes {
   id: number;
@@ -24,6 +25,7 @@ export interface RecipeAttributes {
   categories: Array<Category & { RecipeCategory: RecipeCategory }>;
   ingredients: Array<Ingredient & { RecipeIngredient: RecipeIngredient }>;
   kitchenware: Array<Kitchenware & { RecipeKitchenware: RecipeKitchenware }>;
+  steps: Array<RecipeStep>;
 }
 
 export interface RecipeCreationAttributes

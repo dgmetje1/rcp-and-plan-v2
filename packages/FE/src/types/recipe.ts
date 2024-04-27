@@ -25,6 +25,14 @@ export type Recipe = {
   categories: Category[];
   ingredients: Ingredient[];
   kitchenware: Tool[];
+  steps: RecipeStep[];
+};
+
+export type RecipeStep = {
+  id: number;
+  title: string;
+  body: string;
+  number: number;
 };
 
 export type RecipeListItem = Pick<Recipe, "id" | "title" | "thumbnailUrl">;

@@ -8,8 +8,8 @@ import { RecipeCategoryAttributes } from "./types";
 export class RecipeCategory extends Model<RecipeCategoryAttributes> {
   @ForeignKey(() => Recipe)
   @Column
-  declare recipeId: number;
+  declare recipe_id: number;
   @ForeignKey(() => Category)
   @Column
-  declare categoryId: number;
+  declare category_id: number;
 }

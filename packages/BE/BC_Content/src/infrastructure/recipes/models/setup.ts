@@ -8,6 +8,7 @@ import { RecipeCategory } from "./RecipeCategory";
 import { RecipeIngredient } from "./RecipeIngredient";
 import { RecipeKitchenware } from "./RecipeKitchenware";
 import { Unit } from "./Unit";
+import { RecipeStep } from "./RecipeStep";
 
 export const setupModels = async () => {
   const { db: sequelize } = new SqlBuilder(
@@ -16,6 +17,7 @@ export const setupModels = async () => {
 
   sequelize.addModels([
     RecipeCategory,
+    RecipeStep,
     Recipe,
     Category,
     RecipeIngredient,
@@ -28,6 +30,7 @@ export const setupModels = async () => {
   await Promise.all([
     Recipe.sync(),
     RecipeCategory.sync(),
+    RecipeStep.sync(),
     RecipeIngredient.sync(),
     RecipeKitchenware.sync(),
     Kitchenware.sync(),

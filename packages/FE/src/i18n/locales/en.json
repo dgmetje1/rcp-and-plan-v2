@@ -17,7 +17,8 @@
     },
     "recipe": {
       "ingredients_title": "Ingredients",
-      "kitchenware_title": "Kitchenware"
+      "kitchenware_title": "Kitchenware",
+      "steps_title": "Steps"
     }
   },
   "recipe": {

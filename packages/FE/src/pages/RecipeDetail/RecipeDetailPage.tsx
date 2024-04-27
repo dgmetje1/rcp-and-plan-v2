@@ -9,6 +9,7 @@ import { useSuspenseGetRecipe } from "@/queries/recipes";
 
 import RecipeDetailPageAuthorCard from "./cards/Author";
 import RecipeDetailPageInfoCard from "./cards/Info";
+import RecipeDetailPageStepsSection from "./sections/Steps";
 
 const RecipeDetailPage = () => {
   const { t } = useTranslation();
@@ -53,7 +54,7 @@ const RecipeDetailPage = () => {
             <RecipeDetailPageAuthorCard />
           </Grid>
         </Grid>
-        <Typography component="div" variant="body1">
+        <Typography component="section" variant="body1">
           <RichTextContent content={recipe.description} />
         </Typography>
         <Box component="section" display="flex">
@@ -84,6 +85,8 @@ const RecipeDetailPage = () => {
             />
           </Box>
         </Box>
+
+        <RecipeDetailPageStepsSection />
       </Container>
     </Box>
   );
