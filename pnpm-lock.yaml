@@ -115,18 +115,15 @@ importers:
       '@types/swagger-ui-express':
         specifier: ^4.1.6
         version: 4.1.6
-      ts-node-dev:
-        specifier: 2.0.0
-        version: 2.0.0(@types/node@20.11.25)(typescript@5.4.2)
-      tsc-alias:
-        specifier: ^1.8.8
-        version: 1.8.8
 
   packages/BE/API_Rcp_and_plan:
     dependencies:
       '@rcp-and-plan/bc_content':
         specifier: workspace:*
         version: link:../BC_Content
+      '@rcp-and-plan/commons':
+        specifier: workspace:*
+        version: link:../Commons
       express-jwt:
         specifier: ^8.4.1
         version: 8.4.1
@@ -145,6 +142,9 @@ importers:
 
   packages/BE/BC_Content:
     dependencies:
+      '@rcp-and-plan/commons':
+        specifier: workspace:*
+        version: link:../Commons
       mysql2:
         specifier: ^3.9.3
         version: 3.9.7
@@ -215,6 +215,8 @@ importers:
       tsc-alias:
         specifier: ^1.8.8
         version: 1.8.8
+
+  packages/BE/Commons: {}
 
   packages/FE:
     dependencies:

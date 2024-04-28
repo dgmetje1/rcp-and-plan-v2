@@ -9,6 +9,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
+    "@rcp-and-plan/commons": "workspace:*",
     "mysql2": "^3.9.3",
     "sequelize": "^6.37.1",
     "sequelize-typescript": "^2.1.6"

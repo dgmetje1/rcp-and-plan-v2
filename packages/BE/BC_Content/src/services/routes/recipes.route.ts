@@ -1,4 +1,4 @@
-import { EntityNotFoundError } from "common/EntityNotFoundError";
+import { EntityNotFoundError } from "@rcp-and-plan/commons";
 import {
   Application,
   NextFunction,

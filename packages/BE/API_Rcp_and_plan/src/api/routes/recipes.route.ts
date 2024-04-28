@@ -9,7 +9,7 @@ import {
 import Container from "@api/DI";
 import { ContentService } from "@api/services/content";
 import { RecipesListQueryEntry } from "@dtos/entries/RecipeListQueryEntry";
-import { EntityNotFoundError } from "common/EntityNotFoundError";
+import { EntityNotFoundError } from "@rcp-and-plan/commons";
 
 class RecipesRouter {
   public router: Router;
