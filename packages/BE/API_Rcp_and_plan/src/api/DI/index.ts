@@ -4,8 +4,6 @@ import {
   ServiceFile,
 } from "node-dependency-injection";
 import path from "path";
-import ExampleRoute from "API/routes/example.route";
-import { SocialService } from "API/services/social";
 
 export default class Container {
   static instance: Container;
@@ -24,8 +22,12 @@ export default class Container {
       true,
     );
     await autowire.process();
-    this._container.register("ExampleRoute", ExampleRoute);
-    this._container.register("SocialService", SocialService);
+
+    const { default: RecipeRouter } = await import("@api/routes/recipes.route");
+    const { ContentService } = await import("@api/services/content");
+
+    this._container.register("RecipeRouter", RecipeRouter);
+    this._container.register("ContentService", ContentService);
   }
 
   public get container(): ContainerBuilder {

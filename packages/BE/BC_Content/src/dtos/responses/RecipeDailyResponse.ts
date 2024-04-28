@@ -1,7 +1,7 @@
 import { RecipeCategoryResponse } from "./RecipeCategoryResponse";
 import { RecipeIngredientResponse } from "./RecipeIngredientResponse";
 
-export type RecipesDailyResponse = {
+export type RecipeDailyResponse = {
   id: number;
   title: string;
   time: number;

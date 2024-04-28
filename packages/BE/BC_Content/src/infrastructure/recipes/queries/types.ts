@@ -1,6 +1,6 @@
 import { RecipesListQueryRequest } from "@dtos/requests/RecipesListQueryRequest";
+import { RecipeDailyResponse } from "@dtos/responses/RecipeDailyResponse";
 import { RecipeResponse } from "@dtos/responses/RecipeResponse";
-import { RecipesDailyResponse } from "@dtos/responses/RecipesDailyResponse";
 import { RecipesListResponse } from "@dtos/responses/RecipesListResponse";
 
 export interface IRecipeQueries {
@@ -10,5 +10,5 @@ export interface IRecipeQueries {
    * Gets the recipe of the day
    * @returns Recipe's of the day information
    */
-  getDailyData: () => Promise<RecipesDailyResponse>;
+  getDailyData: () => Promise<RecipeDailyResponse>;
 }

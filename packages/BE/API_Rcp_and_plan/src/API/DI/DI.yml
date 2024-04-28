@@ -1,7 +1,0 @@
-services:
-  X19ob21lX19nYW1lMDIwMzk4X19kZXZfX3JjcC1hbmQtcGxhbl9fcGFja2FnZXNfX0JFX19BUElfUmNwX2FuZF9wbGFuX19zcmNfX0FQSV9fRElfX2luZGV4X19Db250YWluZXI=:
-    class: >-
-      /home/game020398/dev/rcp-and-plan/packages/BE/API_Rcp_and_plan/src/API/DI/index
-    arguments: []
-    abstract: false
-    parent: null

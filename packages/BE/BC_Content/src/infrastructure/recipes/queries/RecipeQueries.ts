@@ -2,8 +2,8 @@ import { EntityNotFoundError } from "common/EntityNotFoundError";
 import { WhereOptions } from "sequelize";
 
 import { RecipesListQueryRequest } from "@dtos/requests/RecipesListQueryRequest";
+import { RecipeDailyResponse } from "@dtos/responses/RecipeDailyResponse";
 import { RecipeResponse } from "@dtos/responses/RecipeResponse";
-import { RecipesDailyResponse } from "@dtos/responses/RecipesDailyResponse";
 import { RecipesListResponse } from "@dtos/responses/RecipesListResponse";
 import { Category, Recipe } from "@infrastructure/recipes/models";
 
@@ -142,7 +142,7 @@ export class RecipeQueries implements IRecipeQueries {
     });
     if (!result) throw new Error("Recipe not found");
 
-    const response: RecipesDailyResponse = {
+    const response: RecipeDailyResponse = {
       id: result.dataValues.id,
       title: result.dataValues.title,
       thumbnailUrl: result.dataValues.thumbnail_url,
