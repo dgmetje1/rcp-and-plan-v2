@@ -19,19 +19,25 @@ const RecipeDetailPage = () => {
   return (
     <Box component="article" py={5} sx={{ bgcolor: "#fffcf6", flexGrow: 1 }}>
       <Container
-        maxWidth="xl"
+        maxWidth="lg"
         sx={{ display: "flex", flexDirection: "column", gap: 4 }}
       >
         <Box flexDirection="column">
-          <Typography component="h1" fontWeight={700} variant="h3">
+          <Typography
+            component="h1"
+            fontSize={{ xs: "2rem", md: "3rem" }}
+            fontWeight={700}
+            variant="h3"
+          >
             {recipe.title}
           </Typography>
         </Box>
         <Grid container spacing={5}>
           <Grid
             item
+            lg={8}
             maxHeight={575}
-            md={8}
+            md={6}
             sx={{
               overflow: "hidden",
               img: { borderRadius: 2, objectFit: "cover" },
@@ -46,7 +52,8 @@ const RecipeDetailPage = () => {
           </Grid>
           <Grid
             item
-            md={4}
+            lg={4}
+            md={6}
             sx={{ display: "flex", flexDirection: "column", gap: 3 }}
             xs={12}
           >
@@ -57,7 +64,11 @@ const RecipeDetailPage = () => {
         <Typography component="section" variant="body1">
           <RichTextContent content={recipe.description} />
         </Typography>
-        <Box component="section" display="flex">
+        <Box
+          component="section"
+          display="flex"
+          flexDirection={{ xs: "column", md: "row" }}
+        >
           <Box display="flex" flexDirection="column" flexGrow={1}>
             <List
               items={recipe.ingredients}

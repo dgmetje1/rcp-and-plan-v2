@@ -118,7 +118,6 @@ import Container from "@services/DI";
  *              type: string
  *            shortName:
  *              type: string
- *
  */
 class RecipesRouter {
   public router: Router;
