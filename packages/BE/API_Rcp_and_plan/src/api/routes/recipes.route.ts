@@ -5,12 +5,165 @@ import {
   type Request,
   type Response,
 } from "express";
+import {
+  EntityNotFoundError,
+  ExceptionErrorResponse,
+} from "@rcp-and-plan/commons";
 
 import Container from "@api/DI";
 import { ContentService } from "@api/services/content";
 import { RecipesListQueryEntry } from "@dtos/entries/RecipeListQueryEntry";
-import { EntityNotFoundError } from "@rcp-and-plan/commons";
+import { RecipesListOutput } from "@dtos/outputs/RecipesListOutput";
+import { RecipeDailyOutput } from "@dtos/outputs/RecipeDailyOutput";
+import { RecipeOutput } from "@dtos/outputs/RecipeOutput";
 
+/**
+ * @openapi
+ * tags:
+ * - name: Recipes
+ *   description: Use cases for recipes content
+ * components:
+ *  schemas:
+ *   RecipesListOutput:
+ *      type: array
+ *      items:
+ *         $ref: '#/components/schemas/RecipeListOutput'
+ *   RecipeListOutput:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       title:
+ *         type: string
+ *       thumbnailUrl:
+ *         type: string
+ *   RecipeOutput:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       title:
+ *         type: string
+ *       description:
+ *         type: string
+ *       thumbnailUrl:
+ *         type: string
+ *       headerImg:
+ *         type: string
+ *       uniqueId:
+ *         type: string
+ *       language:
+ *         type: string
+ *       difficulty:
+ *         type: integer
+ *       time:
+ *         type: integer
+ *       portions:
+ *         type: integer
+ *       visibility:
+ *         type: integer
+ *       author:
+ *         type: string
+ *       publicationDate:
+ *         type: string
+ *         format: date-time
+ *       categories:
+ *         type: array
+ *         items:
+ *            $ref: '#/components/schemas/RecipeCategoryOutput'
+ *       ingredients:
+ *         type: array
+ *         items:
+ *            $ref: '#/components/schemas/RecipeIngredientOutput'
+ *       kitchenware:
+ *         type: array
+ *         items:
+ *            $ref: '#/components/schemas/RecipeKitchenwareOutput'
+ *       steps:
+ *         type: array
+ *         items:
+ *            $ref: '#/components/schemas/RecipeStepsOutput'
+ *   RecipeDailyOutput:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       title:
+ *         type: string
+ *       thumbnailUrl:
+ *         type: string
+ *       time:
+ *         type: integer
+ *       author:
+ *         type: string
+ *       publicationDate:
+ *         type: string
+ *         format: date-time
+ *       difficulty:
+ *         type: integer
+ *       portions:
+ *         type: integer
+ *       categories:
+ *         type: array
+ *         items:
+ *            $ref: '#/components/schemas/RecipeCategoryOutput'
+ *       ingredients:
+ *         type: array
+ *         items:
+ *            $ref: '#/components/schemas/RecipeIngredientOutput'
+ *   RecipeCategoryOutput:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       name:
+ *         type: string
+ *   RecipeKitchenwareOutput:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       name:
+ *         type: string
+ *       singularName:
+ *         type: string
+ *       quantity:
+ *         type: integer
+ *   RecipeStepsOutput:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       title:
+ *         type: string
+ *       body:
+ *         type: string
+ *       number:
+ *         type: integer
+ *   RecipeIngredientOutput:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       name:
+ *         type: string
+ *       singularName:
+ *         type: string
+ *       quantity:
+ *         type: integer
+ *       optional:
+ *         type: boolean
+ *       unit:
+ *         type: object
+ *         properties:
+ *            id:
+ *              type: integer
+ *            name:
+ *              type: string
+ *            shortName:
+ *              type: string
+ *
+ */
 class RecipesRouter {
   public router: Router;
 
@@ -22,6 +175,7 @@ class RecipesRouter {
     app.use("/recipes", this.router);
     this.routes();
   }
+
   /**
    * Sets up the routes for the RecipesRouter class.
    *
@@ -51,11 +205,11 @@ class RecipesRouter {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/RecipesListResponse'
+   *               $ref: '#/components/schemas/RecipesListOutput'
    */
   private async getRecipes(
     req: Request<unknown, unknown, unknown, RecipesListQueryEntry>,
-    res: Response,
+    res: Response<RecipesListOutput>,
   ) {
     const { container } = await Container.getInstance();
 
@@ -75,9 +229,9 @@ class RecipesRouter {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/RecipeDailyResponse'
+   *               $ref: '#/components/schemas/RecipeDailyOutput'
    */
-  private async getDailyRecipe(req: Request, res: Response) {
+  private async getDailyRecipe(req: Request, res: Response<RecipeDailyOutput>) {
     const { container } = await Container.getInstance();
 
     const contentService = container.get<ContentService>("ContentService");
@@ -102,14 +256,18 @@ class RecipesRouter {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/RecipeResponse'
+   *               $ref: '#/components/schemas/RecipeOutput'
    *       400:
    *         content:
    *            application/json:
    *              schema:
    *                $ref: '#/components/schemas/Exception'
    */
-  private async getRecipeById(req: Request, res: Response, next: NextFunction) {
+  private async getRecipeById(
+    req: Request,
+    res: Response<RecipeOutput | ExceptionErrorResponse>,
+    next: NextFunction,
+  ) {
     try {
       const { container } = await Container.getInstance();
 

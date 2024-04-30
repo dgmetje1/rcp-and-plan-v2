@@ -120,7 +120,6 @@ import Container from "@services/DI";
  *              type: string
  *
  */
-
 class RecipesRouter {
   public router: Router;
 
