@@ -8,5 +8,8 @@
   "scripts": {
     "build": "tsc --diagnostics && tsc-alias",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "peerDependencies": {
+    "sequelize-typescript": "2.1.6"
   }
 }

@@ -1,23 +1,45 @@
-import swaggerAutogen from "swagger-autogen";
-import glob from "glob";
+import swaggerJsdoc from "swagger-jsdoc";
 import path from "path";
+import { writeFile } from "fs";
 
 const __dirname = import.meta.dirname;
 
 const serviceBaseURI = path.join(__dirname, "..");
 
-const outputFile = "../documentation.json";
-const endpointsFiles = [
-  `${serviceBaseURI}/server.ts`,
-  ...glob.sync(`${serviceBaseURI}/routes/*.route.*`),
-];
+const outputFile = "./documentation.json";
 
-const doc = {
-  info: {
-    title: "Social",
-    description: "Bounded context of users interaction",
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "BC_Social",
+      version: "1.0.0",
+    },
+    components: {
+      schemas: {
+        Exception: {
+          type: "object",
+          properties: {
+            exceptionMessage: {
+              type: "string",
+            },
+            params: {
+              type: "array",
+              items: {
+                type: "object",
+              },
+            },
+          },
+        },
+      },
+    },
   },
-  host: "localhost:5500",
+  apis: [`${serviceBaseURI}/routes/*.route.*`],
 };
 
-void swaggerAutogen({ openapi: "3.0.0" })(outputFile, endpointsFiles, doc);
+const openapiSpecification = swaggerJsdoc(options);
+const outPath = path.join(serviceBaseURI, outputFile);
+
+writeFile(outPath, JSON.stringify(openapiSpecification), () =>
+  console.log("Swagger documentation generated!"),
+);

@@ -21,7 +21,9 @@
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "paths": {
       "@services/*": ["./services/*"],
-      "@application/*": ["./application/*"]
+      "@application/*": ["./application/*"],
+      "@infrastructure/*": ["./infrastructure/*"],
+      "@dtos/*": ["./dtos/*"]
     }
   },
   "include": ["src"]

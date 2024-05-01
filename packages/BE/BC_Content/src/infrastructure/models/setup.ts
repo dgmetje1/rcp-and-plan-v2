@@ -1,4 +1,4 @@
-import { SqlBuilder } from "@infrastructure/common/sqlBuilder";
+import { SqlBuilder } from "@rcp-and-plan/commons";
 
 import { Category } from "./Category";
 import { Ingredient } from "./Ingredient";

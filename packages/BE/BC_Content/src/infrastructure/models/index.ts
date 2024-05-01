@@ -5,4 +5,4 @@ export { Recipe } from "./Recipe";
 export { RecipeCategory } from "./RecipeCategory";
 
 //side effect
-setupModels();
+void setupModels();

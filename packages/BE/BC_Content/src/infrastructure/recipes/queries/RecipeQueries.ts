@@ -5,14 +5,14 @@ import { RecipesListQueryRequest } from "@dtos/requests/RecipesListQueryRequest"
 import { RecipeDailyResponse } from "@dtos/responses/RecipeDailyResponse";
 import { RecipeResponse } from "@dtos/responses/RecipeResponse";
 import { RecipesListResponse } from "@dtos/responses/RecipesListResponse";
-import { Category, Recipe } from "@infrastructure/recipes/models";
+import { Category, Recipe } from "@infrastructure/models";
 
-import { CategoryAttributes } from "../models/Category/types";
-import { Ingredient } from "../models/Ingredient";
-import { Kitchenware } from "../models/Kitchenware";
-import { RecipeAttributes } from "../models/Recipe/types";
-import { RecipeStep } from "../models/RecipeStep";
-import { Unit } from "../models/Unit";
+import { CategoryAttributes } from "../../models/Category/types";
+import { Ingredient } from "../../models/Ingredient";
+import { Kitchenware } from "../../models/Kitchenware";
+import { RecipeAttributes } from "../../models/Recipe/types";
+import { RecipeStep } from "../../models/RecipeStep";
+import { Unit } from "../../models/Unit";
 import { IRecipeQueries } from "./types";
 
 export class RecipeQueries implements IRecipeQueries {

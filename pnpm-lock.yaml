@@ -157,66 +157,24 @@ importers:
 
   packages/BE/BC_Social:
     dependencies:
-      '@types/express':
-        specifier: 4.17.21
-        version: 4.17.21
-      '@types/glob':
-        specifier: ^7.1.4
-        version: 7.2.0
-      '@types/swagger-ui-express':
-        specifier: ^4.1.6
-        version: 4.1.6
-      compression:
-        specifier: ^1.7.4
-        version: 1.7.4
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.4.5
-      express:
-        specifier: 4.18.3
-        version: 4.18.3
-      glob:
-        specifier: ^7.2.0
-        version: 7.2.3
-      helmet:
-        specifier: ^4.6.0
-        version: 4.6.0
-      node-dependency-injection:
-        specifier: 3.1.2
-        version: 3.1.2(@babel/core@7.24.4)(typescript@5.4.2)
-      node-dependency-injection-express-middleware:
-        specifier: ^1.2.2
-        version: 1.2.2
-      reflect-metadata:
-        specifier: ^0.2.2
-        version: 0.2.2
+      '@rcp-and-plan/commons':
+        specifier: workspace:*
+        version: link:../Commons
+      mysql2:
+        specifier: ^3.9.3
+        version: 3.9.7
       sequelize:
         specifier: ^6.37.1
         version: 6.37.3(mysql2@3.9.7)
       sequelize-typescript:
         specifier: ^2.1.6
         version: 2.1.6(@types/node@20.11.25)(@types/validator@13.11.9)(reflect-metadata@0.2.2)(sequelize@6.37.3)
-      swagger-autogen:
-        specifier: ^2.23.7
-        version: 2.23.7
-      swagger-ui-express:
-        specifier: ^5.0.0
-        version: 5.0.0(express@4.18.3)
-      tsconfig-paths:
-        specifier: ^4.2.0
-        version: 4.2.0
-    devDependencies:
-      '@types/compression':
-        specifier: ^1.7.2
-        version: 1.7.5
-      ts-node-dev:
-        specifier: 2.0.0
-        version: 2.0.0(@types/node@20.11.25)(typescript@5.4.2)
-      tsc-alias:
-        specifier: ^1.8.8
-        version: 1.8.8
 
-  packages/BE/Commons: {}
+  packages/BE/Commons:
+    dependencies:
+      sequelize-typescript:
+        specifier: 2.1.6
+        version: 2.1.6(@types/node@20.11.25)(@types/validator@13.11.9)(reflect-metadata@0.2.2)(sequelize@6.37.3)
 
   packages/FE:
     dependencies:
@@ -1725,6 +1683,7 @@ packages:
     dependencies:
       '@types/minimatch': 5.1.2
       '@types/node': 20.11.25
+    dev: true
 
   /@types/http-cache-semantics@4.0.4:
     resolution: {integrity: sha512-1m0bIFVc7eJWyve9S0RnuRgcQqF/Xd5QsUZAZeQFr1Q3/p9JWoQQEqmVy+DPTNpGXwhgIetAoYF8JSc33q29QA==}
@@ -1761,6 +1720,7 @@ packages:
 
   /@types/minimatch@5.1.2:
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
+    dev: true
 
   /@types/ms@0.7.34:
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
@@ -1845,6 +1805,7 @@ packages:
     dependencies:
       '@types/express': 4.17.21
       '@types/serve-static': 1.15.7
+    dev: true
 
   /@types/validator@13.11.9:
     resolution: {integrity: sha512-FCTsikRozryfayPuiI46QzH3fnrOoctTjvOYZkho9BTFLCOZ2rgZJHMOVgCOfttjPJcgOx52EpkY0CMfy87MIw==}
@@ -2099,12 +2060,6 @@ packages:
     resolution: {integrity: sha512-cjkyv4OtNCIeqhHrfS81QWXoCBPExR/J62oyEqepVw8WaQeSqpW2uhuLPh1m9eWhDuOo/jUXVTlifvesOWp/4A==}
     engines: {node: '>=0.4.0'}
     dev: true
-
-  /acorn@7.4.1:
-    resolution: {integrity: sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==}
-    engines: {node: '>=0.4.0'}
-    hasBin: true
-    dev: false
 
   /acorn@8.11.3:
     resolution: {integrity: sha512-Y9rRfJG5jcKOE0CLisYbojUjIrIEE7AGMzA/Sm4BslANhbS+cDMpgBdcPT91oJ7OuJ9hYJBx59RjbhxVnrF8Xg==}
@@ -2721,11 +2676,6 @@ packages:
   /deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
     dev: true
-
-  /deepmerge@4.3.1:
-    resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
-    engines: {node: '>=0.10.0'}
-    dev: false
 
   /defaults@1.0.4:
     resolution: {integrity: sha512-eFuaLoy/Rxalv2kr+lqMlUnrDWV+3j4pljOIJgLIhI058IQfWJ7vXhyEIHu+HtC738klGALYxOKDO0bQP3tg8A==}
@@ -5378,15 +5328,6 @@ packages:
   /supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
-
-  /swagger-autogen@2.23.7:
-    resolution: {integrity: sha512-vr7uRmuV0DCxWc0wokLJAwX3GwQFJ0jwN+AWk0hKxre2EZwusnkGSGdVFd82u7fQLgwSTnbWkxUL7HXuz5LTZQ==}
-    dependencies:
-      acorn: 7.4.1
-      deepmerge: 4.3.1
-      glob: 7.2.3
-      json5: 2.2.3
-    dev: false
 
   /swagger-jsdoc@6.2.8(openapi-types@12.1.3):
     resolution: {integrity: sha512-VPvil1+JRpmJ55CgAtn8DIcpBs0bL5L3q5bVQvF4tAW/k/9JYSj7dCpaYCAv5rufe0vcCbBRQXGvzpkWjvLklQ==}

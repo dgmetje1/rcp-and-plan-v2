@@ -6,6 +6,9 @@ import "dotenv/config";
 
 import swaggerDocument from "./documentation.json";
 import Container from "./DI";
+import cors from "cors";
+import responseTime from "response-time";
+import { errorHandler } from "./middlewares/errorHandler";
 
 const PORT = process.env.PORT || 3000;
 
@@ -15,32 +18,35 @@ class App {
   constructor() {
     this.app = express();
     this.config();
-    this.routes();
-    this.swagger();
+    void this.routes().then(() => {
+      this.swagger();
+      this.app.get("*", function (_req, res) {
+        res.status(404).send("Not existing url!");
+      });
+      this.app.use(errorHandler);
+      this.app.listen(PORT, () =>
+        console.log(`Example app listening on port ${PORT}`),
+      );
+    });
   }
 
   private config(): void {
+    this.app.use(responseTime());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
+    this.app.use(cors());
     this.app.use(helmet.xssFilter());
     this.app.use(helmet.noSniff());
     this.app.use(helmet.hidePoweredBy());
     this.app.use(helmet.frameguard({ action: "deny" }));
     this.app.use(compress());
-    this.app.listen(PORT, () =>
-      console.log(`Example app listening on port ${PORT}`),
-    );
   }
 
   private async routes() {
     const { container } = await Container.getInstance();
 
-    const exampleRoute = container.get("ExampleRoute");
-    this.app.use("/", exampleRoute.router);
-
-    this.app.get("*", function (req, res) {
-      res.status(404).send("Not existing url!");
-    });
+    const userRouter = container.get("UsersRouter");
+    userRouter.setupRouter(this.app);
   }
 
   private swagger(): void {
