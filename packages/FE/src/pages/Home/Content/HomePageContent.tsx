@@ -8,7 +8,7 @@ import HomePageRecipePreviewCard from "../RecipePreviewCard";
 const HomePageContent = React.memo(() => {
   return (
     <Container
-      maxWidth="xl"
+      maxWidth="lg"
       sx={{ display: "flex", flexDirection: "column", gap: 4, py: 4, mt: 2 }}
     >
       <Category id={undefined} title="What's new" />

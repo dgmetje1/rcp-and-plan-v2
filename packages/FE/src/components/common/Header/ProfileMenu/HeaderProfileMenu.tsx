@@ -1,10 +1,15 @@
 import React from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { AccountCircle } from "@mui/icons-material";
+import { Avatar, Divider, Popover, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { useNavigate } from "@tanstack/react-router";
 
 const HeaderProfileMenu = () => {
+  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const navigate = useNavigate();
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -13,6 +18,47 @@ const HeaderProfileMenu = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogin = React.useCallback(() => {
+    handleClose();
+    loginWithRedirect();
+  }, [loginWithRedirect]);
+
+  const handleLogout = React.useCallback(() => {
+    handleClose();
+    logout({ logoutParams: { returnTo: window.location.origin } });
+  }, [logout]);
+
+  const handleGoToProfile = React.useCallback(() => {
+    handleClose();
+    navigate({ to: "/profile" });
+  }, [navigate]);
+
+  const authenticatedProfileLinks = React.useMemo(
+    () => (
+      <>
+        <Typography
+          fontWeight={600}
+          sx={{
+            px: 2,
+            pb: 1,
+          }}
+        >
+          {`Logged as ${user?.nickname}`}
+        </Typography>
+        <Divider />
+        <MenuItem onClick={handleGoToProfile}>Profile</MenuItem>
+        <MenuItem onClick={handleLogout}>Log out</MenuItem>
+      </>
+    ),
+    [handleGoToProfile, handleLogout, user?.nickname],
+  );
+
+  const anonymousProfileLinks = React.useMemo(
+    () => <MenuItem onClick={handleLogin}>Log in</MenuItem>,
+    [handleLogin],
+  );
+
   return (
     <>
       <IconButton
@@ -22,17 +68,25 @@ const HeaderProfileMenu = () => {
         color="inherit"
         onClick={handleMenu}
       >
-        <AccountCircle fontSize="large" />
+        {isAuthenticated && user?.picture ? (
+          <Avatar alt={`${user.nickname} profile picture`} src={user.picture} />
+        ) : (
+          <AccountCircle fontSize="large" />
+        )}
       </IconButton>
-      <Menu
+      <Popover
         anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
         id="menu-appbar"
         onClose={handleClose}
         open={Boolean(anchorEl)}
+        slotProps={{ paper: { sx: { py: 1, minWidth: 150 } } }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-      </Menu>
+        {isAuthenticated ? authenticatedProfileLinks : anonymousProfileLinks}
+      </Popover>
     </>
   );
 };

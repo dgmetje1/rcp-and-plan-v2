@@ -96,7 +96,6 @@ const RecipeDetailPage = () => {
             />
           </Box>
         </Box>
-
         <RecipeDetailPageStepsSection />
       </Container>
     </Box>

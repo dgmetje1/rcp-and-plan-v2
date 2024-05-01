@@ -1,5 +1,9 @@
 import { FC } from "react";
-import { Auth0Provider, Auth0ProviderOptions } from "@auth0/auth0-react";
+import {
+  Auth0Provider,
+  Auth0ProviderOptions,
+  useAuth0,
+} from "@auth0/auth0-react";
 import { CssBaseline, GlobalStyles, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -62,10 +66,15 @@ const Main: FC = () => (
     />
     <Auth0Provider {...auth0configProps}>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <InnerMain />
       </QueryClientProvider>
     </Auth0Provider>
   </ThemeProvider>
 );
+
+const InnerMain = () => {
+  const authContext = useAuth0();
+  return <RouterProvider context={{ authContext }} router={router} />;
+};
 
 export default Main;

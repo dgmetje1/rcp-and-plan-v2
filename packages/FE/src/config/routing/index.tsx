@@ -6,7 +6,7 @@ import { routeTree } from "./routeTree.gen";
 const getRouter = (queryClient: QueryClient) =>
   createRouter({
     routeTree,
-    context: { queryClient },
+    context: { queryClient, authContext: undefined! },
     defaultPreload: "intent",
     // Since we're using React Query, we don't want loader calls to ever be stale
     // This will ensure that the loader is always called when the route is preloaded or visited
@@ -16,4 +16,5 @@ const getRouter = (queryClient: QueryClient) =>
 export default getRouter;
 
 export { Route as HomePageRoute } from "./routes/_mainLayout/index.lazy";
-export { Route as RecipeDetailRoute } from "./routes/_mainLayout/recipe.$id.lazy";
+export { Route as ProfileRoute } from "./routes/_mainLayout/profile";
+export { Route as RecipeDetailRoute } from "./routes/_mainLayout/recipe.$id";
