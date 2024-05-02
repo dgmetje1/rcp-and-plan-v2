@@ -3,8 +3,12 @@ import { createRouter } from "@tanstack/react-router";
 
 import { routeTree } from "./routeTree.gen";
 
-const getRouter = (queryClient: QueryClient) =>
-  createRouter({
+let singletonRouter: ReturnType<typeof createRouter> | null = null;
+
+const getRouter = (queryClient: QueryClient) => {
+  if (singletonRouter) return singletonRouter;
+
+  singletonRouter = createRouter({
     routeTree,
     context: { queryClient, authContext: undefined! },
     defaultPreload: "intent",
@@ -12,6 +16,9 @@ const getRouter = (queryClient: QueryClient) =>
     // This will ensure that the loader is always called when the route is preloaded or visited
     defaultPreloadStaleTime: 0,
   });
+
+  return singletonRouter;
+};
 
 export default getRouter;
 

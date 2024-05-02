@@ -11,7 +11,7 @@ export const useApiQuery = <T,>(
   actionKey: string,
   queryKey: QueryKey,
   queryFn: QueryFunction<T>,
-  queryConfig?: UndefinedInitialDataOptions<T>,
+  queryConfig?: Omit<UndefinedInitialDataOptions<T>, "queryKey">,
 ) => {
   console.log(actionKey);
   return useQuery({ queryKey, queryFn, ...queryConfig });

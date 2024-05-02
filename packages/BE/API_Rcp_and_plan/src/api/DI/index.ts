@@ -24,10 +24,14 @@ export default class Container {
     await autowire.process();
 
     const { default: RecipeRouter } = await import("@api/routes/recipes.route");
+    const { default: UsersRouter } = await import("@api/routes/users.route");
     const { ContentService } = await import("@api/services/content");
+    const { SocialService } = await import("@api/services/social");
 
     this._container.register("RecipeRouter", RecipeRouter);
+    this._container.register("UsersRouter", UsersRouter);
     this._container.register("ContentService", ContentService);
+    this._container.register("SocialService", SocialService);
   }
 
   public get container(): ContainerBuilder {

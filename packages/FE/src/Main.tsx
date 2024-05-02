@@ -1,17 +1,14 @@
 import { FC } from "react";
-import {
-  Auth0Provider,
-  Auth0ProviderOptions,
-  useAuth0,
-} from "@auth0/auth0-react";
+import { Auth0Provider, Auth0ProviderOptions } from "@auth0/auth0-react";
 import { CssBaseline, GlobalStyles, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RouterProvider } from "@tanstack/react-router";
+import { QueryClientProvider } from "@tanstack/react-query";
 
+import App from "@/components/App";
 import config from "@/config";
 import getRouter from "@/config/routing";
 import themeOptions from "@/config/theme";
+import { queryClient } from "@/lib/core/queryClient";
 
 const theme = createTheme(themeOptions);
 
@@ -20,16 +17,9 @@ const auth0configProps: Auth0ProviderOptions = {
   domain: config.auth0Domain,
   authorizationParams: {
     redirect_uri: window.location.origin,
+    audience: config.auth0ApiAudience,
   },
 };
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-    },
-  },
-});
 
 const router = getRouter(queryClient);
 
@@ -66,15 +56,10 @@ const Main: FC = () => (
     />
     <Auth0Provider {...auth0configProps}>
       <QueryClientProvider client={queryClient}>
-        <InnerMain />
+        <App />
       </QueryClientProvider>
     </Auth0Provider>
   </ThemeProvider>
 );
-
-const InnerMain = () => {
-  const authContext = useAuth0();
-  return <RouterProvider context={{ authContext }} router={router} />;
-};
 
 export default Main;

@@ -16,6 +16,13 @@ const options = {
       version: "1.0.0",
     },
     components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
       schemas: {
         Exception: {
           type: "object",

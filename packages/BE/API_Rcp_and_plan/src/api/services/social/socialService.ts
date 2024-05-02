@@ -8,13 +8,11 @@ export class SocialService {
       baseURL: process.env[`SERVICE_${SocialService._serviceName}`],
     });
   }
-  postExample(body: any) {
-    return this._client.post("/", body);
+
+  getUserByAccountId(accountId: string) {
+    return this._client.get(`/users/account/${accountId}`);
   }
-  getData() {
-    return this._client.get("/");
-  }
-  getDataById(id: number) {
-    return this._client.get(`/${id}`);
+  getUserById(id: string) {
+    return this._client.get(`/users/${id}`);
   }
 }

@@ -20,6 +20,7 @@ const config: Config = {
   cdnUrl: "url",
   auth0Domain: "url",
   auth0ClientId: "id",
+  auth0ApiAudience: "id",
 };
 
 const envConfig: Partial<Config> = omitBy(
@@ -29,6 +30,7 @@ const envConfig: Partial<Config> = omitBy(
     cdnUrl: get(import.meta.env, "VITE_CDN_URL"),
     auth0Domain: get(import.meta.env, "VITE_AUTH0_DOMAIN"),
     auth0ClientId: get(import.meta.env, "VITE_AUTH0_CLIENT_ID"),
+    auth0ApiAudience: get(import.meta.env, "VITE_AUTH0_API_AUDIENCE"),
   },
   isUndefined,
 );

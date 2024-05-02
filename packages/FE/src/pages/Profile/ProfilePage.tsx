@@ -1,10 +1,11 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { Box, Container } from "@mui/material";
+import { useAuthContext } from "@/context/Auth";
 
 import bannerImg from "@/assets/banner-profile.jpg";
 
 const ProfilePage = () => {
-  const { user } = useAuth0();
+  const { account } = useAuthContext();
+
   return (
     <Box
       flexDirection="column"
@@ -16,7 +17,7 @@ const ProfilePage = () => {
         src={bannerImg}
         width="100%"
       />
-      <Container maxWidth="lg">{user?.nickname}</Container>
+      <Container maxWidth="lg">{account?.nickName}</Container>
     </Box>
   );
 };

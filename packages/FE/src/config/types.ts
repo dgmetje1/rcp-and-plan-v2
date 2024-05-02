@@ -14,4 +14,5 @@ export type Config = {
   cdnUrl: string;
   auth0Domain: string;
   auth0ClientId: string;
+  auth0ApiAudience: string;
 };

@@ -5,12 +5,20 @@ import express from "express";
 import helmet from "helmet";
 import responseTime from "response-time";
 import swaggerUi from "swagger-ui-express";
+import http from "http";
+import https from "https";
+import fs from "fs";
 
 import Container from "./DI";
 import swaggerDocument from "./documentation.json";
 import { errorHandler } from "./middleware/errorHandler";
 
 const PORT = process.env.PORT || 3000;
+
+const httpsOptions = {
+  key: fs.readFileSync("./.cert/key.pem"),
+  cert: fs.readFileSync("./.cert/cert.pem"),
+};
 
 class App {
   public readonly app: express.Application;
@@ -24,9 +32,13 @@ class App {
         res.status(404).send("Not existing url!");
       });
       this.app.use(errorHandler);
-      this.app.listen(PORT, () =>
-        console.log(`Example app listening on port ${PORT}`),
-      );
+
+      http.createServer(this.app).listen(PORT, () => {
+        console.log(`API app listening on port ${PORT}`);
+      });
+      https.createServer(httpsOptions, this.app).listen(+PORT + 1, () => {
+        console.log(`API app listening on secure port ${+PORT + 1}`);
+      });
     });
   }
 
@@ -47,6 +59,9 @@ class App {
 
     const recipeRouter = container.get("RecipeRouter");
     recipeRouter.setupRouter(this.app);
+
+    const userRouter = container.get("UsersRouter");
+    userRouter.setupRouter(this.app);
   }
 
   private swagger(): void {
