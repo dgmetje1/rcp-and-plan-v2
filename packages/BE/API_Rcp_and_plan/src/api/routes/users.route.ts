@@ -10,6 +10,7 @@ import Container from "@api/DI";
 import { SocialService } from "@api/services/social";
 import { UserAccountOutput } from "@dtos/outputs/UserAccountOutput";
 import authMiddleware from "@api/middleware/auth/authMiddleware";
+import { userMiddleware } from "@api/middleware/user";
 
 /**
  * @openapi
@@ -56,7 +57,7 @@ class UsersRouter {
    */
   private routes(): void {
     this.router.get("/account", authMiddleware, this.getUserByAccountId);
-    this.router.get("/", authMiddleware, this.getUserById);
+    this.router.get("/", authMiddleware, userMiddleware, this.getUserById);
   }
 
   /**
@@ -94,7 +95,7 @@ class UsersRouter {
 
   /**
    * @openapi
-   * /users/{id}:
+   * /users:
    *   get:
    *     summary: Returns a user profile.
    *     tags: [User]
@@ -107,12 +108,20 @@ class UsersRouter {
    *             schema:
    *               $ref: '#/components/schemas/UserAccountOutput'
    */
-  private async getUserById(req: Request, res: Response<UserAccountOutput>) {
+  private async getUserById(
+    req: Request,
+    res: Response<UserAccountOutput>,
+    next: NextFunction,
+  ) {
     const { container } = await Container.getInstance();
 
-    const socialService = container.get<SocialService>("SocialService");
-    const response = await socialService.getUserById(req.params.id);
-    res.send(response.data);
+    try {
+      const socialService = container.get<SocialService>("SocialService");
+      const response = await socialService.getUserById(req.context.user.id);
+      res.send(response.data);
+    } catch (err) {
+      next(err);
+    }
   }
 }
 

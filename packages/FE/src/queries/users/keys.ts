@@ -7,3 +7,10 @@ export const getAccountKeys = () => {
 
   return { key, queryKey };
 };
+
+export const getUserKeys = () => {
+  const queryKey = [API_ACTION_BASE, "getUser"];
+  const key = queryKey.join("/");
+
+  return { key, queryKey };
+};

@@ -14,9 +14,12 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
+    "declaration": true,
+    "declarationMap": true,
     "outDir": "dist",
     "resolveJsonModule": true,
     "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "emitDecoratorMetadata": true,
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "paths": {

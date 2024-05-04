@@ -39,6 +39,10 @@ const Main: FC = () => (
         body: {
           msOverflowStyle: "none",
           scrollbarWidth: "none",
+          height: "100dvh",
+        },
+        "#root": {
+          height: "100%",
         },
         a: {
           color: "inherit",

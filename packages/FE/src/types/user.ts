@@ -13,3 +13,4 @@ export type User = {
 };
 
 export type UserAccountDTO = User;
+export type UserDTO = User;

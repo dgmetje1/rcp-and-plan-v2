@@ -1,5 +1,14 @@
 import { Api } from "@/lib/api";
-import { UserAccountDTO } from "@/types/user";
+import { UserAccountDTO, UserDTO } from "@/types/user";
 
-export const getAccount = () =>
-  new Api().get<UserAccountDTO>("users/account", { withAuth: true });
+const authRequestOptions = { withAuth: true };
+
+export const getAccount = () => {
+  console.log("CALLING API");
+  return new Api().get<UserAccountDTO>("users/account", authRequestOptions);
+};
+
+export const getUser = () => {
+  console.log("CALLING USER APi");
+  return new Api().get<UserDTO>("users", authRequestOptions);
+};

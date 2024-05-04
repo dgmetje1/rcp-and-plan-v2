@@ -5,7 +5,6 @@ const checkAuthentication = auth({
   audience: process.env.AUDIENCE,
   tokenSigningAlg: "RS256",
   timeoutDuration: 10000,
-  
 });
 
 export default checkAuthentication;

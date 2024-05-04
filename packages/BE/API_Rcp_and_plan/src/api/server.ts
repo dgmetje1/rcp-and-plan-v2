@@ -8,6 +8,7 @@ import swaggerUi from "swagger-ui-express";
 import http from "http";
 import https from "https";
 import fs from "fs";
+import expressContext from "express-request-context";
 
 import Container from "./DI";
 import swaggerDocument from "./documentation.json";
@@ -52,6 +53,7 @@ class App {
     this.app.use(helmet.hidePoweredBy());
     this.app.use(helmet.frameguard({ action: "deny" }));
     this.app.use(compress());
+    this.app.use(expressContext());
   }
 
   private async routes() {

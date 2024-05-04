@@ -5,9 +5,13 @@ import { Avatar, Divider, Popover, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "@tanstack/react-router";
+import { useAuthContext } from "@/context/Auth";
+
+import config from "@/config";
 
 const HeaderProfileMenu = () => {
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { account } = useAuthContext();
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -68,8 +72,11 @@ const HeaderProfileMenu = () => {
         color="inherit"
         onClick={handleMenu}
       >
-        {isAuthenticated && user?.picture ? (
-          <Avatar alt={`${user.nickname} profile picture`} src={user.picture} />
+        {isAuthenticated && account?.profilePicture ? (
+          <Avatar
+            alt={`${account?.nickName} profile picture`}
+            src={`${config.cdnUrl}/${account.profilePicture}`}
+          />
         ) : (
           <AccountCircle fontSize="large" />
         )}

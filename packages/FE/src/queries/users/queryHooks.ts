@@ -1,14 +1,16 @@
 import { UndefinedInitialDataOptions } from "@tanstack/react-query";
 
-import { useApiQuery } from "@/middleware/api";
+import { useApiQuery, useSuspenseApiQuery } from "@/middleware/api";
 
-import { getAccountKeys } from "./keys";
+import { getAccountKeys, getUserKeys } from "./keys";
+import { getUserOptions } from "./options";
 import { getAccount } from "./queries";
 
 export const useGetAccount = (
   enabled?: UndefinedInitialDataOptions["enabled"],
 ) => {
   const { key, queryKey } = getAccountKeys();
+  console.log(enabled);
 
   return useApiQuery(key, queryKey, () => getAccount(), {
     staleTime: Infinity,
@@ -16,4 +18,10 @@ export const useGetAccount = (
     refetchOnWindowFocus: false,
     enabled,
   });
+};
+
+export const useSuspenseGetUser = () => {
+  const { key } = getUserKeys();
+
+  return useSuspenseApiQuery(key, getUserOptions());
 };

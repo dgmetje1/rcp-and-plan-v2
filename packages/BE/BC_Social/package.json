@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "description": "",
   "license": "",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@rcp-and-plan/commons": "workspace:*",
     "sequelize": "^6.37.1",
@@ -10,8 +12,8 @@
     "mysql2": "^3.9.3"
   },
   "scripts": {
-    "start": "pnpm run build && pnpm run generate-swagger && node dist/services/server.js",
-    "dev": "ts-node-dev -r tsconfig-paths/register src/services/server.ts",
+    "start": "pnpm run build && pnpm run generate-swagger && node dist/services/index.js",
+    "dev": "ts-node-dev -r tsconfig-paths/register src/services/index.ts",
     "dev:swagger": "pnpm run generate-swagger && pnpm run dev",
     "build": "tsc --diagnostics && tsc-alias",
     "generate-swagger": "ts-node src/services/utils/swagger.mjs"

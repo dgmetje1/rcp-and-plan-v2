@@ -1,3 +1,4 @@
+import { UserAccountResponse } from "@rcp-and-plan/bc_social";
 import axios, { AxiosInstance } from "axios";
 
 export class SocialService {
@@ -10,9 +11,9 @@ export class SocialService {
   }
 
   getUserByAccountId(accountId: string) {
-    return this._client.get(`/users/account/${accountId}`);
+    return this._client.get<UserAccountResponse>(`/users/account/${accountId}`);
   }
   getUserById(id: string) {
-    return this._client.get(`/users/${id}`);
+    return this._client.get<UserAccountResponse>(`/users/${id}`);
   }
 }

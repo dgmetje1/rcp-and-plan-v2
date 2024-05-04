@@ -15,6 +15,12 @@
         "ingredients_title": "Ingredients"
       }
     },
+    "profile": {
+      "tabs": {
+        "details": "Details",
+        "recipes": "Recipes"
+      }
+    },
     "recipe": {
       "ingredients_title": "Ingredients",
       "kitchenware_title": "Kitchenware",
