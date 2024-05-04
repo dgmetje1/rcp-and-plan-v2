@@ -1,11 +1,11 @@
 import { Box, Container } from "@mui/material";
-import { useAuthContext } from "@/context/Auth";
 
 import bannerImg from "@/assets/banner-profile.jpg";
 
-const ProfilePage = () => {
-  const { account } = useAuthContext();
+import ProfilePageAccountDetails from "./AccountDetails";
+import ProfilePageAccountTabs from "./AccountTabs";
 
+const ProfilePage = () => {
   return (
     <Box
       flexDirection="column"
@@ -17,7 +17,10 @@ const ProfilePage = () => {
         src={bannerImg}
         width="100%"
       />
-      <Container maxWidth="lg">{account?.nickName}</Container>
+      <Container maxWidth="lg">
+        <ProfilePageAccountDetails />
+        <ProfilePageAccountTabs />
+      </Container>
     </Box>
   );
 };
