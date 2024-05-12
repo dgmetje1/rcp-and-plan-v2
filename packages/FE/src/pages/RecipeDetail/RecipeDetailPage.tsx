@@ -18,17 +18,9 @@ const RecipeDetailPage = () => {
 
   return (
     <Box component="article" py={5} sx={{ bgcolor: "#fffcf6", flexGrow: 1 }}>
-      <Container
-        maxWidth="lg"
-        sx={{ display: "flex", flexDirection: "column", gap: 4 }}
-      >
+      <Container maxWidth="lg" sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
         <Box flexDirection="column">
-          <Typography
-            component="h1"
-            fontSize={{ xs: "2rem", md: "3rem" }}
-            fontWeight={700}
-            variant="h3"
-          >
+          <Typography component="h1" fontSize={{ xs: "2rem", md: "3rem" }} fontWeight={700} variant="h3">
             {recipe.title}
           </Typography>
         </Box>
@@ -44,19 +36,9 @@ const RecipeDetailPage = () => {
             }}
             xs={12}
           >
-            <img
-              height="100%"
-              src={`${config.cdnUrl}/${recipe.headerImg}`}
-              width="100%"
-            />
+            <img height="100%" src={`${config.cdnUrl}/${recipe.headerImg}`} width="100%" />
           </Grid>
-          <Grid
-            item
-            lg={4}
-            md={6}
-            sx={{ display: "flex", flexDirection: "column", gap: 3 }}
-            xs={12}
-          >
+          <Grid item lg={4} md={6} sx={{ display: "flex", flexDirection: "column", gap: 3 }} xs={12}>
             <RecipeDetailPageInfoCard />
             <RecipeDetailPageAuthorCard />
           </Grid>
@@ -64,37 +46,27 @@ const RecipeDetailPage = () => {
         <Typography component="section" variant="body1">
           <RichTextContent content={recipe.description} />
         </Typography>
-        <Box
-          component="section"
-          display="flex"
-          flexDirection={{ xs: "column", md: "row" }}
-        >
-          <Box display="flex" flexDirection="column" flexGrow={1}>
-            <List
-              items={recipe.ingredients}
-              renderItem={ingredient =>
-                `${ingredient.quantity} ${ingredient.units.shortName} de ${ingredient.name.toLocaleLowerCase()}`
-              }
-              title={
-                <Typography variant="h4">
-                  {t("pages.recipe.ingredients_title")}
-                </Typography>
-              }
-            />
-          </Box>
-          <Box display="flex" flexDirection="column" flexGrow={1}>
-            <List
-              items={recipe.kitchenware}
-              renderItem={kitchenware =>
-                `${kitchenware.quantity} ${kitchenware.name.toLocaleLowerCase()}`
-              }
-              title={
-                <Typography variant="h4">
-                  {t("pages.recipe.kitchenware_title")}
-                </Typography>
-              }
-            />
-          </Box>
+        <Box component="section" display="flex" flexDirection={{ xs: "column", md: "row" }}>
+          {!!recipe.ingredients.length && (
+            <Box display="flex" flexDirection="column" flexGrow={1}>
+              <List
+                items={recipe.ingredients}
+                renderItem={ingredient =>
+                  `${ingredient.quantity} ${ingredient.units.shortName} de ${ingredient.name.toLocaleLowerCase()}`
+                }
+                title={<Typography variant="h4">{t("pages.recipe.ingredients_title")}</Typography>}
+              />
+            </Box>
+          )}
+          {!!recipe.kitchenware.length && (
+            <Box display="flex" flexDirection="column" flexGrow={1}>
+              <List
+                items={recipe.kitchenware}
+                renderItem={kitchenware => `${kitchenware.quantity} ${kitchenware.name.toLocaleLowerCase()}`}
+                title={<Typography variant="h4">{t("pages.recipe.kitchenware_title")}</Typography>}
+              />
+            </Box>
+          )}
         </Box>
         <RecipeDetailPageStepsSection />
       </Container>

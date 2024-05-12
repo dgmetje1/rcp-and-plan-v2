@@ -3,7 +3,7 @@ import { Optional } from "sequelize";
 import { Recipe } from "../Recipe";
 
 export interface CategoryAttributes {
-  id: number;
+  id: string;
   name: string;
   description: string;
   language: string;

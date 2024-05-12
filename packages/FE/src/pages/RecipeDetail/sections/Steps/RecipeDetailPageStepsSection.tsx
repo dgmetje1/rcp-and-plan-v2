@@ -11,16 +11,14 @@ const RecipeDetailPageStepsSection = () => {
 
   const { id } = RecipeDetailRoute.useParams();
   const { data: recipe } = useSuspenseGetRecipe(id);
+
+  if (!recipe.steps.length) return null;
   return (
     <Box component="section">
       <Typography variant="h4">{t("pages.recipe.steps_title")}</Typography>
       <Box component="ol">
         {recipe.steps.map(step => (
-          <Box
-            component="li"
-            fontWeight="bold"
-            key={`${recipe.id}-step-${step.number}`}
-          >
+          <Box component="li" fontWeight="bold" key={`${recipe.id}-step-${step.number}`}>
             <Box component="span">{step.title}</Box>
             <Typography>
               <RichTextContent content={step.body} />

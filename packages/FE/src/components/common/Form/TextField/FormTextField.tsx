@@ -2,7 +2,9 @@ import React from "react";
 import { useController } from "react-hook-form";
 import { TextField } from "@mui/material";
 
-const FormTextField = ({ name, ...rest }) => {
+import { FormTextFieldProps } from "./types";
+
+const FormTextField = ({ name, ...rest }: FormTextFieldProps) => {
   const inputRef = React.useRef(null);
 
   const { field } = useController({ name });

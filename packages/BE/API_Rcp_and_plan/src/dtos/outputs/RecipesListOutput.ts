@@ -1,5 +1,5 @@
 export type RecipesListOutput = {
-  id: number;
+  id: string;
   title: string;
   thumbnailUrl: string;
 }[];

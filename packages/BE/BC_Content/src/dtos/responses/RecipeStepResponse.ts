@@ -1,5 +1,5 @@
 export type RecipeStepResponse = {
-  id: number;
+  id: string;
   title: string;
   body: string;
   number: number;

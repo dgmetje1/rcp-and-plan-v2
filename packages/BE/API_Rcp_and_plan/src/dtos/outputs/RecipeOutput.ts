@@ -4,13 +4,11 @@ import { RecipeStepOutput } from "./RecipeStepOutput";
 import { RecipeToolOutput } from "./RecipeToolOutput";
 
 export type RecipeOutput = {
-  id: number;
+  id: string;
   title: string;
   description: string;
   thumbnailUrl: string;
   headerImg: string;
-  uniqueId: string;
-  language: string;
   difficulty: number;
   time: number;
   portions: number;

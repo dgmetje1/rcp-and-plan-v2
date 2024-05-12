@@ -1,5 +1,5 @@
 export type RecipeIngredientResponse = {
-  id: number;
+  id: string;
   name: string;
   singularName: string;
   quantity: number;
@@ -8,7 +8,7 @@ export type RecipeIngredientResponse = {
 };
 
 export type RecipeIngredientUnitResponse = {
-  id: number;
+  id: string;
   name: string;
   shortName: string;
 };

@@ -1,5 +1,5 @@
 export type RecipeToolResponse = {
-  id: number;
+  id: string;
   name: string;
   singularName: string;
   quantity: number;

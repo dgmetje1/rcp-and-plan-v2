@@ -1,20 +1,13 @@
 import { DataTypes } from "sequelize";
-import {
-  AutoIncrement,
-  Column,
-  Model,
-  PrimaryKey,
-  Table,
-} from "sequelize-typescript";
+import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 import { UnitAttributes, UnitCreationAttributes } from "./types";
 
 @Table({ timestamps: false, tableName: "units" })
 export class Unit extends Model<UnitAttributes, UnitCreationAttributes> {
   @PrimaryKey
-  @AutoIncrement
-  @Column(DataTypes.INTEGER)
-  declare id: number;
+  @Column(DataTypes.STRING)
+  declare id: string;
 
   @PrimaryKey
   @Column(DataTypes.STRING)

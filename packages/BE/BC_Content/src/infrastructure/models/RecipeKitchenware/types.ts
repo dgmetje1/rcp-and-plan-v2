@@ -1,5 +1,5 @@
 export interface RecipeKitchenwareAttributes {
-  recipe_id: number;
-  tool_id: number;
+  recipe_id: string;
+  tool_id: string;
   quantity: number;
 }

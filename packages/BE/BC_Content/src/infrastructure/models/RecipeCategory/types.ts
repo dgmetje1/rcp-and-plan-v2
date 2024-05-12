@@ -1,4 +1,4 @@
 export interface RecipeCategoryAttributes {
-  recipe_id: number;
-  category_id: number;
+  recipe_id: string;
+  category_id: string;
 }

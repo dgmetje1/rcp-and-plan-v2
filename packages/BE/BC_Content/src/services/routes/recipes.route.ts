@@ -1,11 +1,5 @@
 import { EntityNotFoundError } from "@rcp-and-plan/commons";
-import {
-  Application,
-  NextFunction,
-  type Request,
-  type Response,
-  Router,
-} from "express";
+import { Application, NextFunction, type Request, type Response, Router } from "express";
 
 import { IRecipeQueries } from "@application/queries/recipes/IRecipeQueries";
 import { RecipesListQueryRequest } from "@dtos/requests/RecipesListQueryRequest";
@@ -26,7 +20,7 @@ import Container from "@services/DI";
  *     type: object
  *     properties:
  *       id:
- *         type: integer
+ *         type: string
  *       title:
  *         type: string
  *       thumbnailUrl:
@@ -35,7 +29,7 @@ import Container from "@services/DI";
  *     type: object
  *     properties:
  *       id:
- *         type: integer
+ *         type: string
  *       title:
  *         type: string
  *       description:
@@ -65,7 +59,7 @@ import Container from "@services/DI";
  *     type: object
  *     properties:
  *       id:
- *         type: integer
+ *         type: string
  *       title:
  *         type: string
  *       thumbnailUrl:
@@ -93,14 +87,14 @@ import Container from "@services/DI";
  *     type: object
  *     properties:
  *       id:
- *         type: integer
+ *         type: string
  *       name:
  *         type: string
  *   RecipeIngredientResponse:
  *     type: object
  *     properties:
  *       id:
- *         type: integer
+ *         type: string
  *       name:
  *         type: string
  *       singularName:
@@ -113,7 +107,7 @@ import Container from "@services/DI";
  *         type: object
  *         properties:
  *            id:
- *              type: integer
+ *              type: string
  *            name:
  *              type: string
  *            shortName:
@@ -162,10 +156,7 @@ class RecipesRouter {
    *             schema:
    *               $ref: '#/components/schemas/RecipesListResponse'
    */
-  private async getRecipes(
-    req: Request<unknown, unknown, unknown, RecipesListQueryRequest>,
-    res: Response,
-  ) {
+  private async getRecipes(req: Request<unknown, unknown, unknown, RecipesListQueryRequest>, res: Response) {
     const { container } = await Container.getInstance();
 
     const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
@@ -185,14 +176,29 @@ class RecipesRouter {
    *           application/json:
    *             schema:
    *               $ref: '#/components/schemas/RecipeDailyResponse'
+   *       404:
+   *         description: Recipe not found
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Exception'
    */
-  private async getDailyRecipe(req: Request, res: Response) {
+  private async getDailyRecipe(_req: Request, res: Response, next: NextFunction) {
     const { container } = await Container.getInstance();
 
-    const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
-    const response = await recipesQueries.getDailyData();
-    res.send(response);
+    try {
+      const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
+      const response = await recipesQueries.getDailyData();
+
+      res.send(response);
+    } catch (err) {
+      if (err instanceof EntityNotFoundError) {
+        return res.status(404).send({ exceptionMessage: err.message, params: err.params });
+      }
+      next(err);
+    }
   }
+
   /**
    * @openapi
    * /recipes/{id}:
@@ -202,16 +208,17 @@ class RecipesRouter {
    *     parameters:
    *       - in: path
    *         name: id
-   *         type: integer
+   *         type: string
    *         required: true
-   *         description: Numeric ID of the user to get.
+   *         description: ID of the recipe to get.
    *     responses:
    *       200:
    *         content:
    *           application/json:
    *             schema:
    *               $ref: '#/components/schemas/RecipeResponse'
-   *       400:
+   *       404:
+   *         description: Recipe not found
    *         content:
    *            application/json:
    *              schema:
@@ -222,13 +229,11 @@ class RecipesRouter {
       const { container } = await Container.getInstance();
 
       const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
-      const response = await recipesQueries.getDataById(+req.params.id);
+      const response = await recipesQueries.getDataById(req.params.id);
       res.send(response);
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
-        res
-          .status(404)
-          .send({ exceptionMessage: err.message, params: err.params });
+        return res.status(404).send({ exceptionMessage: err.message, params: err.params });
       }
       next(err);
     }

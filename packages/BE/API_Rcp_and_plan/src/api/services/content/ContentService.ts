@@ -19,7 +19,7 @@ export class ContentService {
       params: queryRequest,
     });
   }
-  getRecipeById(id: number) {
+  getRecipeById(id: string) {
     return this._client.get<RecipeResponse>(`/recipes/${id}`);
   }
   getDailyRecipe() {

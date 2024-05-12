@@ -1,26 +1,15 @@
 import { DataTypes } from "sequelize";
-import {
-  AutoIncrement,
-  BelongsToMany,
-  Column,
-  Model,
-  PrimaryKey,
-  Table,
-} from "sequelize-typescript";
+import { BelongsToMany, Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 import { Recipe } from "../Recipe";
 import { RecipeKitchenware } from "../RecipeKitchenware";
 import { KitchenwareAttributes, KitchenwareCreationAttributes } from "./types";
 
 @Table({ tableName: "kitchenware" })
-export class Kitchenware extends Model<
-  KitchenwareAttributes,
-  KitchenwareCreationAttributes
-> {
+export class Kitchenware extends Model<KitchenwareAttributes, KitchenwareCreationAttributes> {
   @PrimaryKey
-  @AutoIncrement
-  @Column(DataTypes.INTEGER)
-  declare id: number;
+  @Column(DataTypes.STRING)
+  declare id: string;
 
   @Column(DataTypes.STRING)
   declare name: string;

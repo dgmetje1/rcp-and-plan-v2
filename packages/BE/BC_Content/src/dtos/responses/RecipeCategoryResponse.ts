@@ -1,4 +1,4 @@
 export type RecipeCategoryResponse = {
-  id: number;
+  id: string;
   name: string;
 };

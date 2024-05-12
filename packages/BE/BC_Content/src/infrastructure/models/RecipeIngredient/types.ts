@@ -1,7 +1,7 @@
 export interface RecipeIngredientAttributes {
-  recipe_id: number;
-  ingredient_id: number;
-  unit_id: number;
+  recipe_id: string;
+  ingredient_id: string;
+  unit_id: string;
   quantity: number;
   optional: boolean;
 }

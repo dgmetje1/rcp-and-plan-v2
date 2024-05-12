@@ -1,5 +1,5 @@
 export type RecipeToolOutput = {
-  id: number;
+  id: string;
   name: string;
   singularName: string;
   quantity: number;

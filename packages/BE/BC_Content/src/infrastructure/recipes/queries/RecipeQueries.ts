@@ -1,44 +1,39 @@
 import { EntityNotFoundError } from "@rcp-and-plan/commons";
-import { WhereOptions } from "sequelize";
 
 import { RecipesListQueryRequest } from "@dtos/requests/RecipesListQueryRequest";
 import { RecipeDailyResponse } from "@dtos/responses/RecipeDailyResponse";
 import { RecipeResponse } from "@dtos/responses/RecipeResponse";
 import { RecipesListResponse } from "@dtos/responses/RecipesListResponse";
 import { Category, Recipe } from "@infrastructure/models";
+import { RecipePublication } from "@infrastructure/models/Recipe";
 
-import { CategoryAttributes } from "../../models/Category/types";
 import { Ingredient } from "../../models/Ingredient";
 import { Kitchenware } from "../../models/Kitchenware";
-import { RecipeAttributes } from "../../models/Recipe/types";
-import { RecipeStep } from "../../models/RecipeStep";
+import { RecipeStep } from "../../models/Recipe/Step";
 import { Unit } from "../../models/Unit";
+import { processRecipesListParamsQuery } from "./helpers/params";
 import { IRecipeQueries } from "./types";
 
 export class RecipeQueries implements IRecipeQueries {
+  /**
+   *  @inheritdoc
+   */
   async getData(params: RecipesListQueryRequest) {
-    const where: WhereOptions<RecipeAttributes> = { visibility: 1 };
-    const subQueryWhere: WhereOptions<CategoryAttributes> = params.category
-      ? {
-          id: params.category,
-        }
-      : {};
-    const result = await Recipe.findAll({
-      attributes: ["id", "title", "thumbnail_url"],
-      where,
-      include: [{ model: Category, required: true, where: subQueryWhere }],
-    });
+    const result = await Recipe.findAll({ ...processRecipesListParamsQuery(params) });
 
     const response = result.map<RecipesListResponse[number]>(recipe => ({
       id: recipe.dataValues.id,
-      title: recipe.dataValues.title,
+      title: recipe.dataValues.publications[0].title,
       thumbnailUrl: recipe.dataValues.thumbnail_url,
     }));
 
     return response;
   }
 
-  async getDataById(id: number) {
+  /**
+   *  @inheritdoc
+   */
+  async getDataById(id: string) {
     const result = await Recipe.findByPk(id, {
       include: [
         { model: Category, required: true },
@@ -49,22 +44,23 @@ export class RecipeQueries implements IRecipeQueries {
           model: Kitchenware,
         },
         {
+          model: RecipePublication,
+          required: true,
+        },
+        {
           model: RecipeStep,
           order: ["number", "ASC"],
         },
       ],
     });
-    if (!result)
-      throw new EntityNotFoundError("Recipe not found", "Recipe", [{ id }]);
+    if (!result) throw new EntityNotFoundError("Recipe not found", "Recipe", [{ id }]);
 
     const response: RecipeResponse = {
       id: result.dataValues.id,
-      title: result.dataValues.title,
-      description: result.dataValues.description,
+      title: result.dataValues.publications[0].title,
+      description: result.dataValues.publications[0].description,
       thumbnailUrl: result.dataValues.thumbnail_url,
       headerImg: result.dataValues.header_img,
-      uniqueId: result.dataValues.unique_id,
-      language: result.dataValues.language,
       difficulty: result.dataValues.difficulty,
       time: result.dataValues.time,
       portions: result.dataValues.portions,
@@ -121,30 +117,24 @@ export class RecipeQueries implements IRecipeQueries {
   async getDailyData() {
     //TODO improve daily recipe selection
     const result = await Recipe.findOne({
-      attributes: [
-        "id",
-        "title",
-        "thumbnail_url",
-        "time",
-        "author",
-        "publication_date",
-        "difficulty",
-        "portions",
-      ],
+      attributes: ["id", "thumbnail_url", "time", "author", "publication_date", "difficulty", "portions"],
       where: { visibility: 1 },
       include: [
         { model: Category, required: true },
         {
           model: Ingredient,
+        },
+        {
+          model: RecipePublication,
           required: true,
         },
       ],
     });
-    if (!result) throw new Error("Recipe not found");
+    if (!result) throw new EntityNotFoundError("Daily recipe not found", "Recipe");
 
     const response: RecipeDailyResponse = {
       id: result.dataValues.id,
-      title: result.dataValues.title,
+      title: result.dataValues.publications[0].title,
       thumbnailUrl: result.dataValues.thumbnail_url,
       time: result.dataValues.time,
       author: result.dataValues.author,

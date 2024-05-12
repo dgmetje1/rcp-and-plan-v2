@@ -1,5 +1,5 @@
 export type Ingredient = {
-  id: number;
+  id: string;
   name: string;
   singularName: string;
   quantity: number;
@@ -8,7 +8,7 @@ export type Ingredient = {
 };
 
 export type IngredientUnits = {
-  id: number;
+  id: string;
   name: string;
   shortName: string;
 };

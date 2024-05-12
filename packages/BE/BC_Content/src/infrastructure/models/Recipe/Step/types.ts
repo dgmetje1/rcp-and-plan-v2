@@ -1,10 +1,10 @@
 import { Optional } from "sequelize";
 
-import { Recipe } from "../Recipe";
+import { Recipe } from "..";
 
 export interface RecipeStepAttributes {
-  recipe_id: number;
-  id: number;
+  id: string;
+  recipe_id: string;
   number: number;
   title: string;
   body: string;
@@ -14,5 +14,4 @@ export interface RecipeStepAttributes {
   recipe: Recipe;
 }
 
-export interface RecipeStepCreationAttributes
-  extends Optional<RecipeStepAttributes, "id"> {}
+export interface RecipeStepCreationAttributes extends Optional<RecipeStepAttributes, "id"> {}

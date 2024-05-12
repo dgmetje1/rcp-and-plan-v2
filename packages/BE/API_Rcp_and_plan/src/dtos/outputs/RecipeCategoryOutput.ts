@@ -1,4 +1,4 @@
 export type RecipeCategoryOutput = {
-  id: number;
+  id: string;
   name: string;
 };

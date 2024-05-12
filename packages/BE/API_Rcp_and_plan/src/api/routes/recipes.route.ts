@@ -1,14 +1,5 @@
-import {
-  Application,
-  NextFunction,
-  Router,
-  type Request,
-  type Response,
-} from "express";
-import {
-  EntityNotFoundError,
-  ExceptionErrorResponse,
-} from "@rcp-and-plan/commons";
+import { Application, NextFunction, Router, type Request, type Response } from "express";
+import { EntityNotFoundError, ExceptionErrorResponse } from "@rcp-and-plan/commons";
 
 import Container from "@api/DI";
 import { ContentService } from "@api/services/content";
@@ -32,7 +23,7 @@ import { RecipeOutput } from "@dtos/outputs/RecipeOutput";
  *     type: object
  *     properties:
  *       id:
- *         type: integer
+ *         type: string
  *       title:
  *         type: string
  *       thumbnailUrl:
@@ -41,7 +32,7 @@ import { RecipeOutput } from "@dtos/outputs/RecipeOutput";
  *     type: object
  *     properties:
  *       id:
- *         type: integer
+ *         type: string
  *       title:
  *         type: string
  *       description:
@@ -87,7 +78,7 @@ import { RecipeOutput } from "@dtos/outputs/RecipeOutput";
  *     type: object
  *     properties:
  *       id:
- *         type: integer
+ *         type: string
  *       title:
  *         type: string
  *       thumbnailUrl:
@@ -115,14 +106,14 @@ import { RecipeOutput } from "@dtos/outputs/RecipeOutput";
  *     type: object
  *     properties:
  *       id:
- *         type: integer
+ *         type: string
  *       name:
  *         type: string
  *   RecipeKitchenwareOutput:
  *     type: object
  *     properties:
  *       id:
- *         type: integer
+ *         type: string
  *       name:
  *         type: string
  *       singularName:
@@ -133,7 +124,7 @@ import { RecipeOutput } from "@dtos/outputs/RecipeOutput";
  *     type: object
  *     properties:
  *       id:
- *         type: integer
+ *         type: string
  *       title:
  *         type: string
  *       body:
@@ -144,7 +135,7 @@ import { RecipeOutput } from "@dtos/outputs/RecipeOutput";
  *     type: object
  *     properties:
  *       id:
- *         type: integer
+ *         type: string
  *       name:
  *         type: string
  *       singularName:
@@ -197,9 +188,9 @@ class RecipesRouter {
    *     parameters:
    *       - in: query
    *         name: category
-   *         type: integer
+   *         type: string
    *         required: false
-   *         description: Numeric ID of the category to get.
+   *         description: ID of the category to get.
    *     responses:
    *       200:
    *         content:
@@ -231,12 +222,23 @@ class RecipesRouter {
    *             schema:
    *               $ref: '#/components/schemas/RecipeDailyOutput'
    */
-  private async getDailyRecipe(req: Request, res: Response<RecipeDailyOutput>) {
+  private async getDailyRecipe(
+    req: Request,
+    res: Response<RecipeDailyOutput | ExceptionErrorResponse>,
+    next: NextFunction,
+  ) {
     const { container } = await Container.getInstance();
 
-    const contentService = container.get<ContentService>("ContentService");
-    const response = await contentService.getDailyRecipe();
-    res.send(response.data);
+    try {
+      const contentService = container.get<ContentService>("ContentService");
+      const response = await contentService.getDailyRecipe();
+      res.send(response.data);
+    } catch (err) {
+      if (err instanceof EntityNotFoundError) {
+        res.status(404).send({ exceptionMessage: err.message, params: err.params });
+      }
+      next(err);
+    }
   }
 
   /**
@@ -248,9 +250,9 @@ class RecipesRouter {
    *     parameters:
    *       - in: path
    *         name: id
-   *         type: integer
+   *         type: string
    *         required: true
-   *         description: Numeric ID of the user to get.
+   *         description: ID of the recipe to get.
    *     responses:
    *       200:
    *         content:
@@ -263,22 +265,16 @@ class RecipesRouter {
    *              schema:
    *                $ref: '#/components/schemas/Exception'
    */
-  private async getRecipeById(
-    req: Request,
-    res: Response<RecipeOutput | ExceptionErrorResponse>,
-    next: NextFunction,
-  ) {
+  private async getRecipeById(req: Request, res: Response<RecipeOutput | ExceptionErrorResponse>, next: NextFunction) {
     try {
       const { container } = await Container.getInstance();
 
       const recipesQueries = container.get<ContentService>("ContentService");
-      const response = await recipesQueries.getRecipeById(+req.params.id);
+      const response = await recipesQueries.getRecipeById(req.params.id);
       res.send(response.data);
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
-        res
-          .status(404)
-          .send({ exceptionMessage: err.message, params: err.params });
+        res.status(404).send({ exceptionMessage: err.message, params: err.params });
       }
       next(err);
     }

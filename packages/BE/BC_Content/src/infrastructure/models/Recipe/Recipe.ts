@@ -1,13 +1,5 @@
 import { DataTypes } from "sequelize";
-import {
-  AutoIncrement,
-  BelongsToMany,
-  Column,
-  HasMany,
-  Model,
-  PrimaryKey,
-  Table,
-} from "sequelize-typescript";
+import { BelongsToMany, Column, HasMany, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 import { Category } from "../Category";
 import { Ingredient } from "../Ingredient";
@@ -15,33 +7,21 @@ import { Kitchenware } from "../Kitchenware";
 import { RecipeCategory } from "../RecipeCategory";
 import { RecipeIngredient } from "../RecipeIngredient";
 import { RecipeKitchenware } from "../RecipeKitchenware";
-import { RecipeStep } from "../RecipeStep";
+import { RecipePublication } from "./Publication";
+import { RecipeStep } from "./Step";
 import { RecipeAttributes, RecipeCreationAttributes } from "./types";
 
 @Table({ tableName: "recipes" })
 export class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> {
   @PrimaryKey
-  @AutoIncrement
-  @Column(DataTypes.INTEGER)
-  declare id: number;
-
   @Column(DataTypes.STRING)
-  declare title: string;
-
-  @Column(DataTypes.TEXT)
-  declare description: string;
+  declare id: string;
 
   @Column(DataTypes.STRING)
   declare thumbnail_url: string;
 
   @Column(DataTypes.STRING)
   declare header_img: string;
-
-  @Column(DataTypes.STRING)
-  declare unique_id: string;
-
-  @Column(DataTypes.STRING(3))
-  declare language: string;
 
   @Column(DataTypes.INTEGER)
   declare difficulty: number;
@@ -61,18 +41,18 @@ export class Recipe extends Model<RecipeAttributes, RecipeCreationAttributes> {
   @Column(DataTypes.DATE)
   declare publication_date: Date;
 
+  @HasMany(() => RecipePublication)
+  declare publications: Array<RecipePublication>;
+
   @BelongsToMany(() => Category, () => RecipeCategory)
   declare categories: Category[];
 
   @BelongsToMany(() => Ingredient, () => RecipeIngredient)
-  declare ingredients: Array<
-    Ingredient & { RecipeIngredient: RecipeIngredient }
-  >;
+  declare ingredients: Array<Ingredient & { RecipeIngredient: RecipeIngredient }>;
 
   @BelongsToMany(() => Kitchenware, () => RecipeKitchenware)
-  declare kitchenware: Array<
-    Kitchenware & { RecipeKitchenware: RecipeKitchenware }
-  >;
+  declare kitchenware: Array<Kitchenware & { RecipeKitchenware: RecipeKitchenware }>;
+
   @HasMany(() => RecipeStep)
   declare steps: Array<RecipeStep>;
 }

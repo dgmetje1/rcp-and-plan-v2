@@ -1,4 +1,6 @@
+import { Category } from "@/types/category";
+
 export type CategoryProps = {
-  id?: number;
+  id?: Category["id"];
   title?: string;
 };

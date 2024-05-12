@@ -2,7 +2,7 @@ import { RecipeCategoryOutput } from "./RecipeCategoryOutput";
 import { RecipeIngredientOutput } from "./RecipeIngredientOutput";
 
 export type RecipeDailyOutput = {
-  id: number;
+  id: string;
   title: string;
   time: number;
   author: string;

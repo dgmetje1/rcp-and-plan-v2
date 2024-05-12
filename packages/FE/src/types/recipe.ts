@@ -9,7 +9,7 @@ export enum RecipeDifficulty {
 }
 
 export type Recipe = {
-  id: number;
+  id: string;
   title: string;
   description: string;
   thumbnailUrl: string;
@@ -29,7 +29,7 @@ export type Recipe = {
 };
 
 export type RecipeStep = {
-  id: number;
+  id: string;
   title: string;
   body: string;
   number: number;
