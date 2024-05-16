@@ -16,6 +16,7 @@
     "dev": "ts-node-dev -r tsconfig-paths/register src/services/index.ts",
     "dev:swagger": "pnpm run generate-swagger && pnpm run dev",
     "build": "tsc --diagnostics && tsc-alias",
-    "generate-swagger": "ts-node src/services/utils/swagger.mjs"
+    "generate-swagger": "ts-node src/services/utils/swagger.mjs",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives"
   }
 }

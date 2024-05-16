@@ -4,8 +4,11 @@ import { UserAccountDTO, UserDTO } from "@/types/user";
 const authRequestOptions = { withAuth: true };
 
 export const getAccount = () => {
-  console.log("CALLING API");
-  return new Api().get<UserAccountDTO>("users/account", authRequestOptions);
+  try {
+    return new Api().get<UserAccountDTO>("users/account", authRequestOptions);
+  } catch (err: unknown) {
+    throw new Error("User not found");
+  }
 };
 
 export const getUser = () => {

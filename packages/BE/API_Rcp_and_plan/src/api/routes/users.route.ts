@@ -1,16 +1,12 @@
-import {
-  Application,
-  NextFunction,
-  Router,
-  type Request,
-  type Response,
-} from "express";
-
 import Container from "@api/DI";
-import { SocialService } from "@api/services/social";
-import { UserAccountOutput } from "@dtos/outputs/UserAccountOutput";
 import authMiddleware from "@api/middleware/auth/authMiddleware";
 import { userMiddleware } from "@api/middleware/user";
+import { SocialService } from "@api/services/social";
+import { EntityNotFoundErrorType, ExceptionErrorResponse } from "@rcp-and-plan/commons";
+import { AxiosError } from "axios";
+import { Application, NextFunction, type Request, type Response,Router } from "express";
+
+import { UserAccountOutput } from "@dtos/outputs/UserAccountOutput";
 
 /**
  * @openapi
@@ -77,7 +73,7 @@ class UsersRouter {
    */
   private async getUserByAccountId(
     req: Request,
-    res: Response<UserAccountOutput>,
+    res: Response<UserAccountOutput | ExceptionErrorResponse>,
     next: NextFunction,
   ) {
     const { container } = await Container.getInstance();
@@ -88,7 +84,16 @@ class UsersRouter {
       const response = await socialService.getUserByAccountId(accountId);
 
       res.send(response.data);
-    } catch (err) {
+    } catch (err: unknown) {
+      const errorData = (err as AxiosError<ExceptionErrorResponse | object>)?.response?.data;
+      if (errorData && "type" in errorData && errorData.type === EntityNotFoundErrorType) {
+        const typedErrorData = errorData as ExceptionErrorResponse;
+        return res.status(404).send({
+          type: EntityNotFoundErrorType,
+          exceptionMessage: typedErrorData.exceptionMessage,
+          params: typedErrorData.params,
+        });
+      }
       next(err);
     }
   }
@@ -108,11 +113,7 @@ class UsersRouter {
    *             schema:
    *               $ref: '#/components/schemas/UserAccountOutput'
    */
-  private async getUserById(
-    req: Request,
-    res: Response<UserAccountOutput>,
-    next: NextFunction,
-  ) {
+  private async getUserById(req: Request, res: Response<UserAccountOutput>, next: NextFunction) {
     const { container } = await Container.getInstance();
 
     try {

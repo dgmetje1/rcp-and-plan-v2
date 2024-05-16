@@ -11,5 +11,8 @@
   },
   "peerDependencies": {
     "sequelize-typescript": "2.1.6"
+  },
+  "devDependencies": {
+    "@types/node": "20.12.12"
   }
 }

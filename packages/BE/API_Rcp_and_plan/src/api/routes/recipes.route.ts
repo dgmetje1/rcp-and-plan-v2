@@ -1,12 +1,12 @@
-import { Application, NextFunction, Router, type Request, type Response } from "express";
-import { EntityNotFoundError, ExceptionErrorResponse } from "@rcp-and-plan/commons";
-
 import Container from "@api/DI";
 import { ContentService } from "@api/services/content";
+import { EntityNotFoundError, EntityNotFoundErrorType, ExceptionErrorResponse } from "@rcp-and-plan/commons";
+import { Application, NextFunction, type Request, type Response,Router } from "express";
+
 import { RecipesListQueryEntry } from "@dtos/entries/RecipeListQueryEntry";
-import { RecipesListOutput } from "@dtos/outputs/RecipesListOutput";
 import { RecipeDailyOutput } from "@dtos/outputs/RecipeDailyOutput";
 import { RecipeOutput } from "@dtos/outputs/RecipeOutput";
+import { RecipesListOutput } from "@dtos/outputs/RecipesListOutput";
 
 /**
  * @openapi
@@ -186,6 +186,7 @@ class RecipesRouter {
    *     summary: Returns a list of recipes.
    *     tags: [Recipes]
    *     parameters:
+   *       - $ref: '#/components/parameters/Accept-Language'
    *       - in: query
    *         name: category
    *         type: string
@@ -205,7 +206,7 @@ class RecipesRouter {
     const { container } = await Container.getInstance();
 
     const contentService = container.get<ContentService>("ContentService");
-    const response = await contentService.getRecipes(req.query);
+    const response = await contentService.getRecipes(req.query, req.headers);
     res.send(response.data);
   }
 
@@ -235,7 +236,9 @@ class RecipesRouter {
       res.send(response.data);
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
-        res.status(404).send({ exceptionMessage: err.message, params: err.params });
+        return res
+          .status(404)
+          .send({ type: EntityNotFoundErrorType, exceptionMessage: err.message, params: err.params });
       }
       next(err);
     }
@@ -274,7 +277,9 @@ class RecipesRouter {
       res.send(response.data);
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
-        res.status(404).send({ exceptionMessage: err.message, params: err.params });
+        return res
+          .status(404)
+          .send({ type: EntityNotFoundErrorType, exceptionMessage: err.message, params: err.params });
       }
       next(err);
     }

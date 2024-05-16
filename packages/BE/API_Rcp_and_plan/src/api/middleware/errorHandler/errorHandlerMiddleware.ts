@@ -7,8 +7,7 @@ export const errorHandler: ErrorRequestHandler = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next: NextFunction,
 ) => {
+  // eslint-disable-next-line no-console
   console.error(err.stack);
-  res
-    .status(err.status || 500)
-    .send({ message: "Something went wrong", stack: err.stack });
+  res.status(err.status || 500).send({ message: "Something went wrong", stack: err.stack });
 };

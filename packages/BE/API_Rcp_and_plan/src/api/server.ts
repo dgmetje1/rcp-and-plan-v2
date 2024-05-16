@@ -2,13 +2,13 @@ import "dotenv/config";
 import compress from "compression";
 import cors from "cors";
 import express from "express";
+import expressContext from "express-request-context";
+import fs from "fs";
 import helmet from "helmet";
-import responseTime from "response-time";
-import swaggerUi from "swagger-ui-express";
 import http from "http";
 import https from "https";
-import fs from "fs";
-import expressContext from "express-request-context";
+import responseTime from "response-time";
+import swaggerUi from "swagger-ui-express";
 
 import Container from "./DI";
 import swaggerDocument from "./documentation.json";

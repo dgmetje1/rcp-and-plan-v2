@@ -20,6 +20,6 @@
     "dev:swagger": "pnpm run generate-swagger && pnpm run dev",
     "build": "tsc --diagnostics && tsc-alias",
     "generate-swagger": "ts-node src/services/utils/swagger.mjs",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives"
   }
 }

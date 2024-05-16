@@ -1,11 +1,5 @@
 import { EntityNotFoundError } from "@rcp-and-plan/commons";
-import {
-  Application,
-  NextFunction,
-  type Request,
-  type Response,
-  Router,
-} from "express";
+import { Application, NextFunction, type Request, type Response, Router } from "express";
 
 import { IUserQueries } from "@application/queries/users/IUserQueries";
 import Container from "@services/DI";
@@ -78,25 +72,17 @@ class UsersRouter {
    *             schema:
    *               $ref: '#/components/schemas/UserAccountResponse'
    */
-  private async getUserByAccountId(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) {
+  private async getUserByAccountId(req: Request, res: Response, next: NextFunction) {
     try {
       const { container } = await Container.getInstance();
 
       const userQueries = container.get<IUserQueries>("UserQueries");
-      const response = await userQueries.getDataByAccountId(
-        req.params.accountId,
-      );
+      const response = await userQueries.getDataByAccountId(req.params.accountId);
 
       res.send(response);
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
-        res
-          .status(404)
-          .send({ exceptionMessage: err.message, params: err.params });
+        return res.status(404).send({ type: err.type, exceptionMessage: err.message, params: err.params });
       }
       next(err);
     }
@@ -131,9 +117,7 @@ class UsersRouter {
       res.send(response);
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
-        res
-          .status(404)
-          .send({ exceptionMessage: err.message, params: err.params });
+        return res.status(404).send({ type: err.type, exceptionMessage: err.message, params: err.params });
       }
       next(err);
     }

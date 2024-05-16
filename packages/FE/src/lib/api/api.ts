@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 import config from "@/config";
+import { Language } from "@/types/user";
 
 import { ApiException } from "./apiException";
 import { RequestConfig } from "./types";
@@ -9,7 +10,10 @@ const MAX_RETRIES = 3;
 
 export class Api {
   private static _accessToken: string | null;
+  private static _lang: Language;
+
   private _axiosInstance;
+
   constructor() {
     this._axiosInstance = axios.create({ baseURL: config.apiUrl });
   }
@@ -18,17 +22,13 @@ export class Api {
     return this.request<T>("GET", url, config);
   }
 
-  public async request<T>(
-    method: string,
-    url: string,
-    config?: RequestConfig,
-    retry: number = 0,
-  ): Promise<T> {
+  public async request<T>(method: string, url: string, config?: RequestConfig, retry: number = 0): Promise<T> {
     try {
-      const headers: AxiosRequestConfig["headers"] = {};
+      const headers: AxiosRequestConfig["headers"] = {
+        "Accept-Language": Api._lang,
+      };
       if (config?.withAuth) {
-        if (!Api._accessToken)
-          throw new ApiException("missing-user-token", "Missing user token");
+        if (!Api._accessToken) throw new ApiException("missing-user-token", "Missing user token");
         headers.Authorization = `Bearer ${Api._accessToken}`;
       }
       const response = await this._axiosInstance.request<T>({
@@ -39,15 +39,8 @@ export class Api {
       });
       return response.data;
     } catch (err: unknown) {
-      console.log(err);
-      if (
-        err instanceof ApiException &&
-        err.errorCode === "missing-user-token" &&
-        retry < MAX_RETRIES
-      ) {
-        await new Promise(resolve =>
-          setTimeout(() => resolve(undefined), (retry + 1) * 1000),
-        );
+      if (err instanceof ApiException && err.errorCode === "missing-user-token" && retry < MAX_RETRIES) {
+        await new Promise(resolve => setTimeout(() => resolve(undefined), (retry + 1) * 1000));
         return this.request<T>(method, url, config, retry + 1);
       } else {
         throw err;
@@ -62,5 +55,9 @@ export class Api {
 
   public static clearAccessToken() {
     this._accessToken = null;
+  }
+
+  public static setLanguage(language: Language) {
+    this._lang = language;
   }
 }

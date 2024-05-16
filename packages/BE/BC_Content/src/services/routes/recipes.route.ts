@@ -157,6 +157,7 @@ class RecipesRouter {
    *               $ref: '#/components/schemas/RecipesListResponse'
    */
   private async getRecipes(req: Request<unknown, unknown, unknown, RecipesListQueryRequest>, res: Response) {
+    console.log(req.headers);
     const { container } = await Container.getInstance();
 
     const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");

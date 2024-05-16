@@ -5,16 +5,17 @@ import AuthContext from "@/context/Auth/AuthContext";
 import Loader from "@/components/common/Loader";
 import { Api } from "@/lib/api";
 import { useGetAccount } from "@/queries/users";
+import { Navigate } from "@tanstack/react-router";
 
 const withAuth = (Component: React.FC) => {
   return memo(props => {
     const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
-    const [{ accessToken, isAccessTokenLoading }, setAccessTokenInfo] =
-      useState({ accessToken: "", isAccessTokenLoading: false });
+    const [{ accessToken, isAccessTokenLoading }, setAccessTokenInfo] = useState({
+      accessToken: "",
+      isAccessTokenLoading: false,
+    });
 
-    const { data: account, isLoading: isAccountLoading } = useGetAccount(
-      !!accessToken && !isAccessTokenLoading,
-    );
+    const { data: account, isLoading: isAccountLoading } = useGetAccount(!!accessToken && !isAccessTokenLoading);
 
     useEffect(() => {
       if (isAuthenticated && !isLoading) {
@@ -38,8 +39,8 @@ const withAuth = (Component: React.FC) => {
       [accessToken, account, isAccessTokenLoading, isAccountLoading],
     );
 
-    if (!isAuthenticated && isLoading && !accessToken) return <Loader />;
-
+    if (isLoading || isAccountLoading) return <Loader />;
+    if (accessToken && !account) return <Navigate to="register" />;
     return (
       <AuthContext.Provider value={contextValue}>
         <Suspense fallback={<Loader />}>
