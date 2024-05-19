@@ -1,11 +1,11 @@
+import { Application, NextFunction, type Request, type Response, Router } from "express";
+import { EntityNotFoundErrorType, ExceptionErrorResponse } from "@rcp-and-plan/commons";
+import { AxiosError } from "axios";
+
 import Container from "@api/DI";
 import authMiddleware from "@api/middleware/auth/authMiddleware";
 import { userMiddleware } from "@api/middleware/user";
 import { SocialService } from "@api/services/social";
-import { EntityNotFoundErrorType, ExceptionErrorResponse } from "@rcp-and-plan/commons";
-import { AxiosError } from "axios";
-import { Application, NextFunction, type Request, type Response,Router } from "express";
-
 import { UserAccountOutput } from "@dtos/outputs/UserAccountOutput";
 
 /**
@@ -52,7 +52,9 @@ class UsersRouter {
    *
    */
   private routes(): void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     this.router.get("/account", authMiddleware, this.getUserByAccountId);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     this.router.get("/", authMiddleware, userMiddleware, this.getUserById);
   }
 

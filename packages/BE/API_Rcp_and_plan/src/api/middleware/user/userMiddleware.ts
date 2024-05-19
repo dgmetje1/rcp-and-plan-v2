@@ -1,8 +1,9 @@
-import Container from "@api/DI";
-import { SocialService } from "@api/services/social";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import { UserAccountResponse } from "@rcp-and-plan/bc_social";
 import { EntityNotFoundError } from "@rcp-and-plan/commons";
-import { NextFunction, Request, RequestHandler, Response } from "express";
+
+import Container from "@api/DI";
+import { SocialService } from "@api/services/social";
 
 import client from "./redisClient";
 

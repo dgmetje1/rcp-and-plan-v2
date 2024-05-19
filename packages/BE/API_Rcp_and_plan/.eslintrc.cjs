@@ -7,8 +7,8 @@ module.exports = {
       "warn",
       {
         groups: [
-          ["^\\u0000", "^node:", "^@\\w", "^[^.]"],
-          ["^@(application|domain|infrastructure|service|dtos)(.*|$)*"],
+          ["^\\u0000", "^node:", "express", "^@\\w", "^[^.]"],
+          ["^@(api|application|domain|infrastructure|service|dtos)(.*|$)*"],
           ["^\\."],
         ],
       },

@@ -1,14 +1,14 @@
 import "dotenv/config";
-import compress from "compression";
-import cors from "cors";
 import express from "express";
 import expressContext from "express-request-context";
+import swaggerUi from "swagger-ui-express";
+import compress from "compression";
+import cors from "cors";
 import fs from "fs";
 import helmet from "helmet";
 import http from "http";
 import https from "https";
 import responseTime from "response-time";
-import swaggerUi from "swagger-ui-express";
 
 import Container from "./DI";
 import swaggerDocument from "./documentation.json";
@@ -35,9 +35,11 @@ class App {
       this.app.use(errorHandler);
 
       http.createServer(this.app).listen(PORT, () => {
+        // eslint-disable-next-line no-console
         console.log(`API app listening on port ${PORT}`);
       });
       https.createServer(httpsOptions, this.app).listen(+PORT + 1, () => {
+        // eslint-disable-next-line no-console
         console.log(`API app listening on secure port ${+PORT + 1}`);
       });
     });
