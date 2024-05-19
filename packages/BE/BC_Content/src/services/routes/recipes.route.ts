@@ -3,6 +3,7 @@ import { Application, NextFunction, type Request, type Response, Router } from "
 
 import { IRecipeQueries } from "@application/queries/recipes/IRecipeQueries";
 import { RecipesListQueryRequest } from "@dtos/requests/RecipesListQueryRequest";
+import { DEFAULT_LANGUAGE, Languages } from "@global_types/languages";
 import Container from "@services/DI";
 
 /**
@@ -144,6 +145,7 @@ class RecipesRouter {
    *     summary: Returns a list of recipes.
    *     tags: [Recipes]
    *     parameters:
+   *       - $ref: '#/components/parameters/Accept-Language'
    *       - in: query
    *         name: category
    *         type: integer
@@ -157,11 +159,13 @@ class RecipesRouter {
    *               $ref: '#/components/schemas/RecipesListResponse'
    */
   private async getRecipes(req: Request<unknown, unknown, unknown, RecipesListQueryRequest>, res: Response) {
-    console.log(req.headers);
     const { container } = await Container.getInstance();
 
     const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
-    const response = await recipesQueries.getData(req.query);
+    const response = await recipesQueries.getData(
+      req.query,
+      (req.headers["accept-language"] as Languages) ?? DEFAULT_LANGUAGE,
+    );
     res.send(response);
   }
 
@@ -171,6 +175,8 @@ class RecipesRouter {
    *   get:
    *     summary: Returns a daily highlighted recipe.
    *     tags: [Recipes]
+   *     parameters:
+   *       - $ref: '#/components/parameters/Accept-Language'
    *     responses:
    *       200:
    *         content:
@@ -184,12 +190,14 @@ class RecipesRouter {
    *              schema:
    *                $ref: '#/components/schemas/Exception'
    */
-  private async getDailyRecipe(_req: Request, res: Response, next: NextFunction) {
+  private async getDailyRecipe(req: Request, res: Response, next: NextFunction) {
     const { container } = await Container.getInstance();
 
     try {
       const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
-      const response = await recipesQueries.getDailyData();
+      const response = await recipesQueries.getDailyData(
+        (req.headers["accept-language"] as Languages) ?? DEFAULT_LANGUAGE,
+      );
 
       res.send(response);
     } catch (err) {
@@ -207,6 +215,7 @@ class RecipesRouter {
    *     summary: Returns a recipe detail.
    *     tags: [Recipes]
    *     parameters:
+   *       - $ref: '#/components/parameters/Accept-Language'
    *       - in: path
    *         name: id
    *         type: string
@@ -230,7 +239,10 @@ class RecipesRouter {
       const { container } = await Container.getInstance();
 
       const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
-      const response = await recipesQueries.getDataById(req.params.id);
+      const response = await recipesQueries.getDataById(
+        req.params.id,
+        (req.headers["accept-language"] as Languages) ?? DEFAULT_LANGUAGE,
+      );
       res.send(response);
     } catch (err) {
       if (err instanceof EntityNotFoundError) {

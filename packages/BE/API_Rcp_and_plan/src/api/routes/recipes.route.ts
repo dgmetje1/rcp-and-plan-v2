@@ -216,6 +216,8 @@ class RecipesRouter {
    *   get:
    *     summary: Returns a daily highlighted recipe.
    *     tags: [Recipes]
+   *     parameters:
+   *       - $ref: '#/components/parameters/Accept-Language'
    *     responses:
    *       200:
    *         content:
@@ -251,6 +253,7 @@ class RecipesRouter {
    *     summary: Returns a recipe detail.
    *     tags: [Recipes]
    *     parameters:
+   *       - $ref: '#/components/parameters/Accept-Language'
    *       - in: path
    *         name: id
    *         type: string

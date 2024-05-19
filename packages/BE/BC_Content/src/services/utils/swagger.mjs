@@ -16,6 +16,18 @@ const options = {
       version: "1.0.0",
     },
     components: {
+      parameters: {
+        "Accept-Language": {
+          name: "Accept-Language",
+          in: "header",
+          description: "Language preference",
+          schema: {
+            type: "string",
+            enum: ["en", "fr", "es", "ca"],
+            default: "en",
+          },
+        },
+      },
       schemas: {
         Exception: {
           type: "object",
@@ -40,6 +52,4 @@ const options = {
 const openapiSpecification = swaggerJsdoc(options);
 const outPath = path.join(serviceBaseURI, outputFile);
 
-writeFile(outPath, JSON.stringify(openapiSpecification), () =>
-  console.log("Swagger documentation generated!"),
-);
+writeFile(outPath, JSON.stringify(openapiSpecification), () => console.log("Swagger documentation generated!"));

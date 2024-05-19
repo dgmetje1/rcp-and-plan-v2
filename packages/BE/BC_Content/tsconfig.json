@@ -26,7 +26,8 @@
       "@services/*": ["./services/*"],
       "@application/*": ["./application/*"],
       "@infrastructure/*": ["./infrastructure/*"],
-      "@dtos/*": ["./dtos/*"]
+      "@dtos/*": ["./dtos/*"],
+      "@global_types/*": ["./types/*"]
     }
   },
   "include": ["src"],
