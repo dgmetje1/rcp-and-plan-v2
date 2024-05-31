@@ -10,9 +10,12 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "peerDependencies": {
-    "sequelize-typescript": "2.1.6"
+    "sequelize": "6.37.1",
+    "sequelize-typescript": "2.1.6",
+    "cls-hooked": "4.2.2"
   },
   "devDependencies": {
-    "@types/node": "20.12.12"
+    "@types/node": "20.12.12",
+    "@types/cls-hooked": "4.3.8"
   }
 }

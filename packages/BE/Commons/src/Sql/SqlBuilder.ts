@@ -11,7 +11,7 @@ const DEFAULT_OPTIONS: SequelizeOptions = {
 };
 
 export class SqlBuilder {
-  private _db: Sequelize;
+  protected _db: Sequelize;
   constructor(connectionString: string, options?: SequelizeOptions) {
     this._db = new Sequelize(connectionString, {
       ...DEFAULT_OPTIONS,
