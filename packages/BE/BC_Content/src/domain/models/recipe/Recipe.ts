@@ -1,18 +1,19 @@
 import { ensureThat, InvalidParameterError } from "@rcp-and-plan/commons";
 import { ulid } from "ulidx";
 
+import { Category } from "@domain/models/category/Category";
 import { Languages } from "@global_types/languages";
 
-import { Category } from "../category/Category";
 import { RecipePublication, RecipePublications } from "./aggregates/RecipePublication";
 import { RecipeDifficulty } from "./VO/RecipeDifficulty";
+import { RecipeVisibility } from "./VO/RecipeVisibility";
 
 export class Recipe {
   private _id: string;
   private _difficulty: RecipeDifficulty;
   private _time: number;
   private _portions: number;
-  private _visibility: number;
+  private _visibility: RecipeVisibility;
   private _author: string;
   private _publicationDate: Date;
   private _publications: RecipePublications;
@@ -23,7 +24,7 @@ export class Recipe {
   }
 
   public get difficulty() {
-    return this._difficulty;
+    return this._difficulty.value;
   }
 
   public get time() {
@@ -35,7 +36,7 @@ export class Recipe {
   }
 
   public get visibility() {
-    return this._visibility;
+    return this._visibility.value;
   }
 
   public get author() {
@@ -59,7 +60,7 @@ export class Recipe {
     difficulty: RecipeDifficulty,
     time: number,
     portions: number,
-    visibility: number,
+    visibility: RecipeVisibility,
     author: string,
     publicationDate: Date,
     publications: Record<string, { title: string; description: string }>,
@@ -100,7 +101,7 @@ export class Recipe {
     difficulty: RecipeDifficulty,
     time: number,
     portions: number,
-    visibility: number,
+    visibility: RecipeVisibility,
     author: string,
     publications: Record<string, { title: string; description: string }>,
     categories: Array<Category>,

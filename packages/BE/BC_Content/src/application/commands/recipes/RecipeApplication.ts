@@ -1,6 +1,7 @@
 import { ICategoryQueries } from "@application/queries/categories/ICategoryQueries";
 import { Category } from "@domain/models/category/Category";
 import { RecipeDifficulties } from "@domain/models/recipe/helpers/RecipeDifficulties";
+import { RecipeVisibilities } from "@domain/models/recipe/helpers/RecipeVisibilities";
 import { IRecipeRepository } from "@domain/models/recipe/IRecipeRepository";
 import { Recipe } from "@domain/models/recipe/Recipe";
 import { RecipeCreateRequest } from "@dtos/requests/RecipeCreateRequest";
@@ -27,7 +28,7 @@ export class RecipeApplication implements IRecipeApplication {
       RecipeDifficulties.get(request.difficulty),
       request.time,
       request.portions,
-      request.visibility,
+      RecipeVisibilities.get(request.visibility),
       request.author,
       request.publications,
       categories,
