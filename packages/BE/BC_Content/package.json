@@ -10,7 +10,7 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@rcp-and-plan/commons": "workspace:*",
-    "mysql2": "3.9.3",
+    "mysql2": "3.9.8",
     "sequelize": "6.37.1",
     "sequelize-typescript": "2.1.6"
   },
