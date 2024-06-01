@@ -25,6 +25,7 @@
     "paths": {
       "@services/*": ["./services/*"],
       "@application/*": ["./application/*"],
+      "@domain/*": ["./domain/*"],
       "@infrastructure/*": ["./infrastructure/*"],
       "@dtos/*": ["./dtos/*"],
       "@global_types/*": ["./types/*"]

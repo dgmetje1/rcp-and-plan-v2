@@ -26,4 +26,8 @@ export interface RecipeAttributes {
   steps: Array<RecipeStep>;
 }
 
-export interface RecipeCreationAttributes extends Optional<RecipeAttributes, "id"> {}
+export interface RecipeCreationAttributes
+  extends Optional<
+    RecipeAttributes,
+    "thumbnail_url" | "header_img" | "ingredients" | "kitchenware" | "steps" | "categories"
+  > {}

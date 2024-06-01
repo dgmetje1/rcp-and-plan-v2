@@ -1,7 +1,9 @@
-import { EntityNotFoundError } from "@rcp-and-plan/commons";
+import { EntityNotFoundError, InvalidParameterError } from "@rcp-and-plan/commons";
 import { Application, NextFunction, type Request, type Response, Router } from "express";
 
+import { IRecipeApplication } from "@application/commands/recipes";
 import { IRecipeQueries } from "@application/queries/recipes/IRecipeQueries";
+import { RecipeCreateRequest } from "@dtos/requests/RecipeCreateRequest";
 import { RecipesListQueryRequest } from "@dtos/requests/RecipesListQueryRequest";
 import { DEFAULT_LANGUAGE, Languages } from "@global_types/languages";
 import Container from "@services/DI";
@@ -13,6 +15,41 @@ import Container from "@services/DI";
  *   description: Use cases for recipes content
  * components:
  *  schemas:
+ *   RecipeCreatePublication:
+ *      type: object
+ *      properties:
+ *        title:
+ *          type: string
+ *        description:
+ *          type: string
+ *   RecipeCreateRequest:
+ *      type: object
+ *      properties:
+ *        difficulty:
+ *          type: integer
+ *        time:
+ *          type: integer
+ *        portions:
+ *          type: integer
+ *        visibility:
+ *          type: integer
+ *        author:
+ *          type: string
+ *        publications:
+ *          type: object
+ *          additionalProperties:
+ *            $ref: '#/components/schemas/RecipeCreatePublication'
+ *          example:
+ *            en:
+ *              title: string
+ *              description: string
+ *            es:
+ *              title: string
+ *              description: string
+ *        categories:
+ *          type: array
+ *          items:
+ *            type: string
  *   RecipesListResponse:
  *      type: array
  *      items:
@@ -136,6 +173,7 @@ class RecipesRouter {
     this.router.get("/", this.getRecipes);
     this.router.get("/daily", this.getDailyRecipe);
     this.router.get("/:id", this.getRecipeById);
+    this.router.post("/", this.createRecipe);
   }
 
   /**
@@ -247,6 +285,45 @@ class RecipesRouter {
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
         return res.status(404).send({ exceptionMessage: err.message, params: err.params });
+      }
+      next(err);
+    }
+  }
+
+  /**
+   * @openapi
+   * /recipes:
+   *   post:
+   *     summary: Creates a recipe.
+   *     tags: [Recipes]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/RecipeCreateRequest'
+   *     responses:
+   *       201:
+   *         description: Recipe created
+   *       400:
+   *         description: Error in request fields
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Exception'
+   */
+  private async createRecipe(req: Request<unknown, RecipeCreateRequest>, res: Response, next: NextFunction) {
+    try {
+      const { container } = await Container.getInstance();
+
+      const recipeApplication = container.get<IRecipeApplication>("RecipeApplication");
+
+      await recipeApplication.createRecipe(req.body);
+
+      res.status(201).send();
+    } catch (err) {
+      if (err instanceof InvalidParameterError) {
+        return res.status(400).send({ exceptionMessage: err.message, params: err.params });
       }
       next(err);
     }
