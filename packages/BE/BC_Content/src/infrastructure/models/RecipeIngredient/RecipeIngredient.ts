@@ -23,5 +23,5 @@ export class RecipeIngredient extends Model<RecipeIngredientAttributes> {
   declare quantity: number;
 
   @Column
-  declare optional: boolean;
+  declare is_optional: boolean;
 }

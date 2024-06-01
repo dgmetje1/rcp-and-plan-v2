@@ -1,7 +1,8 @@
 import { DataTypes } from "sequelize";
-import { BelongsTo, Column, DataType, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 import { Recipe } from "..";
+import { RecipeStepContent } from "./Content";
 import { RecipeStepAttributes, RecipeStepCreationAttributes } from "./types";
 
 @Table({ tableName: "recipes_steps" })
@@ -18,12 +19,6 @@ export class RecipeStep extends Model<RecipeStepAttributes, RecipeStepCreationAt
   @Column(DataType.INTEGER)
   declare number: number;
 
-  @Column
-  declare title: string;
-
-  @Column
-  declare body: string;
-
   @Column(DataTypes.STRING)
   declare media_1: string | null;
 
@@ -35,4 +30,7 @@ export class RecipeStep extends Model<RecipeStepAttributes, RecipeStepCreationAt
 
   @BelongsTo(() => Recipe, "recipe_id")
   declare recipe: Recipe;
+
+  @HasMany(() => RecipeStepContent)
+  declare publications: Array<RecipeStepContent>;
 }

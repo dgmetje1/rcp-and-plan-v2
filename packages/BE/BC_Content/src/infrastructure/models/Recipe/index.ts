@@ -1,3 +1,3 @@
 export { RecipePublication } from "./Publication";
 export { Recipe } from "./Recipe";
-export { RecipeStep } from "./Step";
+export { RecipeStep, RecipeStepContent } from "./Step";

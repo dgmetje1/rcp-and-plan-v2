@@ -5,6 +5,8 @@ export interface UnitAttributes {
   language: string;
   name: string;
   short_name: string;
+  singular_name: string;
+  is_visible: boolean;
 }
 
 export interface UnitCreationAttributes extends Optional<UnitAttributes, "id"> {}

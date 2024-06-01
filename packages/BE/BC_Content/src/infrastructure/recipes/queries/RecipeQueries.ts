@@ -14,6 +14,8 @@ import { RecipeStep } from "../../models/Recipe/Step";
 import { Unit } from "../../models/Unit";
 import { processRecipesListParamsQuery } from "./helpers/params";
 import { IRecipeQueries } from "./types";
+import { RecipeStepContent } from "@infrastructure/models/Recipe/Step/Content";
+import { RecipeStepResponse } from "@dtos/index";
 
 export class RecipeQueries implements IRecipeQueries {
   /**
@@ -91,7 +93,7 @@ export class RecipeQueries implements IRecipeQueries {
             const unit = await Unit.findOne({
               where: {
                 id: ingredient.RecipeIngredient.unit_id,
-                language: "ca",
+                language,
               },
               rejectOnEmpty: true,
             });
@@ -100,7 +102,7 @@ export class RecipeQueries implements IRecipeQueries {
               name: ingredient.dataValues.name,
               singularName: ingredient.dataValues.singular_name,
               quantity: ingredient.RecipeIngredient.dataValues.quantity,
-              optional: ingredient.RecipeIngredient.dataValues.optional,
+              optional: ingredient.RecipeIngredient.dataValues.is_optional,
               units: {
                 id: unit.dataValues.id,
                 name: unit.dataValues.name,
@@ -115,12 +117,7 @@ export class RecipeQueries implements IRecipeQueries {
           singularName: tool.dataValues.singular_name,
           quantity: tool.RecipeKitchenware.dataValues.quantity,
         })),
-        steps: result.dataValues.steps.map(step => ({
-          id: step.dataValues.id,
-          title: step.dataValues.title,
-          body: step.dataValues.body,
-          number: step.dataValues.number,
-        })),
+        steps: await this.getSteps(result, language),
       };
 
       return response;
@@ -182,7 +179,7 @@ export class RecipeQueries implements IRecipeQueries {
               name: ingredient.dataValues.name,
               singularName: ingredient.dataValues.singular_name,
               quantity: ingredient.RecipeIngredient.dataValues.quantity,
-              optional: ingredient.RecipeIngredient.dataValues.optional,
+              optional: ingredient.RecipeIngredient.dataValues.is_optional,
               units: {
                 id: unit.dataValues.id,
                 name: unit.dataValues.name,
@@ -200,5 +197,27 @@ export class RecipeQueries implements IRecipeQueries {
       }
       throw err;
     }
+  }
+
+  private async getSteps(recipe: Recipe, language: Languages): Promise<RecipeStepResponse[]> {
+    const steps: RecipeStepResponse[] = [];
+    for (const step of recipe.dataValues.steps) {
+      const content = await RecipeStepContent.findOne({
+        where: {
+          id: step.id,
+          language,
+        },
+      });
+      if (content) {
+        steps.push({
+          id: step.dataValues.id,
+          title: content.dataValues.title,
+          body: content.dataValues.body,
+          number: step.dataValues.number,
+        });
+      }
+    }
+
+    return steps;
   }
 }

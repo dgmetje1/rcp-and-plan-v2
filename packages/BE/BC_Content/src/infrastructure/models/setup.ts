@@ -3,7 +3,7 @@ import { SqlBuilder } from "@rcp-and-plan/commons";
 import { Category } from "./Category";
 import { Ingredient } from "./Ingredient";
 import { Kitchenware } from "./Kitchenware";
-import { Recipe, RecipePublication, RecipeStep } from "./Recipe";
+import { Recipe, RecipePublication, RecipeStep, RecipeStepContent } from "./Recipe";
 import { RecipeCategory } from "./RecipeCategory";
 import { RecipeIngredient } from "./RecipeIngredient";
 import { RecipeKitchenware } from "./RecipeKitchenware";
@@ -15,6 +15,7 @@ export const setupModels = async () => {
   sequelize.addModels([
     RecipeCategory,
     RecipePublication,
+    RecipeStepContent,
     RecipeStep,
     Recipe,
     Category,
@@ -32,6 +33,7 @@ export const setupModels = async () => {
     Unit.sync(),
     Category.sync(),
     RecipeCategory.sync(),
+    RecipeStepContent.sync(),
     RecipeStep.sync(),
     RecipePublication.sync(),
     RecipeIngredient.sync(),
