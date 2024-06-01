@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { EntityNotFoundError, InvalidParameterError } from "@rcp-and-plan/commons";
 import { Application, NextFunction, type Request, type Response, Router } from "express";
 
@@ -15,13 +16,48 @@ import Container from "@services/DI";
  *   description: Use cases for recipes content
  * components:
  *  schemas:
- *   RecipeCreatePublication:
+ *   RecipeCreatePublicationRequest:
  *      type: object
  *      properties:
  *        title:
  *          type: string
  *        description:
  *          type: string
+ *   RecipeCreateStepPublicationRequest:
+ *      type: object
+ *      properties:
+ *        title:
+ *          type: string
+ *        body:
+ *          type: string
+ *   RecipeCreateStepRequest:
+ *      type: object
+ *      properties:
+ *        number:
+ *          type: integer
+ *          minimum: 0
+ *        content:
+ *          type: object
+ *          additionalProperties:
+ *            $ref: '#/components/schemas/RecipeCreateStepPublicationRequest'
+ *   RecipeIngredientRequest:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: string
+ *        unitId:
+ *          type: string
+ *        quantity:
+ *          type: number
+ *        isOptional:
+ *          type: boolean
+ *   RecipeKitchenwareRequest:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: string
+ *        quantity:
+ *          type: integer
  *   RecipeCreateRequest:
  *      type: object
  *      properties:
@@ -38,7 +74,7 @@ import Container from "@services/DI";
  *        publications:
  *          type: object
  *          additionalProperties:
- *            $ref: '#/components/schemas/RecipeCreatePublication'
+ *            $ref: '#/components/schemas/RecipeCreatePublicationRequest'
  *          example:
  *            en:
  *              title: string
@@ -50,6 +86,18 @@ import Container from "@services/DI";
  *          type: array
  *          items:
  *            type: string
+ *        ingredients:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/RecipeIngredientRequest'
+ *        kitchenware:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/RecipeKitchenwareRequest'
+ *        steps:
+ *          type: array
+ *          items:
+ *            $ref: '#/components/schemas/RecipeCreateStepRequest'
  *   RecipesListResponse:
  *      type: array
  *      items:
@@ -324,6 +372,9 @@ class RecipesRouter {
     } catch (err) {
       if (err instanceof InvalidParameterError) {
         return res.status(400).send({ exceptionMessage: err.message, params: err.params });
+      }
+      if (err instanceof EntityNotFoundError) {
+        return res.status(404).send({ exceptionMessage: err.message, params: err.params });
       }
       next(err);
     }

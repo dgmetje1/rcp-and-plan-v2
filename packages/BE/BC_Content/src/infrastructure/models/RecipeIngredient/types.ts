@@ -3,5 +3,5 @@ export interface RecipeIngredientAttributes {
   ingredient_id: string;
   unit_id: string;
   quantity: number;
-  optional: boolean;
+  is_optional: boolean;
 }

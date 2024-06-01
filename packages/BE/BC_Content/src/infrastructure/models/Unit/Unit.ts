@@ -16,6 +16,12 @@ export class Unit extends Model<UnitAttributes, UnitCreationAttributes> {
   @Column(DataTypes.STRING)
   declare name: string;
 
-  @Column(DataTypes.TEXT)
+  @Column(DataTypes.STRING)
   declare short_name: string;
+
+  @Column(DataTypes.STRING)
+  declare singular_name: string;
+
+  @Column(DataTypes.BOOLEAN)
+  declare is_visible: boolean;
 }
