@@ -60,7 +60,7 @@ export class RecipeRepository implements IRecipeRepository {
         id,
         time,
         portions,
-        difficulty: difficulty.value,
+        difficulty,
         author,
         visibility,
         publication_date: publicationDate,
