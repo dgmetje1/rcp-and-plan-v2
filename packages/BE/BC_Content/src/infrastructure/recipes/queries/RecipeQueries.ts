@@ -1,5 +1,6 @@
 import { EntityNotFoundError, TranslationsNotFoundError } from "@rcp-and-plan/commons";
 
+import { RecipeStepResponse } from "@dtos/index";
 import { RecipesListQueryRequest } from "@dtos/requests/RecipesListQueryRequest";
 import { RecipeDailyResponse } from "@dtos/responses/RecipeDailyResponse";
 import { RecipeResponse } from "@dtos/responses/RecipeResponse";
@@ -7,6 +8,7 @@ import { RecipesListResponse } from "@dtos/responses/RecipesListResponse";
 import { DEFAULT_LANGUAGE, Languages } from "@global_types/languages";
 import { Category, Recipe } from "@infrastructure/models";
 import { RecipePublication } from "@infrastructure/models/Recipe";
+import { RecipeStepContent } from "@infrastructure/models/Recipe/Step/Content";
 
 import { Ingredient } from "../../models/Ingredient";
 import { Kitchenware } from "../../models/Kitchenware";
@@ -14,8 +16,6 @@ import { RecipeStep } from "../../models/Recipe/Step";
 import { Unit } from "../../models/Unit";
 import { processRecipesListParamsQuery } from "./helpers/params";
 import { IRecipeQueries } from "./types";
-import { RecipeStepContent } from "@infrastructure/models/Recipe/Step/Content";
-import { RecipeStepResponse } from "@dtos/index";
 
 export class RecipeQueries implements IRecipeQueries {
   /**

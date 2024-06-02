@@ -2,8 +2,11 @@ import { ensureThat, InvalidParameterError } from "@rcp-and-plan/commons";
 import { ulid } from "ulidx";
 
 import { Category } from "@domain/models/category/Category";
+import { Ingredient } from "@domain/models/ingredient/Ingredient";
+import { Unit } from "@domain/models/unit/Unit";
 import { Languages } from "@global_types/languages";
 
+import { RecipeIngredient } from "./aggregates/RecipeIngredient";
 import { RecipePublication, RecipePublications } from "./aggregates/RecipePublication";
 import { RecipeDifficulty } from "./VO/RecipeDifficulty";
 import { RecipeVisibility } from "./VO/RecipeVisibility";
@@ -18,6 +21,7 @@ export class Recipe {
   private _publicationDate: Date;
   private _publications: RecipePublications;
   private _categories: Array<Category>;
+  private _ingredients: Array<RecipeIngredient>;
 
   public get id() {
     return this._id;
@@ -54,6 +58,9 @@ export class Recipe {
   public get categories() {
     return this._categories;
   }
+  public get ingredients() {
+    return this._ingredients;
+  }
 
   private constructor(
     id: string,
@@ -77,6 +84,7 @@ export class Recipe {
     this._author = author;
     this._publicationDate = publicationDate;
     this._categories = categories;
+    this._ingredients = [];
 
     this._publications = new Map();
     Object.entries(publications).forEach(([key, { title, description }]) => {
@@ -95,6 +103,7 @@ export class Recipe {
    * @param author Recipe's author
    * @param publications Information language related such as the title or the description
    * @param categories Recipe's categories
+   * @param ingredients Recipe's ingredients
    * @returns A new Recipe instance
    */
   public static create(
@@ -119,5 +128,9 @@ export class Recipe {
     );
 
     return recipe;
+  }
+
+  public setIngredient(ingredient: Ingredient, unit: Unit, quantity: number, isOptional: boolean) {
+    this._ingredients.push(RecipeIngredient.create(ingredient, unit, quantity, isOptional));
   }
 }

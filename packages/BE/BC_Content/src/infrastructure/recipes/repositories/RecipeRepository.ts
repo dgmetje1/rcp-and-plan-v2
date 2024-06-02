@@ -50,11 +50,6 @@ export class RecipeRepository implements IRecipeRepository {
     publications,
     categories,
   }: Recipe) {
-    const categoriesFromDB = [];
-    for (const category of categories) {
-      categoriesFromDB.push(await Category.findByPk(category.id, { rejectOnEmpty: true }));
-    }
-
     const newRecipe = await RecipeDB.create(
       {
         id,
@@ -71,6 +66,10 @@ export class RecipeRepository implements IRecipeRepository {
       { include: [RecipePublication] },
     );
 
+    const categoriesFromDB = [];
+    for (const category of categories) {
+      categoriesFromDB.push(await Category.findByPk(category.id, { rejectOnEmpty: true }));
+    }
     await newRecipe.$set("categories", categoriesFromDB);
   }
 }

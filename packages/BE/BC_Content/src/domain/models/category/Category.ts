@@ -1,50 +1,55 @@
-import { ensureThat, InvalidParameterError } from "@rcp-and-plan/commons";
+import { ensureThat, InvalidParameterError, TranslationsNotFoundError } from "@rcp-and-plan/commons";
 
-import { AvailableLanguages, Languages } from "@global_types/languages";
+import { TranslatableContent } from "@domain/shared/TranslatableContent";
+import { AvailableLanguages, DEFAULT_LANGUAGE, Languages } from "@global_types/languages";
+
+import { CategoryTranslatableContent } from "./types";
 
 export class Category {
   private _id: string;
-  private _language: Languages;
-  private _name: string;
-  private _description: string;
+  private _content: TranslatableContent<CategoryTranslatableContent>;
 
   public get id() {
     return this._id;
   }
 
-  public get language() {
-    return this._language;
-  }
-
-  public get name() {
-    return this._name;
-  }
-
-  public get description() {
-    return this._description;
-  }
-
-  private constructor(id: string, language: string, name: string, description: string) {
-    ensureThat(
-      language in AvailableLanguages,
-      new InvalidParameterError(`Language must be one of ${AvailableLanguages}`, "Recipe", [{ language }]),
-    );
-
+  private constructor(id: string, content: { language: string; name: string; description: string }[]) {
     this._id = id;
-    this._language = language as Languages;
-    this._name = name;
-    this._description = description;
+    this._content = new Map();
+
+    content.forEach(({ language, name, description }) => {
+      ensureThat(
+        language in AvailableLanguages,
+        new InvalidParameterError(`Language must be one of ${AvailableLanguages}`, "Category", [{ language }]),
+      );
+      this._content.set(language as Languages, { name, description });
+    });
   }
 
   /**
-   * Gets an instance of Category with the fields specified below
-   * @param id Category identifier
-   * @param language Language of the fields
-   * @param name Name of the category
-   * @param description Description of the category
-   * @returns A Category instance
+   * Creates a new instance of Category with the provided id and content.
+   *
+   * @param id - The unique identifier for the Category.
+   * @param content - An array of objects containing language, name, and description for the Category.
+   * @returns A new instance of Category initialized with the provided id and content.
    */
-  public static get(id: string, language: string, name: string, description: string) {
-    return new Category(id, language, name, description);
+  public static get(id: string, content: { language: string; name: string; description: string }[]) {
+    return new Category(id, content);
+  }
+
+  /**
+   * Retrieves the content of the Category in the specified language.
+   * If the content is not available in the specified language, a TranslationsNotFoundError is thrown.
+   *
+   * @param language - The language in which to retrieve the content. Defaults to the DEFAULT_LANGUAGE.
+   * @returns The content of the Category in the specified language.
+   * @throws TranslationsNotFoundError if the content is not available in the specified language.
+   */
+  public getContent(language: Languages = DEFAULT_LANGUAGE) {
+    const translatedContent = this._content.get(language);
+    if (!translatedContent)
+      throw new TranslationsNotFoundError("Category translation not found", language, [{ id: this._id }]);
+
+    return translatedContent;
   }
 }

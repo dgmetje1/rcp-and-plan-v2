@@ -2,7 +2,6 @@ module.exports = {
   extends: ["../../../.eslintrc.json"],
   rules: {
     "no-console": "warn",
-    "@typescript-eslint/no-unsafe-argument": "warn",
     "simple-import-sort/imports": [
       "warn",
       {
