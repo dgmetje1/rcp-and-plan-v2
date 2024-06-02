@@ -10,9 +10,12 @@ export class CategoryQueries implements ICategoryQueries {
    * @inheritdoc
    */
   async getEntity(id: string): Promise<Category> {
-    const category = await CategoryDB.findByPk(id);
-    if (!category) throw new EntityNotFoundError("Category not found", "Category", [{ id }]);
+    const categories = await CategoryDB.findAll({ where: { id } });
+    if (!categories.length) throw new EntityNotFoundError("Category not found", "Category", [{ id }]);
 
-    return Category.get(category.id, category.language, category.name, category.description);
+    return Category.get(
+      categories[0]!.id,
+      categories.map(({ language, name, description }) => ({ language, name, description })),
+    );
   }
 }
