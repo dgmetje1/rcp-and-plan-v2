@@ -1,5 +1,4 @@
-import { ensureThat, InvalidParameterError } from "@rcp-and-plan/commons";
-import { ulid } from "ulidx";
+import { AggregateRoot, ensureThat, InvalidParameterError, UniqueEntityID } from "@rcp-and-plan/commons";
 
 import { Category } from "@domain/models/category/Category";
 import { Ingredient } from "@domain/models/ingredient/Ingredient";
@@ -8,11 +7,11 @@ import { Languages } from "@global_types/languages";
 
 import { RecipeIngredient } from "./aggregates/RecipeIngredient";
 import { RecipePublication, RecipePublications } from "./aggregates/RecipePublication";
+import { RecipeIngredientAddedDomainEvent } from "./events/RecipeIngredientAddedDomainEvent";
 import { RecipeDifficulty } from "./VO/RecipeDifficulty";
 import { RecipeVisibility } from "./VO/RecipeVisibility";
 
-export class Recipe {
-  private _id: string;
+export class Recipe extends AggregateRoot {
   private _difficulty: RecipeDifficulty;
   private _time: number;
   private _portions: number;
@@ -22,10 +21,6 @@ export class Recipe {
   private _publications: RecipePublications;
   private _categories: Array<Category>;
   private _ingredients: Array<RecipeIngredient>;
-
-  public get id() {
-    return this._id;
-  }
 
   public get difficulty() {
     return this._difficulty.value;
@@ -63,7 +58,7 @@ export class Recipe {
   }
 
   private constructor(
-    id: string,
+    id: string | undefined,
     difficulty: RecipeDifficulty,
     time: number,
     portions: number,
@@ -73,10 +68,11 @@ export class Recipe {
     publications: Record<string, { title: string; description: string }>,
     categories: Array<Category>,
   ) {
+    super(new UniqueEntityID(id));
+
     ensureThat(time > 0, new InvalidParameterError("time must be greater than 0", "Recipe", [{ time }]));
     ensureThat(!!categories.length, new InvalidParameterError("Recipe must belong to at least one category", "Recipe"));
 
-    this._id = id;
     this._difficulty = difficulty;
     this._time = time;
     this._portions = portions;
@@ -116,7 +112,7 @@ export class Recipe {
     categories: Array<Category>,
   ) {
     const recipe = new Recipe(
-      ulid(),
+      undefined,
       difficulty,
       time,
       portions,
@@ -131,6 +127,9 @@ export class Recipe {
   }
 
   public setIngredient(ingredient: Ingredient, unit: Unit, quantity: number, isOptional: boolean) {
-    this._ingredients.push(RecipeIngredient.create(ingredient, unit, quantity, isOptional));
+    const recipeIngredient = RecipeIngredient.create(ingredient, unit, quantity, isOptional);
+    this._ingredients.push(recipeIngredient);
+
+    this.addDomainEvent(new RecipeIngredientAddedDomainEvent(this._id, recipeIngredient));
   }
 }
