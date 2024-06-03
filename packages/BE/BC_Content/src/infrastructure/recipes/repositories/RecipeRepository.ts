@@ -23,7 +23,7 @@ export class RecipeRepository implements IRecipeRepository {
    * @inheritdoc
    */
   public create(entity: Recipe) {
-    this._context.addCommand(() => this.insertRecipe(entity));
+    this._context.addCommand(() => this.insertRecipe(entity), entity);
   }
 
   /**
@@ -52,7 +52,7 @@ export class RecipeRepository implements IRecipeRepository {
   }: Recipe) {
     const newRecipe = await RecipeDB.create(
       {
-        id,
+        id: id.toValue() as string,
         time,
         portions,
         difficulty,
