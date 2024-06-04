@@ -4,7 +4,7 @@ import { DomainEvent } from "./DomainEvent";
 export class EventDispatcher extends EventEmitter {
   static instance: EventDispatcher;
 
-  static async getInstance() {
+  static getInstance() {
     if (!EventDispatcher.instance) {
       EventDispatcher.instance = new EventDispatcher();
     }
@@ -16,7 +16,7 @@ export class EventDispatcher extends EventEmitter {
   }
 
   subscribe<T = unknown>(event: string, callback: (event: DomainEvent<T>) => void) {
-    this.on(event.constructor.name, callback);
+    this.on(event, callback);
   }
 
   private constructor() {

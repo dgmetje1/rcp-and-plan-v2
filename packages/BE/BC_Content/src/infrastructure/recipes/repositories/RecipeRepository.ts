@@ -1,4 +1,4 @@
-import { SqlContext } from "@rcp-and-plan/commons";
+import { EventDispatcher, SqlContext } from "@rcp-and-plan/commons";
 
 import { Recipe } from "@domain/models/recipe/Recipe";
 import { Category, Recipe as RecipeDB, RecipePublication } from "@infrastructure/models";
@@ -16,7 +16,7 @@ export class RecipeRepository implements IRecipeRepository {
   }
 
   public constructor() {
-    this._context = new SqlContext(process.env.CONNECTION_STRING_CONTENT!);
+    this._context = new SqlContext(process.env.CONNECTION_STRING_CONTENT!, EventDispatcher.getInstance());
   }
 
   /**
