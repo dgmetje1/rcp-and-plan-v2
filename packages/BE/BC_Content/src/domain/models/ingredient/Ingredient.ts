@@ -20,8 +20,11 @@ export class Ingredient {
     content.forEach(({ language, name, singularName }) => {
       ensureThat(
         language in AvailableLanguages,
-        new InvalidParameterError(`Language must be one of ${AvailableLanguages}`, "Ingredient", [{ language }]),
+        new InvalidParameterError(`Language must be one of ${Object.values(AvailableLanguages)}`, "Ingredient", [
+          { language },
+        ]),
       );
+
       this._content.set(language as Languages, { name, singularName });
     });
   }
