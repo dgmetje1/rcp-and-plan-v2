@@ -1,5 +1,6 @@
 import { Sequelize, SequelizeOptions } from "sequelize-typescript";
 import cls from "cls-hooked";
+import { randomUUID } from "crypto";
 
 import { AggregateRoot, EventDispatcher } from "../DDD";
 import { SqlBuilder } from "./SqlBuilder";
@@ -10,7 +11,7 @@ export class SqlContext extends SqlBuilder {
   private _eventDispatcher: EventDispatcher | undefined;
 
   constructor(connectionString: string, eventDispatcher?: EventDispatcher, options?: SequelizeOptions) {
-    const namespace = cls.createNamespace(SqlContext.name);
+    const namespace = cls.createNamespace(`${SqlContext.name}_${randomUUID()}`);
     Sequelize.useCLS(namespace);
 
     super(connectionString, options);
@@ -38,6 +39,7 @@ export class SqlContext extends SqlBuilder {
         });
       });
 
+    this._entities.clear();
     this._commands = [];
   }
 }

@@ -1,25 +1,27 @@
-import { ICategoryQueries } from "@application/queries/categories/ICategoryQueries";
-import { IIngredientQueries } from "@application/queries/ingredients/IIngredientQueries";
-import { IUnitQueries } from "@application/queries/units/IUnitsQueries";
+import { Container, Service } from "typedi";
+
+import { CategoryQueries, ICategoryQueries } from "@application/queries/categories/ICategoryQueries";
+import { IIngredientQueries, IngredientQueries } from "@application/queries/ingredients/IIngredientQueries";
+import { IRecipeQueries, RecipeQueries } from "@application/queries/recipes/IRecipeQueries";
+import { IUnitQueries, UnitQueries } from "@application/queries/units/IUnitsQueries";
 import { Category } from "@domain/models/category/Category";
 import { Ingredient } from "@domain/models/ingredient/Ingredient";
 import { RecipeDifficulties } from "@domain/models/recipe/helpers/RecipeDifficulties";
 import { RecipeVisibilities } from "@domain/models/recipe/helpers/RecipeVisibilities";
-import { IRecipeRepository } from "@domain/models/recipe/IRecipeRepository";
+import { IRecipeRepository, RecipeRepository } from "@domain/models/recipe/IRecipeRepository";
 import { Recipe } from "@domain/models/recipe/Recipe";
 import { Unit } from "@domain/models/unit/Unit";
 import { RecipeCreateRequest } from "@dtos/requests/RecipeCreateRequest";
-import Container from "@services/DI";
+import { RecipeIngredientsRequest } from "@dtos/requests/RecipeIngredientRequest";
 
 import { IRecipeApplication } from "./IRecipeApplication";
 
+@Service({ transient: true })
 export class RecipeApplication implements IRecipeApplication {
   /**
    * @inheritdoc
    */
   public async createRecipe(request: RecipeCreateRequest): Promise<void> {
-    const { container } = await Container.getInstance();
-
     const categories = await this.getCategories(request.categories);
 
     const recipe = Recipe.create(
@@ -33,21 +35,36 @@ export class RecipeApplication implements IRecipeApplication {
     );
     const ingredients = await this.getIngredients(request.ingredients);
     ingredients.forEach(({ ingredient, unit, quantity, isOptional }) =>
-      recipe.setIngredient(ingredient, unit, quantity, isOptional),
+      recipe.addIngredient(ingredient, unit, quantity, isOptional),
     );
 
-    const repository = container.get<IRecipeRepository>("RecipeRepository");
+    const repository = Container.get<IRecipeRepository>(RecipeRepository);
 
     repository.create(recipe);
 
     await repository.unitOfWork.saveChangesAsync();
   }
 
-  private async getIngredients(ingredientsRequest: RecipeCreateRequest["ingredients"]) {
-    const { container } = await Container.getInstance();
+  /**
+   * @inheritdoc
+   */
+  public async addRecipeIngredients(recipeId: string, request: RecipeIngredientsRequest) {
+    const recipeQueries = Container.get<IRecipeQueries>(RecipeQueries);
+    const recipe = await recipeQueries.getEntity(recipeId);
 
-    const ingredientQueries = container.get<IIngredientQueries>("IngredientQueries");
-    const unitQueries = container.get<IUnitQueries>("UnitQueries");
+    const ingredients = await this.getIngredients(request);
+    const repository = Container.get<IRecipeRepository>(RecipeRepository);
+    ingredients.forEach(({ ingredient, unit, quantity, isOptional }) => {
+      const recipeIngredient = recipe.setIngredient(ingredient, unit, quantity, isOptional);
+      repository.addIngredient(recipe, recipeIngredient);
+    });
+
+    await repository.unitOfWork.saveChangesAsync();
+  }
+
+  private async getIngredients(ingredientsRequest: RecipeCreateRequest["ingredients"]) {
+    const ingredientQueries = Container.get<IIngredientQueries>(IngredientQueries);
+    const unitQueries = Container.get<IUnitQueries>(UnitQueries);
 
     const ingredients: Array<
       { ingredient: Ingredient; unit: Unit } & Pick<
@@ -74,9 +91,7 @@ export class RecipeApplication implements IRecipeApplication {
    * @returns An array of Category instances corresponding to the provided IDs
    */
   private async getCategories(categoriesIds: RecipeCreateRequest["categories"]) {
-    const { container } = await Container.getInstance();
-
-    const categoryQueries = container.get<ICategoryQueries>("CategoryQueries");
+    const categoryQueries = Container.get<ICategoryQueries>(CategoryQueries);
 
     const categories: Category[] = [];
 

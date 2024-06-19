@@ -1,10 +1,18 @@
 import { EventDispatcher, SqlContext } from "@rcp-and-plan/commons";
+import { Service } from "typedi";
 
+import { RecipeIngredient } from "@domain/models/recipe/aggregates/RecipeIngredient";
 import { Recipe } from "@domain/models/recipe/Recipe";
-import { Category, Recipe as RecipeDB, RecipePublication } from "@infrastructure/models";
+import {
+  Category,
+  Recipe as RecipeDB,
+  RecipeIngredient as RecipeIngredientDB,
+  RecipePublication,
+} from "@infrastructure/models";
 
 import { IRecipeRepository } from "./types";
 
+@Service({ transient: true })
 export class RecipeRepository implements IRecipeRepository {
   private _context: SqlContext;
 
@@ -24,6 +32,13 @@ export class RecipeRepository implements IRecipeRepository {
    */
   public create(entity: Recipe) {
     this._context.addCommand(() => this.insertRecipe(entity), entity);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public addIngredient(entity: Recipe, ingredient: RecipeIngredient): void {
+    this._context.addCommand(() => this.insertRecipeIngredient(entity, ingredient), entity);
   }
 
   /**
@@ -71,5 +86,23 @@ export class RecipeRepository implements IRecipeRepository {
       categoriesFromDB.push(await Category.findByPk(category.id, { rejectOnEmpty: true }));
     }
     await newRecipe.$set("categories", categoriesFromDB);
+  }
+
+  /**
+   * Inserts a new recipe ingredient into the database.
+   *
+   * @param entity The Recipe entity to which the ingredient belongs.
+   * @param recipeIngredient The RecipeIngredient object representing the ingredient to be inserted.
+   */
+  private async insertRecipeIngredient(entity: Recipe, recipeIngredient: RecipeIngredient) {
+    const recipeDB = await RecipeDB.findByPk(entity.id.toValue(), { rejectOnEmpty: true });
+
+    await RecipeIngredientDB.create({
+      is_optional: recipeIngredient.isOptional,
+      unit_id: recipeIngredient.unit.id,
+      ingredient_id: recipeIngredient.ingredient.id,
+      quantity: recipeIngredient.quantity,
+      recipe_id: recipeDB.id,
+    });
   }
 }

@@ -12,7 +12,8 @@
   "peerDependencies": {
     "sequelize": "6.37.1",
     "sequelize-typescript": "2.1.6",
-    "cls-hooked": "4.2.2"
+    "cls-hooked": "4.2.2",
+    "typedi": "0.10.0"
   },
   "devDependencies": {
     "@types/node": "20.12.12",

@@ -126,10 +126,60 @@ export class Recipe extends AggregateRoot {
     return recipe;
   }
 
+  /**
+   * Gets a Recipe instance with all the specified information
+   * @param id Recipe identifier
+   * @param difficulty Level of difficulty
+   * @param time Number of seconds spent in the recipe
+   * @param portions Number of portions
+   * @param visibility Recipe's visibility
+   * @param author Recipe's author
+   * @param publications Information language related such as the title or the description
+   * @param categories Recipe's categories
+   * @param ingredients Recipe's ingredients
+   * @returns A new Recipe instance
+   */
+  public static get(
+    id: string,
+    difficulty: RecipeDifficulty,
+    time: number,
+    portions: number,
+    visibility: RecipeVisibility,
+    author: string,
+    publicationDate: Date,
+    publications: Record<string, { title: string; description: string }>,
+    categories: Array<Category>,
+  ) {
+    const recipe = new Recipe(
+      id,
+      difficulty,
+      time,
+      portions,
+      visibility,
+      author,
+      publicationDate,
+      publications,
+      categories,
+    );
+
+    return recipe;
+  }
+
   public setIngredient(ingredient: Ingredient, unit: Unit, quantity: number, isOptional: boolean) {
     const recipeIngredient = RecipeIngredient.create(ingredient, unit, quantity, isOptional);
+    ensureThat(
+      !this._ingredients.find(ingredient => ingredient.ingredient.id === recipeIngredient.ingredient.id),
+      new InvalidParameterError("Ingredient already present", "Recipe", [
+        { id: this.id.toValue(), ingredientId: recipeIngredient.ingredient.id },
+      ]),
+    );
     this._ingredients.push(recipeIngredient);
 
+    return recipeIngredient;
+  }
+
+  public addIngredient(ingredient: Ingredient, unit: Unit, quantity: number, isOptional: boolean) {
+    const recipeIngredient = this.setIngredient(ingredient, unit, quantity, isOptional);
     this.addDomainEvent(new RecipeIngredientAddedDomainEvent(this._id, recipeIngredient));
   }
 }

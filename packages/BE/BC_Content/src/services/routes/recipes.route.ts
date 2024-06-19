@@ -1,13 +1,14 @@
 /* eslint-disable max-lines */
 import { EntityNotFoundError, InvalidParameterError } from "@rcp-and-plan/commons";
 import { Application, NextFunction, type Request, type Response, Router } from "express";
+import { Container, Service } from "typedi";
 
-import { IRecipeApplication } from "@application/commands/recipes";
-import { IRecipeQueries } from "@application/queries/recipes/IRecipeQueries";
+import { IRecipeApplication, RecipeApplication } from "@application/commands/recipes";
+import { IRecipeQueries, RecipeQueries } from "@application/queries/recipes/IRecipeQueries";
 import { RecipeCreateRequest } from "@dtos/requests/RecipeCreateRequest";
+import { RecipeIngredientsRequest } from "@dtos/requests/RecipeIngredientRequest";
 import { RecipesListQueryRequest } from "@dtos/requests/RecipesListQueryRequest";
 import { DEFAULT_LANGUAGE, Languages } from "@global_types/languages";
-import Container from "@services/DI";
 
 /**
  * @openapi
@@ -199,6 +200,7 @@ import Container from "@services/DI";
  *            shortName:
  *              type: string
  */
+@Service()
 class RecipesRouter {
   public router: Router;
 
@@ -222,6 +224,7 @@ class RecipesRouter {
     this.router.get("/daily", this.getDailyRecipe);
     this.router.get("/:id", this.getRecipeById);
     this.router.post("/", this.createRecipe);
+    this.router.post("/:id/ingredients", this.addRecipeIngredients);
   }
 
   /**
@@ -245,9 +248,7 @@ class RecipesRouter {
    *               $ref: '#/components/schemas/RecipesListResponse'
    */
   private async getRecipes(req: Request<unknown, unknown, unknown, RecipesListQueryRequest>, res: Response) {
-    const { container } = await Container.getInstance();
-
-    const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
+    const recipesQueries = Container.get<IRecipeQueries>(RecipeQueries);
     const response = await recipesQueries.getData(
       req.query,
       (req.headers["accept-language"] as Languages) ?? DEFAULT_LANGUAGE,
@@ -277,10 +278,8 @@ class RecipesRouter {
    *                $ref: '#/components/schemas/Exception'
    */
   private async getDailyRecipe(req: Request, res: Response, next: NextFunction) {
-    const { container } = await Container.getInstance();
-
     try {
-      const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
+      const recipesQueries = Container.get<IRecipeQueries>(RecipeQueries);
       const response = await recipesQueries.getDailyData(
         (req.headers["accept-language"] as Languages) ?? DEFAULT_LANGUAGE,
       );
@@ -322,9 +321,7 @@ class RecipesRouter {
    */
   private async getRecipeById(req: Request, res: Response, next: NextFunction) {
     try {
-      const { container } = await Container.getInstance();
-
-      const recipesQueries = container.get<IRecipeQueries>("RecipeQueries");
+      const recipesQueries = Container.get<IRecipeQueries>(RecipeQueries);
       const response = await recipesQueries.getDataById(
         req.params.id,
         (req.headers["accept-language"] as Languages) ?? DEFAULT_LANGUAGE,
@@ -362,13 +359,63 @@ class RecipesRouter {
    */
   private async createRecipe(req: Request<unknown, RecipeCreateRequest>, res: Response, next: NextFunction) {
     try {
-      const { container } = await Container.getInstance();
-
-      const recipeApplication = container.get<IRecipeApplication>("RecipeApplication");
+      const recipeApplication = Container.get<IRecipeApplication>(RecipeApplication);
 
       await recipeApplication.createRecipe(req.body);
 
       res.status(201).send();
+    } catch (err) {
+      if (err instanceof InvalidParameterError) {
+        return res.status(400).send({ exceptionMessage: err.message, params: err.params });
+      }
+      if (err instanceof EntityNotFoundError) {
+        return res.status(404).send({ exceptionMessage: err.message, params: err.params });
+      }
+      next(err);
+    }
+  }
+
+  /**
+   * @openapi
+   * /recipes/{id}/ingredients:
+   *   post:
+   *     summary: Adds ingredients to a recipe.
+   *     tags: [Recipes]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         type: string
+   *         required: true
+   *         description: ID of the recipe to get.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: array
+   *             items:
+   *               $ref: '#/components/schemas/RecipeIngredientRequest'
+   *     responses:
+   *       204:
+   *         description: Recipe ingredients added
+   *       400:
+   *         description: Error in request fields
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Exception'
+   */
+  private async addRecipeIngredients(
+    req: Request<{ id: string }, unknown, RecipeIngredientsRequest>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const recipeApplication = Container.get<IRecipeApplication>(RecipeApplication);
+
+      await recipeApplication.addRecipeIngredients(req.params.id, req.body);
+
+      res.status(204).send();
     } catch (err) {
       if (err instanceof InvalidParameterError) {
         return res.status(400).send({ exceptionMessage: err.message, params: err.params });
