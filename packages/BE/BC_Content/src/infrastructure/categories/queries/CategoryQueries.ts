@@ -1,10 +1,12 @@
 import { EntityNotFoundError } from "@rcp-and-plan/commons";
+import { Service } from "typedi";
 
 import { Category } from "@domain/models/category/Category";
 import { Category as CategoryDB } from "@infrastructure/models";
 
 import { ICategoryQueries } from "./types";
 
+@Service()
 export class CategoryQueries implements ICategoryQueries {
   /**
    * @inheritdoc

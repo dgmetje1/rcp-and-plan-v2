@@ -1,10 +1,12 @@
 import { EntityNotFoundError } from "@rcp-and-plan/commons";
+import { Service } from "typedi";
 
 import { Unit } from "@domain/models/unit/Unit";
 import { Unit as UnitDB } from "@infrastructure/models";
 
 import { IUnitQueries } from "./types";
 
+@Service()
 export class UnitQueries implements IUnitQueries {
   /**
    * @inheritdoc

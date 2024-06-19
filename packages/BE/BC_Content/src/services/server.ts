@@ -1,14 +1,18 @@
 import "dotenv/config";
+import { HandlerToken } from "@rcp-and-plan/commons";
 import compress from "compression";
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import responseTime from "response-time";
 import swaggerUi from "swagger-ui-express";
+import { Container } from "typedi";
 
-import Container from "./DI";
+import { SaveEntryOnRecipeIngredientAdded } from "@application/commands/recipes/events/RecipeIngredientAdded/SaveEntryOnRecipeIngredientAdded";
+
 import swaggerDocument from "./documentation.json";
 import { errorHandler } from "./middlewares/errorHandler";
+import RecipesRouter from "./routes/recipes.route";
 
 const PORT = process.env.PORT || 3000;
 
@@ -24,9 +28,7 @@ class App {
         res.status(404).send("Not existing url!");
       });
       this.app.use(errorHandler);
-      this.app.listen(PORT, () =>
-        console.log(`Example app listening on port ${PORT}`),
-      );
+      this.app.listen(PORT, () => console.log(`Example app listening on port ${PORT}`));
     });
   }
 
@@ -40,17 +42,24 @@ class App {
     this.app.use(helmet.hidePoweredBy());
     this.app.use(helmet.frameguard({ action: "deny" }));
     this.app.use(compress());
+
+    this.setupEventHandlers();
   }
 
   private async routes() {
-    const { container } = await Container.getInstance();
-
-    const recipeRouter = container.get("RecipeRouter");
+    const recipeRouter = Container.get(RecipesRouter);
     recipeRouter.setupRouter(this.app);
   }
 
   private swagger(): void {
     this.app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  }
+
+  private setupEventHandlers() {
+    Container.import([SaveEntryOnRecipeIngredientAdded]);
+
+    const handlers = Container.getMany(HandlerToken);
+    handlers.forEach(handler => handler.initialize());
   }
 }
 

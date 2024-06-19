@@ -1,8 +1,11 @@
-import { DomainEvent } from "./DomainEvent";
-import { EventDispatcher } from "./EventDispatcher";
+import { Token } from "typedi";
 
-export class IHandle {
-  subscribe<T extends object>(eventName: string, callback: (event: DomainEvent<T>) => void): void {
-    EventDispatcher.getInstance().subscribe(eventName, callback);
-  }
+import { DomainEvent } from "./DomainEvent";
+
+export const HandlerToken = new Token<IHandle>("handlers");
+
+export interface IHandle {
+  initialize(): void;
+
+  subscribe<T extends object>(eventName: string, callback: (event: DomainEvent<T>) => void): void;
 }

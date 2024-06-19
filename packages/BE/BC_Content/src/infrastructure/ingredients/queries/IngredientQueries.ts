@@ -1,10 +1,12 @@
 import { EntityNotFoundError } from "@rcp-and-plan/commons";
+import { Service } from "typedi";
 
 import { Ingredient } from "@domain/models/ingredient/Ingredient";
 import { Ingredient as IngredientDB } from "@infrastructure/models";
 
 import { IIngredientQueries } from "./types";
 
+@Service()
 export class IngredientQueries implements IIngredientQueries {
   /**
    * @inheritdoc

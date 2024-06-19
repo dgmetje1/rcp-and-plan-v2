@@ -1,5 +1,10 @@
 import { EntityNotFoundError, TranslationsNotFoundError } from "@rcp-and-plan/commons";
+import { Service } from "typedi";
 
+import { Category as CategoryModel } from "@domain/models/category/Category";
+import { RecipeDifficulties } from "@domain/models/recipe/helpers/RecipeDifficulties";
+import { RecipeVisibilities } from "@domain/models/recipe/helpers/RecipeVisibilities";
+import { Recipe as RecipeModel } from "@domain/models/recipe/Recipe";
 import { RecipeStepResponse } from "@dtos/index";
 import { RecipesListQueryRequest } from "@dtos/requests/RecipesListQueryRequest";
 import { RecipeDailyResponse } from "@dtos/responses/RecipeDailyResponse";
@@ -17,7 +22,37 @@ import { Unit } from "../../models/Unit";
 import { processRecipesListParamsQuery } from "./helpers/params";
 import { IRecipeQueries } from "./types";
 
+@Service()
 export class RecipeQueries implements IRecipeQueries {
+  async getEntity(id: string): Promise<RecipeModel> {
+    const result = await Recipe.findByPk(id, {
+      include: [
+        { model: Category, required: true },
+        {
+          model: Ingredient,
+        },
+      ],
+    });
+    if (!result) throw new EntityNotFoundError("Recipe not found", "Recipe", [{ id }]);
+
+    //TODO Review publications
+    const recipe = RecipeModel.get(
+      result.dataValues.id,
+      RecipeDifficulties.get(result.dataValues.difficulty),
+      result.dataValues.time,
+      result.dataValues.portions,
+      RecipeVisibilities.get(result.dataValues.visibility),
+      result.dataValues.author,
+      result.dataValues.publication_date,
+      {},
+      result.categories.map(({ id, language, name, description }) =>
+        CategoryModel.get(id, [{ language, name, description }]),
+      ),
+    );
+
+    return recipe;
+  }
+
   /**
    *  @inheritdoc
    */
