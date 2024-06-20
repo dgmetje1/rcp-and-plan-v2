@@ -1,4 +1,5 @@
 import { RecipeIngredientsRequest } from "./RecipeIngredientRequest";
+import { RecipeKitchenwareRequest } from "./RecipeKitchenwareRequest";
 
 export type RecipeCreateRequest = {
   difficulty: number;
@@ -9,18 +10,13 @@ export type RecipeCreateRequest = {
   publications: Record<string, RecipeCreatePublicationRequest>;
   categories: Array<string>;
   ingredients: RecipeIngredientsRequest;
-  kitchenware: Array<RecipeKitchenwareRequest>;
+  kitchenware: RecipeKitchenwareRequest;
   steps: Array<RecipeStepRequest>;
 };
 
 type RecipeCreatePublicationRequest = {
   title: string;
   description: string;
-};
-
-type RecipeKitchenwareRequest = {
-  id: string;
-  quantity: number;
 };
 
 type RecipeStepRequest = {

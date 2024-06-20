@@ -8,8 +8,6 @@ import responseTime from "response-time";
 import swaggerUi from "swagger-ui-express";
 import { Container } from "typedi";
 
-import { SaveEntryOnRecipeIngredientAdded } from "@application/commands/recipes/events/RecipeIngredientAdded/SaveEntryOnRecipeIngredientAdded";
-
 import swaggerDocument from "./documentation.json";
 import { errorHandler } from "./middlewares/errorHandler";
 import RecipesRouter from "./routes/recipes.route";
@@ -56,10 +54,17 @@ class App {
   }
 
   private setupEventHandlers() {
-    Container.import([SaveEntryOnRecipeIngredientAdded]);
+    Promise.all([
+      import("@application/commands/recipes/events/RecipeIngredientAdded/SaveEntryOnRecipeIngredientAdded"),
+      import("@application/commands/recipes/events/RecipeKitchenwareAdded/SaveEntryOnRecipeKitchenwareAdded"),
+    ])
+      .then(([{ SaveEntryOnRecipeIngredientAdded }, { SaveEntryOnRecipeKitchenwareAdded }]) => {
+        Container.import([SaveEntryOnRecipeIngredientAdded, SaveEntryOnRecipeKitchenwareAdded]);
 
-    const handlers = Container.getMany(HandlerToken);
-    handlers.forEach(handler => handler.initialize());
+        const handlers = Container.getMany(HandlerToken);
+        handlers.forEach(handler => handler.initialize());
+      })
+      .catch(ex => console.error(ex));
   }
 }
 
