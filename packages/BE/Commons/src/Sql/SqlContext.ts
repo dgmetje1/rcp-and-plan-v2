@@ -1,33 +1,40 @@
 import { Sequelize, SequelizeOptions } from "sequelize-typescript";
 import cls from "cls-hooked";
-import { randomUUID } from "crypto";
 
 import { AggregateRoot, EventDispatcher } from "../DDD";
 import { SqlBuilder } from "./SqlBuilder";
+import { Transaction } from "sequelize";
 
 export class SqlContext extends SqlBuilder {
-  private _commands: Array<() => void> = [];
+  private _commands: Array<(t: Transaction) => void> = [];
   private _entities: Set<AggregateRoot> = new Set();
   private _eventDispatcher: EventDispatcher | undefined;
 
-  constructor(connectionString: string, eventDispatcher?: EventDispatcher, options?: SequelizeOptions) {
-    const namespace = cls.createNamespace(`${SqlContext.name}_${randomUUID()}`);
-    Sequelize.useCLS(namespace);
+  constructor(
+    connectionString: string,
+    eventDispatcher?: EventDispatcher,
+    options?: SequelizeOptions,
+    useCLS?: boolean,
+  ) {
+    if (useCLS) {
+      const namespace = cls.createNamespace(SqlContext.name);
+      Sequelize.useCLS(namespace);
+    }
 
     super(connectionString, options);
 
     this._eventDispatcher = eventDispatcher;
   }
 
-  public addCommand(command: () => void, entity: AggregateRoot) {
+  public addCommand(command: (t: Transaction) => void, entity: AggregateRoot) {
     this._commands.push(command);
     this._entities.add(entity);
   }
 
   public async saveChangesAsync() {
-    await this._db.transaction(async () => {
+    await this._db.transaction(async t => {
       for (const command of this._commands) {
-        await command();
+        await command(t);
       }
       return Promise.resolve();
     });
