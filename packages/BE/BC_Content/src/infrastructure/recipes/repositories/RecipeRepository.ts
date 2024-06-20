@@ -85,7 +85,7 @@ export class RecipeRepository implements IRecipeRepository {
     for (const category of categories) {
       categoriesFromDB.push(await Category.findByPk(category.id, { rejectOnEmpty: true }));
     }
-    await newRecipe.$set("categories", categoriesFromDB);
+    await newRecipe.$add("categories", categoriesFromDB);
   }
 
   /**

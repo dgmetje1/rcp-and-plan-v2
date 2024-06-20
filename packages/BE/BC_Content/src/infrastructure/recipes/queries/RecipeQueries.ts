@@ -35,7 +35,6 @@ export class RecipeQueries implements IRecipeQueries {
     });
     if (!result) throw new EntityNotFoundError("Recipe not found", "Recipe", [{ id }]);
 
-    //TODO Review publications
     const recipe = RecipeModel.get(
       result.dataValues.id,
       RecipeDifficulties.get(result.dataValues.difficulty),
@@ -44,7 +43,10 @@ export class RecipeQueries implements IRecipeQueries {
       RecipeVisibilities.get(result.dataValues.visibility),
       result.dataValues.author,
       result.dataValues.publication_date,
-      {},
+      result.dataValues.publications.reduce(
+        (prev, { language, title, description }) => ({ ...prev, [language]: { title, description } }),
+        {},
+      ),
       result.categories.map(({ id, language, name, description }) =>
         CategoryModel.get(id, [{ language, name, description }]),
       ),
