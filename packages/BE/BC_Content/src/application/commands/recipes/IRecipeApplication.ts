@@ -1,5 +1,6 @@
 import { RecipeCreateRequest } from "@dtos/requests/RecipeCreateRequest";
 import { RecipeIngredientsRequest } from "@dtos/requests/RecipeIngredientRequest";
+import { RecipeKitchenwareRequest } from "@dtos/requests/RecipeKitchenwareRequest";
 
 export interface IRecipeApplication {
   /**
@@ -14,4 +15,10 @@ export interface IRecipeApplication {
    * @param request Data to add ingredients
    */
   addRecipeIngredients(recipeId: string, request: RecipeIngredientsRequest): Promise<void>;
+  /**
+   * Adds the specified tools to the recipe
+   * @param recipeId Recipe identifier
+   * @param request Data to add tools
+   */
+  addRecipeKitchenware(recipeId: string, request: RecipeKitchenwareRequest): Promise<void>;
 }

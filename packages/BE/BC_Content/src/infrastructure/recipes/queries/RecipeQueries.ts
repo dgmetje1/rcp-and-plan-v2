@@ -31,6 +31,7 @@ export class RecipeQueries implements IRecipeQueries {
         {
           model: Ingredient,
         },
+        { model: RecipePublication },
       ],
     });
     if (!result) throw new EntityNotFoundError("Recipe not found", "Recipe", [{ id }]);

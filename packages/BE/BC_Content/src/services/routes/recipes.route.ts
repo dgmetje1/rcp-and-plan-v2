@@ -9,6 +9,7 @@ import { RecipeCreateRequest } from "@dtos/requests/RecipeCreateRequest";
 import { RecipeIngredientsRequest } from "@dtos/requests/RecipeIngredientRequest";
 import { RecipesListQueryRequest } from "@dtos/requests/RecipesListQueryRequest";
 import { DEFAULT_LANGUAGE, Languages } from "@global_types/languages";
+import { RecipeKitchenwareRequest } from "@dtos/requests/RecipeKitchenwareRequest";
 
 /**
  * @openapi
@@ -225,6 +226,7 @@ class RecipesRouter {
     this.router.get("/:id", this.getRecipeById);
     this.router.post("/", this.createRecipe);
     this.router.put("/:id/ingredients", this.addRecipeIngredients);
+    this.router.put("/:id/kitchenware", this.addRecipeKitchenware);
   }
 
   /**
@@ -414,6 +416,58 @@ class RecipesRouter {
       const recipeApplication = Container.get<IRecipeApplication>(RecipeApplication);
 
       await recipeApplication.addRecipeIngredients(req.params.id, req.body);
+
+      res.status(204).send();
+    } catch (err) {
+      if (err instanceof InvalidParameterError) {
+        return res.status(400).send({ exceptionMessage: err.message, params: err.params });
+      }
+      if (err instanceof EntityNotFoundError) {
+        return res.status(404).send({ exceptionMessage: err.message, params: err.params });
+      }
+      next(err);
+    }
+  }
+
+  /**
+   * @openapi
+   * /recipes/{id}/kitchenware:
+   *   put:
+   *     summary: Adds kitchenware to a recipe.
+   *     tags: [Recipes]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         type: string
+   *         required: true
+   *         description: ID of the recipe to get.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: array
+   *             items:
+   *               $ref: '#/components/schemas/RecipeKitchenwareRequest'
+   *     responses:
+   *       204:
+   *         description: Recipe kitchenware added
+   *       400:
+   *         description: Error in request fields
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Exception'
+   */
+  private async addRecipeKitchenware(
+    req: Request<{ id: string }, unknown, RecipeKitchenwareRequest>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const recipeApplication = Container.get<IRecipeApplication>(RecipeApplication);
+
+      await recipeApplication.addRecipeKitchenware(req.params.id, req.body);
 
       res.status(204).send();
     } catch (err) {

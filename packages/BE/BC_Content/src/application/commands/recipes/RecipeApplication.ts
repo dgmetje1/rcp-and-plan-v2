@@ -2,10 +2,12 @@ import { Container, Service } from "typedi";
 
 import { CategoryQueries, ICategoryQueries } from "@application/queries/categories/ICategoryQueries";
 import { IIngredientQueries, IngredientQueries } from "@application/queries/ingredients/IIngredientQueries";
+import { IKitchenwareQueries, KitchenwareQueries } from "@application/queries/kitchenware/IKitchenwareQueries";
 import { IRecipeQueries, RecipeQueries } from "@application/queries/recipes/IRecipeQueries";
 import { IUnitQueries, UnitQueries } from "@application/queries/units/IUnitsQueries";
 import { Category } from "@domain/models/category/Category";
 import { Ingredient } from "@domain/models/ingredient/Ingredient";
+import { Kitchenware } from "@domain/models/kitchenware/Kitchenware";
 import { RecipeDifficulties } from "@domain/models/recipe/helpers/RecipeDifficulties";
 import { RecipeVisibilities } from "@domain/models/recipe/helpers/RecipeVisibilities";
 import { IRecipeRepository, RecipeRepository } from "@domain/models/recipe/IRecipeRepository";
@@ -13,6 +15,7 @@ import { Recipe } from "@domain/models/recipe/Recipe";
 import { Unit } from "@domain/models/unit/Unit";
 import { RecipeCreateRequest } from "@dtos/requests/RecipeCreateRequest";
 import { RecipeIngredientsRequest } from "@dtos/requests/RecipeIngredientRequest";
+import { RecipeKitchenwareRequest } from "@dtos/requests/RecipeKitchenwareRequest";
 
 import { IRecipeApplication } from "./IRecipeApplication";
 
@@ -33,10 +36,14 @@ export class RecipeApplication implements IRecipeApplication {
       request.publications,
       categories,
     );
+
     const ingredients = await this.getIngredients(request.ingredients);
     ingredients.forEach(({ ingredient, unit, quantity, isOptional }) =>
       recipe.addIngredient(ingredient, unit, quantity, isOptional),
     );
+
+    const kitchenware = await this.getKitchenware(request.kitchenware);
+    kitchenware.forEach(({ kitchenware, quantity }) => recipe.addKitchenware(kitchenware, quantity));
 
     const repository = Container.get<IRecipeRepository>(RecipeRepository);
 
@@ -62,6 +69,23 @@ export class RecipeApplication implements IRecipeApplication {
     await repository.unitOfWork.saveChangesAsync();
   }
 
+  /**
+   * @inheritdoc
+   */
+  public async addRecipeKitchenware(recipeId: string, request: RecipeKitchenwareRequest) {
+    const recipeQueries = Container.get<IRecipeQueries>(RecipeQueries);
+    const recipe = await recipeQueries.getEntity(recipeId);
+
+    const kitchenware = await this.getKitchenware(request);
+    const repository = Container.get<IRecipeRepository>(RecipeRepository);
+    kitchenware.forEach(({ kitchenware, quantity }) => {
+      const recipeKitchenware = recipe.setKitchenware(kitchenware, quantity);
+      repository.addKitchenware(recipe, recipeKitchenware);
+    });
+
+    await repository.unitOfWork.saveChangesAsync();
+  }
+
   private async getIngredients(ingredientsRequest: RecipeCreateRequest["ingredients"]) {
     const ingredientQueries = Container.get<IIngredientQueries>(IngredientQueries);
     const unitQueries = Container.get<IUnitQueries>(UnitQueries);
@@ -82,6 +106,29 @@ export class RecipeApplication implements IRecipeApplication {
     }
 
     return ingredients;
+  }
+
+  /**
+   * Retrieves kitchenware based on their IDs along with the specified quantity.
+   *
+   * @param kitchenwareRequest The list of kitchenware IDs and quantities to retrieve
+   * @returns An array of objects containing the kitchenware instances and their respective quantities
+   */
+  private async getKitchenware(kitchenwareRequest: RecipeCreateRequest["kitchenware"]) {
+    const kitchenwareQueries = Container.get<IKitchenwareQueries>(KitchenwareQueries);
+
+    const kitchenware: Array<
+      { kitchenware: Kitchenware } & Pick<RecipeCreateRequest["kitchenware"][number], "quantity">
+    > = [];
+
+    for (const { id, ...rest } of kitchenwareRequest) {
+      kitchenware.push({
+        kitchenware: await kitchenwareQueries.getEntity(id),
+        ...rest,
+      });
+    }
+
+    return kitchenware;
   }
 
   /**

@@ -5,13 +5,17 @@ import { Ingredient } from "@domain/models/ingredient/Ingredient";
 import { Unit } from "@domain/models/unit/Unit";
 import { Languages } from "@global_types/languages";
 
+import { Kitchenware } from "../kitchenware/Kitchenware";
 import { RecipeIngredient } from "./aggregates/RecipeIngredient";
+import { RecipeKitchenware } from "./aggregates/RecipeKitchenware";
 import { RecipePublication, RecipePublications } from "./aggregates/RecipePublication";
 import { RecipeIngredientAddedDomainEvent } from "./events/RecipeIngredientAddedDomainEvent";
+import { RecipeKitchenwareAddedDomainEvent } from "./events/RecipeKitchenwareAddedDomainEvent";
 import { RecipeDifficulty } from "./VO/RecipeDifficulty";
 import { RecipeVisibility } from "./VO/RecipeVisibility";
 
 export class Recipe extends AggregateRoot {
+  //#region Private fields
   private _difficulty: RecipeDifficulty;
   private _time: number;
   private _portions: number;
@@ -21,7 +25,10 @@ export class Recipe extends AggregateRoot {
   private _publications: RecipePublications;
   private _categories: Array<Category>;
   private _ingredients: Array<RecipeIngredient>;
+  private _kitchenware: Array<RecipeKitchenware>;
+  //#endregion
 
+  //#region Public getters
   public get difficulty() {
     return this._difficulty.value;
   }
@@ -53,9 +60,15 @@ export class Recipe extends AggregateRoot {
   public get categories() {
     return this._categories;
   }
+
   public get ingredients() {
     return this._ingredients;
   }
+
+  public get kitchenware() {
+    return this._kitchenware;
+  }
+  //#endregion
 
   private constructor(
     id: string | undefined,
@@ -81,6 +94,7 @@ export class Recipe extends AggregateRoot {
     this._publicationDate = publicationDate;
     this._categories = categories;
     this._ingredients = [];
+    this._kitchenware = [];
 
     this._publications = new Map();
     Object.entries(publications).forEach(([key, { title, description }]) => {
@@ -178,8 +192,26 @@ export class Recipe extends AggregateRoot {
     return recipeIngredient;
   }
 
+  public setKitchenware(kitchenware: Kitchenware, quantity: number) {
+    const recipeKitchenware = RecipeKitchenware.create(kitchenware, quantity);
+    ensureThat(
+      !this._kitchenware.find(kitchenware => kitchenware.kitchenware.id === recipeKitchenware.kitchenware.id),
+      new InvalidParameterError("Tool already present", "Recipe", [
+        { id: this.id.toValue(), toolId: recipeKitchenware.kitchenware.id },
+      ]),
+    );
+    this._kitchenware.push(recipeKitchenware);
+
+    return recipeKitchenware;
+  }
+
   public addIngredient(ingredient: Ingredient, unit: Unit, quantity: number, isOptional: boolean) {
     const recipeIngredient = this.setIngredient(ingredient, unit, quantity, isOptional);
     this.addDomainEvent(new RecipeIngredientAddedDomainEvent(this._id, recipeIngredient));
+  }
+
+  public addKitchenware(kitchenware: Kitchenware, quantity: number): void {
+    const recipeKitchenware = this.setKitchenware(kitchenware, quantity);
+    this.addDomainEvent(new RecipeKitchenwareAddedDomainEvent(this._id, recipeKitchenware));
   }
 }
