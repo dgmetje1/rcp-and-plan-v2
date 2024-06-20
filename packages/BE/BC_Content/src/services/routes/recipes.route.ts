@@ -224,7 +224,7 @@ class RecipesRouter {
     this.router.get("/daily", this.getDailyRecipe);
     this.router.get("/:id", this.getRecipeById);
     this.router.post("/", this.createRecipe);
-    this.router.post("/:id/ingredients", this.addRecipeIngredients);
+    this.router.put("/:id/ingredients", this.addRecipeIngredients);
   }
 
   /**
@@ -378,7 +378,7 @@ class RecipesRouter {
   /**
    * @openapi
    * /recipes/{id}/ingredients:
-   *   post:
+   *   put:
    *     summary: Adds ingredients to a recipe.
    *     tags: [Recipes]
    *     parameters:
