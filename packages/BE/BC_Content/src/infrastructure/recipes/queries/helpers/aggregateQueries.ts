@@ -28,3 +28,11 @@ export const getRecipeKitchenware = (kitchenware: Recipe["kitchenware"]) => {
     }),
   );
 };
+
+export const getRecipeSteps = (steps: Recipe["steps"]) => {
+  return steps.map(({ id, number, publications }) => ({
+    id,
+    number,
+    content: publications.reduce((prev, { language, title, body }) => ({ ...prev, [language]: { title, body } }), {}),
+  }));
+};

@@ -12,14 +12,14 @@ import { RecipeResponse } from "@dtos/responses/RecipeResponse";
 import { RecipesListResponse } from "@dtos/responses/RecipesListResponse";
 import { DEFAULT_LANGUAGE, Languages } from "@global_types/languages";
 import { Category, Recipe } from "@infrastructure/models";
+import { Ingredient } from "@infrastructure/models/Ingredient";
+import { Kitchenware } from "@infrastructure/models/Kitchenware";
 import { RecipePublication } from "@infrastructure/models/Recipe";
+import { RecipeStep } from "@infrastructure/models/Recipe/Step";
 import { RecipeStepContent } from "@infrastructure/models/Recipe/Step/Content";
+import { Unit } from "@infrastructure/models/Unit";
 
-import { Ingredient } from "../../models/Ingredient";
-import { Kitchenware } from "../../models/Kitchenware";
-import { RecipeStep } from "../../models/Recipe/Step";
-import { Unit } from "../../models/Unit";
-import { getRecipeIngredients, getRecipeKitchenware } from "./helpers/aggregateQueries";
+import { getRecipeIngredients, getRecipeKitchenware, getRecipeSteps } from "./helpers/aggregateQueries";
 import { processRecipesListParamsQuery } from "./helpers/params";
 import { IRecipeQueries } from "./types";
 
@@ -38,6 +38,11 @@ export class RecipeQueries implements IRecipeQueries {
           attributes: ["id"],
         },
         { model: RecipePublication },
+        {
+          model: RecipeStep,
+          order: ["number", "ASC"],
+          include: [RecipeStepContent],
+        },
       ],
     });
     if (!result) throw new EntityNotFoundError("Recipe not found", "Recipe", [{ id }]);
@@ -59,6 +64,7 @@ export class RecipeQueries implements IRecipeQueries {
       ),
       await getRecipeIngredients(result.dataValues.ingredients),
       await getRecipeKitchenware(result.dataValues.kitchenware),
+      getRecipeSteps(result.dataValues.steps),
     );
 
     return recipe;
