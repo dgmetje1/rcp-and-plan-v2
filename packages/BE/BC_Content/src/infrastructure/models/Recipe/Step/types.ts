@@ -14,4 +14,4 @@ export interface RecipeStepAttributes {
   content: Array<RecipeStepContent>;
 }
 
-export interface RecipeStepCreationAttributes extends Optional<RecipeStepAttributes, "id"> {}
+export interface RecipeStepCreationAttributes extends Optional<RecipeStepAttributes, "recipe" | "content"> {}

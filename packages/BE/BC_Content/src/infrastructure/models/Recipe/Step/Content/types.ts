@@ -1,3 +1,5 @@
+import { Optional } from "sequelize";
+
 import { RecipeStep } from "../RecipeStep";
 
 export interface RecipeStepContentAttributes {
@@ -7,3 +9,4 @@ export interface RecipeStepContentAttributes {
   body: string;
   step: RecipeStep;
 }
+export interface RecipeStepContentCreationAttributes extends Optional<RecipeStepContentAttributes, "step"> {}

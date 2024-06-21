@@ -2,6 +2,7 @@ import { SqlContext } from "@rcp-and-plan/commons";
 
 import { RecipeIngredient } from "@domain/models/recipe/aggregates/RecipeIngredient";
 import { RecipeKitchenware } from "@domain/models/recipe/aggregates/RecipeKitchenware";
+import { RecipeStep } from "@domain/models/recipe/aggregates/RecipeStep";
 import { Recipe } from "@domain/models/recipe/Recipe";
 
 export interface IRecipeRepository {
@@ -24,10 +25,16 @@ export interface IRecipeRepository {
   addIngredient(entity: Recipe, ingredient: RecipeIngredient): void;
 
   /**
-   * Requests an insertion for the a new ingredient entry to the recipe entity
+   * Requests an insertion for the a new kitchenware entry to the recipe entity
    * @param entity Recipe domain entity
-   * @param kitchenware Ingredient aggregate
-
+   * @param kitchenware Kitchenware aggregate
    */
   addKitchenware(entity: Recipe, kitchenware: RecipeKitchenware): void;
+
+  /**
+   * Requests an insertion for the a new step entry to the recipe entity
+   * @param entity Recipe domain entity
+   * @param kitchenware Step aggregate
+   */
+  addStep(entity: Recipe, step: RecipeStep): void;
 }

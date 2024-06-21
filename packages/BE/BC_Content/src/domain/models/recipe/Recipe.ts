@@ -9,8 +9,10 @@ import { Kitchenware } from "../kitchenware/Kitchenware";
 import { RecipeIngredient } from "./aggregates/RecipeIngredient";
 import { RecipeKitchenware } from "./aggregates/RecipeKitchenware";
 import { RecipePublication, RecipePublications } from "./aggregates/RecipePublication";
+import { RecipeStep, RecipeSteps } from "./aggregates/RecipeStep";
 import { RecipeIngredientAddedDomainEvent } from "./events/RecipeIngredientAddedDomainEvent";
 import { RecipeKitchenwareAddedDomainEvent } from "./events/RecipeKitchenwareAddedDomainEvent";
+import { RecipeStepAddedDomainEvent } from "./events/RecipeStepAddedDomainEvent";
 import { RecipeDifficulty } from "./VO/RecipeDifficulty";
 import { RecipeVisibility } from "./VO/RecipeVisibility";
 
@@ -26,6 +28,7 @@ export class Recipe extends AggregateRoot {
   private _categories: Array<Category>;
   private _ingredients: Array<RecipeIngredient>;
   private _kitchenware: Array<RecipeKitchenware>;
+  private _steps: RecipeSteps;
   //#endregion
 
   //#region Public getters
@@ -68,6 +71,11 @@ export class Recipe extends AggregateRoot {
   public get kitchenware() {
     return this._kitchenware;
   }
+
+  public get steps() {
+    return this._steps;
+  }
+
   //#endregion
 
   private constructor(
@@ -78,7 +86,7 @@ export class Recipe extends AggregateRoot {
     visibility: RecipeVisibility,
     author: string,
     publicationDate: Date,
-    publications: Record<string, { title: string; description: string }>,
+    publications: Map<Languages, RecipePublication>,
     categories: Array<Category>,
   ) {
     super(new UniqueEntityID(id));
@@ -95,13 +103,8 @@ export class Recipe extends AggregateRoot {
     this._categories = categories;
     this._ingredients = [];
     this._kitchenware = [];
-
-    this._publications = new Map();
-    Object.entries(publications).forEach(([key, { title, description }]) => {
-      const publicationAggregate = RecipePublication.create(key, title, description);
-
-      this._publications.set(key as Languages, publicationAggregate);
-    });
+    this._publications = publications;
+    this._steps = new RecipeSteps();
   }
 
   /**
@@ -125,6 +128,13 @@ export class Recipe extends AggregateRoot {
     publications: Record<string, { title: string; description: string }>,
     categories: Array<Category>,
   ) {
+    const publicationsMap = new Map();
+    Object.entries(publications).forEach(([key, { title, description }]) => {
+      const publicationAggregate = RecipePublication.create(key, title, description);
+
+      publicationsMap.set(key as Languages, publicationAggregate);
+    });
+
     const recipe = new Recipe(
       undefined,
       difficulty,
@@ -133,7 +143,7 @@ export class Recipe extends AggregateRoot {
       visibility,
       author,
       new Date(Date.now()),
-      publications,
+      publicationsMap,
       categories,
     );
 
@@ -161,11 +171,19 @@ export class Recipe extends AggregateRoot {
     visibility: RecipeVisibility,
     author: string,
     publicationDate: Date,
-    publications: Record<string, { title: string; description: string }>,
+    publications: Record<string, { id: string; title: string; description: string }>,
     categories: Array<Category>,
     ingredients: Array<{ ingredient: Ingredient; unit: Unit; quantity: number; isOptional: boolean }>,
     kitchenware: Array<{ kitchenware: Kitchenware; quantity: number }>,
+    steps: Array<{ id: string; number: number; content: Record<string, { title: string; body: string }> }>,
   ) {
+    const publicationsMap = new Map();
+    Object.entries(publications).forEach(([key, { id, title, description }]) => {
+      const publicationAggregate = RecipePublication.get(id, key, title, description);
+
+      publicationsMap.set(key as Languages, publicationAggregate);
+    });
+
     const recipe = new Recipe(
       id,
       difficulty,
@@ -174,7 +192,7 @@ export class Recipe extends AggregateRoot {
       visibility,
       author,
       publicationDate,
-      publications,
+      publicationsMap,
       categories,
     );
 
@@ -182,6 +200,8 @@ export class Recipe extends AggregateRoot {
       recipe.setIngredient(ingredient, unit, quantity, isOptional),
     );
     kitchenware.forEach(({ kitchenware, quantity }) => recipe.setKitchenware(kitchenware, quantity));
+
+    steps.forEach(({ id, number, content }) => recipe.getStep(id, number, content));
 
     return recipe;
   }
@@ -212,6 +232,18 @@ export class Recipe extends AggregateRoot {
     return recipeKitchenware;
   }
 
+  public getStep(id: string, number: number, content: Record<string, { title: string; body: string }>): void {
+    const recipeStep = RecipeStep.get(id, number, content);
+    this._steps.push(recipeStep);
+  }
+
+  public setStep(number: number, content: Record<string, { title: string; body: string }>) {
+    const recipeStep = RecipeStep.create(number, content);
+    this._steps.push(recipeStep);
+
+    return recipeStep;
+  }
+
   public addIngredient(ingredient: Ingredient, unit: Unit, quantity: number, isOptional: boolean) {
     const recipeIngredient = this.setIngredient(ingredient, unit, quantity, isOptional);
     this.addDomainEvent(new RecipeIngredientAddedDomainEvent(this._id, recipeIngredient));
@@ -220,5 +252,10 @@ export class Recipe extends AggregateRoot {
   public addKitchenware(kitchenware: Kitchenware, quantity: number): void {
     const recipeKitchenware = this.setKitchenware(kitchenware, quantity);
     this.addDomainEvent(new RecipeKitchenwareAddedDomainEvent(this._id, recipeKitchenware));
+  }
+
+  public addStep(number: number, content: Record<string, { title: string; body: string }>): void {
+    const recipeStep = this.setStep(number, content);
+    this.addDomainEvent(new RecipeStepAddedDomainEvent(this._id, recipeStep));
   }
 }

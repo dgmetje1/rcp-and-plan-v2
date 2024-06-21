@@ -57,13 +57,24 @@ class App {
     Promise.all([
       import("@application/commands/recipes/events/RecipeIngredientAdded/SaveEntryOnRecipeIngredientAdded"),
       import("@application/commands/recipes/events/RecipeKitchenwareAdded/SaveEntryOnRecipeKitchenwareAdded"),
+      import("@application/commands/recipes/events/RecipeStepAdded/SaveEntryOnRecipeStepAdded"),
     ])
-      .then(([{ SaveEntryOnRecipeIngredientAdded }, { SaveEntryOnRecipeKitchenwareAdded }]) => {
-        Container.import([SaveEntryOnRecipeIngredientAdded, SaveEntryOnRecipeKitchenwareAdded]);
+      .then(
+        ([
+          { SaveEntryOnRecipeIngredientAdded },
+          { SaveEntryOnRecipeKitchenwareAdded },
+          { SaveEntryOnRecipeStepAdded },
+        ]) => {
+          Container.import([
+            SaveEntryOnRecipeIngredientAdded,
+            SaveEntryOnRecipeKitchenwareAdded,
+            SaveEntryOnRecipeStepAdded,
+          ]);
 
-        const handlers = Container.getMany(HandlerToken);
-        handlers.forEach(handler => handler.initialize());
-      })
+          const handlers = Container.getMany(HandlerToken);
+          handlers.forEach(handler => handler.initialize());
+        },
+      )
       .catch(ex => console.error(ex));
   }
 }

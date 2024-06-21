@@ -14,6 +14,7 @@ import { IRecipeRepository, RecipeRepository } from "@domain/models/recipe/IReci
 import { Recipe } from "@domain/models/recipe/Recipe";
 import { Unit } from "@domain/models/unit/Unit";
 import { RecipeCreateRequest } from "@dtos/requests/RecipeCreateRequest";
+import { RecipeCreateStepsRequest } from "@dtos/requests/RecipeCreateStepRequest";
 import { RecipeIngredientsRequest } from "@dtos/requests/RecipeIngredientRequest";
 import { RecipeKitchenwareRequest } from "@dtos/requests/RecipeKitchenwareRequest";
 
@@ -81,6 +82,22 @@ export class RecipeApplication implements IRecipeApplication {
     kitchenware.forEach(({ kitchenware, quantity }) => {
       const recipeKitchenware = recipe.setKitchenware(kitchenware, quantity);
       repository.addKitchenware(recipe, recipeKitchenware);
+    });
+
+    await repository.unitOfWork.saveChangesAsync();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public async addRecipeSteps(recipeId: string, request: RecipeCreateStepsRequest) {
+    const recipeQueries = Container.get<IRecipeQueries>(RecipeQueries);
+    const recipe = await recipeQueries.getEntity(recipeId);
+
+    const repository = Container.get<IRecipeRepository>(RecipeRepository);
+    request.forEach(({ number, content }) => {
+      const recipeStep = recipe.setStep(number, content);
+      repository.addStep(recipe, recipeStep);
     });
 
     await repository.unitOfWork.saveChangesAsync();

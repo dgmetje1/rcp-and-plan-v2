@@ -4,6 +4,7 @@ import { Service } from "typedi";
 
 import { RecipeIngredient } from "@domain/models/recipe/aggregates/RecipeIngredient";
 import { RecipeKitchenware } from "@domain/models/recipe/aggregates/RecipeKitchenware";
+import { RecipeStep } from "@domain/models/recipe/aggregates/RecipeStep";
 import { Recipe } from "@domain/models/recipe/Recipe";
 import {
   Category,
@@ -11,6 +12,8 @@ import {
   RecipeIngredient as RecipeIngredientDB,
   RecipeKitchenware as RecipeKitchenwareDB,
   RecipePublication,
+  RecipeStep as RecipeStepDB,
+  RecipeStepContent as RecipeStepContentDB,
 } from "@infrastructure/models";
 
 import { IRecipeRepository } from "./types";
@@ -48,6 +51,12 @@ export class RecipeRepository implements IRecipeRepository {
    */
   public addKitchenware(entity: Recipe, kitchenware: RecipeKitchenware): void {
     this._context.addCommand(t => this.insertRecipeKitchenware(t, entity, kitchenware), entity);
+  }
+  /**
+   * @inheritdoc
+   */
+  public addStep(entity: Recipe, step: RecipeStep): void {
+    this._context.addCommand(t => this.insertRecipeStep(t, entity, step), entity);
   }
 
   /**
@@ -110,10 +119,10 @@ export class RecipeRepository implements IRecipeRepository {
   }
 
   /**
-   * Inserts a new recipe ingredient into the database.
+   * Inserts a new recipe kitchenware into the database.
    *
-   * @param entity The Recipe entity to which the ingredient belongs.
-   * @param recipeIngredient The RecipeIngredient object representing the ingredient to be inserted.
+   * @param entity The Recipe entity to which the kitchenware belongs.
+   * @param recipeKitchenware The RecipeKitchenware object representing the kitchenware to be inserted.
    */
   private async insertRecipeKitchenware(t: Transaction, entity: Recipe, recipeKitchenware: RecipeKitchenware) {
     await RecipeKitchenwareDB.create(
@@ -124,5 +133,25 @@ export class RecipeRepository implements IRecipeRepository {
       },
       { transaction: t },
     );
+  }
+
+  /**
+   * Inserts a new recipe ingredient into the database.
+   *
+   * @param entity The Recipe entity to which the ingredient belongs.
+   * @param recipeIngredient The RecipeIngredient object representing the ingredient to be inserted.
+   */
+  private async insertRecipeStep(t: Transaction, entity: Recipe, recipeStep: RecipeStep) {
+    await RecipeStepDB.create(
+      {
+        id: recipeStep.id,
+        number: recipeStep.number,
+        recipe_id: entity.id.toValue() as string,
+      },
+      { transaction: t },
+    );
+
+    for (const { language, title, body } of recipeStep.content.values())
+      await RecipeStepContentDB.create({ id: recipeStep.id, language, title, body }, { transaction: t });
   }
 }

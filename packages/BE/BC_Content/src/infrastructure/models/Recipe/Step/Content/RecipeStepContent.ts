@@ -2,10 +2,10 @@ import { DataTypes } from "sequelize";
 import { BelongsTo, Column, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 import { RecipeStep } from "../RecipeStep";
-import { RecipeStepContentAttributes } from "./types";
+import { RecipeStepContentAttributes, RecipeStepContentCreationAttributes } from "./types";
 
 @Table({ tableName: "recipes_steps_content" })
-export class RecipeStepContent extends Model<RecipeStepContentAttributes> {
+export class RecipeStepContent extends Model<RecipeStepContentAttributes, RecipeStepContentCreationAttributes> {
   @PrimaryKey
   @ForeignKey(() => RecipeStep)
   @Column(DataTypes.STRING)
