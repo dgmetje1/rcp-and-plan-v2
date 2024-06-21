@@ -19,6 +19,7 @@ import { Ingredient } from "../../models/Ingredient";
 import { Kitchenware } from "../../models/Kitchenware";
 import { RecipeStep } from "../../models/Recipe/Step";
 import { Unit } from "../../models/Unit";
+import { getRecipeIngredients, getRecipeKitchenware } from "./helpers/aggregateQueries";
 import { processRecipesListParamsQuery } from "./helpers/params";
 import { IRecipeQueries } from "./types";
 
@@ -30,6 +31,11 @@ export class RecipeQueries implements IRecipeQueries {
         { model: Category, required: true },
         {
           model: Ingredient,
+          attributes: ["id"],
+        },
+        {
+          model: Kitchenware,
+          attributes: ["id"],
         },
         { model: RecipePublication },
       ],
@@ -51,6 +57,8 @@ export class RecipeQueries implements IRecipeQueries {
       result.categories.map(({ id, language, name, description }) =>
         CategoryModel.get(id, [{ language, name, description }]),
       ),
+      await getRecipeIngredients(result.dataValues.ingredients),
+      await getRecipeKitchenware(result.dataValues.kitchenware),
     );
 
     return recipe;
