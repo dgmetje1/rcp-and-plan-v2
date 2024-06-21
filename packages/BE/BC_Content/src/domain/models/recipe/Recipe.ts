@@ -163,6 +163,8 @@ export class Recipe extends AggregateRoot {
     publicationDate: Date,
     publications: Record<string, { title: string; description: string }>,
     categories: Array<Category>,
+    ingredients: Array<{ ingredient: Ingredient; unit: Unit; quantity: number; isOptional: boolean }>,
+    kitchenware: Array<{ kitchenware: Kitchenware; quantity: number }>,
   ) {
     const recipe = new Recipe(
       id,
@@ -175,6 +177,11 @@ export class Recipe extends AggregateRoot {
       publications,
       categories,
     );
+
+    ingredients.forEach(({ ingredient, unit, quantity, isOptional }) =>
+      recipe.setIngredient(ingredient, unit, quantity, isOptional),
+    );
+    kitchenware.forEach(({ kitchenware, quantity }) => recipe.setKitchenware(kitchenware, quantity));
 
     return recipe;
   }
