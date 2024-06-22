@@ -1,7 +1,0 @@
-services:
-  X19ob21lX19nYW1lMDIwMzk4X19kZXZfX3JjcC1hbmQtcGxhbl9fcGFja2FnZXNfX0JFX19CQ19Tb2NpYWxfX3NyY19fc2VydmljZXNfX0RJX19pbmRleF9fQ29udGFpbmVy:
-    class: >-
-      /home/game020398/dev/rcp-and-plan/packages/BE/BC_Social/src/services/DI/index
-    arguments: []
-    abstract: false
-    parent: null

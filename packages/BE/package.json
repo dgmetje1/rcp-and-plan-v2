@@ -2,8 +2,6 @@
   "name": "root-be",
   "private": true,
   "dependencies": {
-    "node-dependency-injection": "3.1.2",
-    "node-dependency-injection-express-middleware": "^1.2.2",
     "reflect-metadata": "^0.2.2",
     "response-time": "^2.3.2",
     "swagger-jsdoc": "^6.2.8",

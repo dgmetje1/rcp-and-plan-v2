@@ -1,8 +1,8 @@
 import { EntityNotFoundError } from "@rcp-and-plan/commons";
 import { Application, NextFunction, type Request, type Response, Router } from "express";
+import Container, { Service } from "typedi";
 
-import { IUserQueries } from "@application/queries/users/IUserQueries";
-import Container from "@services/DI";
+import { IUserQueries, UserQueries } from "@application/queries/users/IUserQueries";
 
 /**
  * @openapi
@@ -30,6 +30,7 @@ import Container from "@services/DI";
  *         type: string
  *         nullable: true
  */
+@Service()
 class UsersRouter {
   public router: Router;
 
@@ -74,9 +75,7 @@ class UsersRouter {
    */
   private async getUserByAccountId(req: Request, res: Response, next: NextFunction) {
     try {
-      const { container } = await Container.getInstance();
-
-      const userQueries = container.get<IUserQueries>("UserQueries");
+      const userQueries = Container.get<IUserQueries>(UserQueries);
       const response = await userQueries.getDataByAccountId(req.params.accountId);
 
       res.send(response);
@@ -109,9 +108,7 @@ class UsersRouter {
    */
   private async getUserById(req: Request, res: Response, next: NextFunction) {
     try {
-      const { container } = await Container.getInstance();
-
-      const userQueries = container.get<IUserQueries>("UserQueries");
+      const userQueries = Container.get<IUserQueries>(UserQueries);
       const response = await userQueries.getDataById(req.params.id);
 
       res.send(response);

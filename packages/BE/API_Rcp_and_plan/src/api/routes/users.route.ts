@@ -1,8 +1,8 @@
 import { Application, NextFunction, type Request, type Response, Router } from "express";
 import { EntityNotFoundErrorType, ExceptionErrorResponse } from "@rcp-and-plan/commons";
 import { AxiosError } from "axios";
+import Container, { Service } from "typedi";
 
-import Container from "@api/DI";
 import authMiddleware from "@api/middleware/auth/authMiddleware";
 import { userMiddleware } from "@api/middleware/user";
 import { SocialService } from "@api/services/social";
@@ -34,6 +34,7 @@ import { UserAccountOutput } from "@dtos/outputs/UserAccountOutput";
  *         type: string
  *         nullable: true
  */
+@Service()
 class UsersRouter {
   public router: Router;
 
@@ -78,9 +79,8 @@ class UsersRouter {
     res: Response<UserAccountOutput | ExceptionErrorResponse>,
     next: NextFunction,
   ) {
-    const { container } = await Container.getInstance();
     try {
-      const socialService = container.get<SocialService>("SocialService");
+      const socialService = Container.get<SocialService>(SocialService);
 
       const accountId = req.auth?.payload.sub?.split("|").pop() || "";
       const response = await socialService.getUserByAccountId(accountId);
@@ -116,10 +116,8 @@ class UsersRouter {
    *               $ref: '#/components/schemas/UserAccountOutput'
    */
   private async getUserById(req: Request, res: Response<UserAccountOutput>, next: NextFunction) {
-    const { container } = await Container.getInstance();
-
     try {
-      const socialService = container.get<SocialService>("SocialService");
+      const socialService = Container.get<SocialService>(SocialService);
       const response = await socialService.getUserById(req.context.user.id);
       res.send(response.data);
     } catch (err) {

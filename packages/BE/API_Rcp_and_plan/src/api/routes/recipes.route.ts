@@ -1,7 +1,7 @@
 import { Application, NextFunction, type Request, type Response, Router } from "express";
 import { EntityNotFoundError, EntityNotFoundErrorType, ExceptionErrorResponse } from "@rcp-and-plan/commons";
+import Container, { Service } from "typedi";
 
-import Container from "@api/DI";
 import { ContentService } from "@api/services/content";
 import { RecipesListQueryEntry } from "@dtos/entries/RecipeListQueryEntry";
 import { RecipeDailyOutput } from "@dtos/outputs/RecipeDailyOutput";
@@ -155,6 +155,7 @@ import { RecipesListOutput } from "@dtos/outputs/RecipesListOutput";
  *              type: string
  *
  */
+@Service()
 class RecipesRouter {
   public router: Router;
 
@@ -203,9 +204,7 @@ class RecipesRouter {
     req: Request<unknown, unknown, unknown, RecipesListQueryEntry>,
     res: Response<RecipesListOutput>,
   ) {
-    const { container } = await Container.getInstance();
-
-    const contentService = container.get<ContentService>("ContentService");
+    const contentService = Container.get<ContentService>("ContentService");
     const response = await contentService.getRecipes(req.query, req.headers);
     res.send(response.data);
   }
@@ -230,10 +229,8 @@ class RecipesRouter {
     res: Response<RecipeDailyOutput | ExceptionErrorResponse>,
     next: NextFunction,
   ) {
-    const { container } = await Container.getInstance();
-
     try {
-      const contentService = container.get<ContentService>("ContentService");
+      const contentService = Container.get<ContentService>("ContentService");
       const response = await contentService.getDailyRecipe();
       res.send(response.data);
     } catch (err) {
@@ -273,9 +270,7 @@ class RecipesRouter {
    */
   private async getRecipeById(req: Request, res: Response<RecipeOutput | ExceptionErrorResponse>, next: NextFunction) {
     try {
-      const { container } = await Container.getInstance();
-
-      const recipesQueries = container.get<ContentService>("ContentService");
+      const recipesQueries = Container.get<ContentService>("ContentService");
       const response = await recipesQueries.getRecipeById(req.params.id);
       res.send(response.data);
     } catch (err) {

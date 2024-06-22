@@ -1,14 +1,15 @@
 import { EntityNotFoundError } from "@rcp-and-plan/commons";
+import { Service } from "typedi";
 
 import { IUserQueries } from "@application/queries/users/IUserQueries";
 import { UserAccountResponse } from "@dtos/index";
 import { User } from "@infrastructure/models";
 
+@Service()
 export class UserQueries implements IUserQueries {
   async getDataById(id: string) {
     const result = await User.findByPk(id);
-    if (!result)
-      throw new EntityNotFoundError("User not found", "User", [{ id }]);
+    if (!result) throw new EntityNotFoundError("User not found", "User", [{ id }]);
 
     const response: UserAccountResponse = {
       id: result.dataValues.id,
@@ -26,8 +27,7 @@ export class UserQueries implements IUserQueries {
 
   async getDataByAccountId(accountId: string) {
     const result = await User.findOne({ where: { account_id: accountId } });
-    if (!result)
-      throw new EntityNotFoundError("User not found", "User", [{ accountId }]);
+    if (!result) throw new EntityNotFoundError("User not found", "User", [{ accountId }]);
 
     const response: UserAccountResponse = {
       id: result.dataValues.id,

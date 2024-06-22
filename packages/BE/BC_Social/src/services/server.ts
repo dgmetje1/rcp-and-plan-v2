@@ -1,14 +1,15 @@
-import express from "express";
-import swaggerUi from "swagger-ui-express";
-import compress from "compression";
-import helmet from "helmet";
 import "dotenv/config";
+import compress from "compression";
+import cors from "cors";
+import express from "express";
+import helmet from "helmet";
+import responseTime from "response-time";
+import swaggerUi from "swagger-ui-express";
+import Container from "typedi";
 
 import swaggerDocument from "./documentation.json";
-import Container from "./DI";
-import cors from "cors";
-import responseTime from "response-time";
 import { errorHandler } from "./middlewares/errorHandler";
+import UsersRouter from "./routes/users.route";
 
 const PORT = process.env.PORT || 3000;
 
@@ -24,9 +25,7 @@ class App {
         res.status(404).send("Not existing url!");
       });
       this.app.use(errorHandler);
-      this.app.listen(PORT, () =>
-        console.log(`Example app listening on port ${PORT}`),
-      );
+      this.app.listen(PORT, () => console.log(`Example app listening on port ${PORT}`));
     });
   }
 
@@ -43,9 +42,7 @@ class App {
   }
 
   private async routes() {
-    const { container } = await Container.getInstance();
-
-    const userRouter = container.get("UsersRouter");
+    const userRouter = Container.get(UsersRouter);
     userRouter.setupRouter(this.app);
   }
 
