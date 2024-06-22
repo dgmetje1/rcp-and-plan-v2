@@ -9,10 +9,12 @@ import helmet from "helmet";
 import http from "http";
 import https from "https";
 import responseTime from "response-time";
+import Container from "typedi";
 
-import Container from "./DI";
 import swaggerDocument from "./documentation.json";
 import { errorHandler } from "./middleware/errorHandler";
+import RecipesRouter from "./routes/recipes.route";
+import UsersRouter from "./routes/users.route";
 
 const PORT = process.env.PORT || 3000;
 
@@ -59,12 +61,10 @@ class App {
   }
 
   private async routes() {
-    const { container } = await Container.getInstance();
-
-    const recipeRouter = container.get("RecipeRouter");
+    const recipeRouter = Container.get(RecipesRouter);
     recipeRouter.setupRouter(this.app);
 
-    const userRouter = container.get("UsersRouter");
+    const userRouter = Container.get(UsersRouter);
     userRouter.setupRouter(this.app);
   }
 
