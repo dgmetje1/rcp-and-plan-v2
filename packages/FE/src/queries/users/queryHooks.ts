@@ -1,9 +1,10 @@
 import { UndefinedInitialDataOptions } from "@tanstack/react-query";
 
 import { useApiQuery, useSuspenseApiQuery } from "@/middleware/api";
+import { User } from "@/types/user";
 
-import { getAccountKeys, getUserKeys } from "./keys";
-import { getUserOptions } from "./options";
+import { getAccountKeys, getUserKeys, getUserSummaryKeys } from "./keys";
+import { getUserOptions, getUserSummaryOptions } from "./options";
 import { getAccount } from "./queries";
 
 export const useGetAccount = (enabled?: UndefinedInitialDataOptions["enabled"]) => {
@@ -21,4 +22,9 @@ export const useSuspenseGetUser = () => {
   const { key } = getUserKeys();
 
   return useSuspenseApiQuery(key, getUserOptions());
+};
+export const useSuspenseGetUserSummary = (userId: User["id"]) => {
+  const { key } = getUserSummaryKeys(userId);
+
+  return useSuspenseApiQuery(key, getUserSummaryOptions(userId));
 };

@@ -1,1 +1,1 @@
-export { SocialService } from "./socialService";
+export { SocialService } from "./SocialService";

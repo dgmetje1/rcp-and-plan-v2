@@ -25,7 +25,7 @@ export class RecipeApplication implements IRecipeApplication {
   /**
    * @inheritdoc
    */
-  public async createRecipe(request: RecipeCreateRequest): Promise<void> {
+  public async createRecipe(request: RecipeCreateRequest): Promise<string> {
     const categories = await this.getCategories(request.categories);
 
     const recipe = Recipe.create(
@@ -46,11 +46,15 @@ export class RecipeApplication implements IRecipeApplication {
     const kitchenware = await this.getKitchenware(request.kitchenware);
     kitchenware.forEach(({ kitchenware, quantity }) => recipe.addKitchenware(kitchenware, quantity));
 
+    request.steps.forEach(({ number, content }) => recipe.addStep(number, content));
+
     const repository = Container.get<IRecipeRepository>(RecipeRepository);
 
     repository.create(recipe);
 
     await repository.unitOfWork.saveChangesAsync();
+
+    return recipe.id.toString();
   }
 
   /**

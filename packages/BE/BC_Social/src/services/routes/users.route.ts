@@ -26,6 +26,22 @@ import { IUserQueries, UserQueries } from "@application/queries/users/IUserQueri
  *         type: string
  *       lastName:
  *         type: string
+ *       language:
+ *         type: string
+ *       profilePicture:
+ *         type: string
+ *         nullable: true
+ *   UserSummaryResponse:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: string
+ *       nickName:
+ *         type: string
+ *       name:
+ *         type: string
+ *       lastName:
+ *         type: string
  *       profilePicture:
  *         type: string
  *         nullable: true
@@ -52,6 +68,7 @@ class UsersRouter {
   private routes(): void {
     this.router.get("/account/:accountId", this.getUserByAccountId);
     this.router.get("/:id", this.getUserById);
+    this.router.get("/:id/summary", this.getUserSummaryById);
   }
 
   /**
@@ -110,6 +127,39 @@ class UsersRouter {
     try {
       const userQueries = Container.get<IUserQueries>(UserQueries);
       const response = await userQueries.getDataById(req.params.id);
+
+      res.send(response);
+    } catch (err) {
+      if (err instanceof EntityNotFoundError) {
+        return res.status(404).send({ type: err.type, exceptionMessage: err.message, params: err.params });
+      }
+      next(err);
+    }
+  }
+
+  /**
+   * @openapi
+   * /users/{id}/summary:
+   *   get:
+   *     summary: Returns a user's summary.
+   *     tags: [User]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         type: string
+   *         required: true
+   *         description: ID of the user to get.
+   *     responses:
+   *       200:
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/UserSummaryResponse'
+   */
+  private async getUserSummaryById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userQueries = Container.get<IUserQueries>(UserQueries);
+      const response = await userQueries.getDataSummaryById(req.params.id);
 
       res.send(response);
     } catch (err) {

@@ -1,8 +1,8 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import { UserAccountResponse } from "@rcp-and-plan/bc_social";
 import { EntityNotFoundError } from "@rcp-and-plan/commons";
+import Container from "typedi";
 
-import Container from "@api/DI";
 import { SocialService } from "@api/services/social";
 
 import client from "./redisClient";
@@ -19,8 +19,7 @@ export const userMiddleware: RequestHandler = async (req: Request, res: Response
     let account: UserAccountResponse = accountRaw ? JSON.parse(accountRaw) : null;
 
     if (!account) {
-      const { container } = await Container.getInstance();
-      const socialService = container.get<SocialService>("SocialService");
+      const socialService = Container.get<SocialService>(SocialService);
 
       const response = await socialService.getUserByAccountId(accountId);
       account = response.data;
