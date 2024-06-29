@@ -4,15 +4,12 @@
     "es2021": true,
     "node": true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier"
-  ],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
+  "ignorePatterns": ["dist/**"],
   "plugins": ["import", "simple-import-sort"],
   "rules": {
     "max-lines": ["warn", { "max": 320, "skipBlankLines": true }],
