@@ -24,6 +24,7 @@
     "recipe": {
       "ingredients_title": "Ingredients",
       "kitchenware_title": "Kitchenware",
+      "author_title": "Author",
       "steps_title": "Steps"
     }
   },

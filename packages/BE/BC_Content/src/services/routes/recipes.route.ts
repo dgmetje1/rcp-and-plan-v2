@@ -291,7 +291,7 @@ class RecipesRouter {
       res.send(response);
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
-        return res.status(404).send({ exceptionMessage: err.message, params: err.params });
+        return res.status(404).send({ type: err.type, exceptionMessage: err.message, params: err.params });
       }
       next(err);
     }
@@ -333,7 +333,7 @@ class RecipesRouter {
       res.send(response);
     } catch (err) {
       if (err instanceof EntityNotFoundError) {
-        return res.status(404).send({ exceptionMessage: err.message, params: err.params });
+        return res.status(404).send({ type: err.type, exceptionMessage: err.message, params: err.params });
       }
       next(err);
     }
@@ -354,6 +354,11 @@ class RecipesRouter {
    *     responses:
    *       201:
    *         description: Recipe created
+   *         content:
+   *          text/plain:
+   *            schema:
+   *            type: string
+   *            example: string
    *       400:
    *         description: Error in request fields
    *         content:
@@ -361,19 +366,19 @@ class RecipesRouter {
    *              schema:
    *                $ref: '#/components/schemas/Exception'
    */
-  private async createRecipe(req: Request<unknown, RecipeCreateRequest>, res: Response, next: NextFunction) {
+  private async createRecipe(req: Request<unknown, unknown, RecipeCreateRequest>, res: Response, next: NextFunction) {
     try {
       const recipeApplication = Container.get<IRecipeApplication>(RecipeApplication);
 
-      await recipeApplication.createRecipe(req.body);
+      const recipeId = await recipeApplication.createRecipe(req.body);
 
-      res.status(201).send();
+      res.status(201).send(recipeId);
     } catch (err) {
       if (err instanceof InvalidParameterError) {
-        return res.status(400).send({ exceptionMessage: err.message, params: err.params });
+        return res.status(400).send({ type: err.type, exceptionMessage: err.message, params: err.params });
       }
       if (err instanceof EntityNotFoundError) {
-        return res.status(404).send({ exceptionMessage: err.message, params: err.params });
+        return res.status(404).send({ type: err.type, exceptionMessage: err.message, params: err.params });
       }
       next(err);
     }
@@ -422,10 +427,10 @@ class RecipesRouter {
       res.status(204).send();
     } catch (err) {
       if (err instanceof InvalidParameterError) {
-        return res.status(400).send({ exceptionMessage: err.message, params: err.params });
+        return res.status(400).send({ type: err.type, exceptionMessage: err.message, params: err.params });
       }
       if (err instanceof EntityNotFoundError) {
-        return res.status(404).send({ exceptionMessage: err.message, params: err.params });
+        return res.status(404).send({ type: err.type, exceptionMessage: err.message, params: err.params });
       }
       next(err);
     }
@@ -474,10 +479,10 @@ class RecipesRouter {
       res.status(204).send();
     } catch (err) {
       if (err instanceof InvalidParameterError) {
-        return res.status(400).send({ exceptionMessage: err.message, params: err.params });
+        return res.status(400).send({ type: err.type, exceptionMessage: err.message, params: err.params });
       }
       if (err instanceof EntityNotFoundError) {
-        return res.status(404).send({ exceptionMessage: err.message, params: err.params });
+        return res.status(404).send({ type: err.type, exceptionMessage: err.message, params: err.params });
       }
       next(err);
     }
@@ -526,10 +531,10 @@ class RecipesRouter {
       res.status(204).send();
     } catch (err) {
       if (err instanceof InvalidParameterError) {
-        return res.status(400).send({ exceptionMessage: err.message, params: err.params });
+        return res.status(400).send({ type: err.type, exceptionMessage: err.message, params: err.params });
       }
       if (err instanceof EntityNotFoundError) {
-        return res.status(404).send({ exceptionMessage: err.message, params: err.params });
+        return res.status(404).send({ type: err.type, exceptionMessage: err.message, params: err.params });
       }
       next(err);
     }

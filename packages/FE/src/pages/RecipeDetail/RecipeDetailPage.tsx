@@ -5,6 +5,7 @@ import List from "@/components/common/List";
 import RichTextContent from "@/components/common/RichTextContent";
 import config from "@/config";
 import { RecipeDetailRoute } from "@/config/routing";
+import { parseQuantityName } from "@/lib/parsers/plurals";
 import { useSuspenseGetRecipe } from "@/queries/recipes";
 
 import RecipeDetailPageAuthorCard from "./cards/Author";
@@ -52,7 +53,9 @@ const RecipeDetailPage = () => {
               <List
                 items={recipe.ingredients}
                 renderItem={ingredient =>
-                  `${ingredient.quantity} ${ingredient.units.shortName} de ${ingredient.name.toLocaleLowerCase()}`
+                  `${ingredient.quantity} ${ingredient.units.shortName} ` +
+                  t("common.of") +
+                  ` ${parseQuantityName(ingredient.quantity, ingredient.name.toLocaleLowerCase(), ingredient.singularName.toLocaleLowerCase())}`
                 }
                 title={<Typography variant="h4">{t("pages.recipe.ingredients_title")}</Typography>}
               />
@@ -62,7 +65,9 @@ const RecipeDetailPage = () => {
             <Box display="flex" flexDirection="column" flexGrow={1}>
               <List
                 items={recipe.kitchenware}
-                renderItem={kitchenware => `${kitchenware.quantity} ${kitchenware.name.toLocaleLowerCase()}`}
+                renderItem={kitchenware =>
+                  `${kitchenware.quantity} ${parseQuantityName(kitchenware.quantity, kitchenware.name.toLocaleLowerCase(), kitchenware.singularName.toLocaleLowerCase())}`
+                }
                 title={<Typography variant="h4">{t("pages.recipe.kitchenware_title")}</Typography>}
               />
             </Box>

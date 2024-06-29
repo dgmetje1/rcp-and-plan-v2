@@ -7,6 +7,7 @@ import authMiddleware from "@api/middleware/auth/authMiddleware";
 import { userMiddleware } from "@api/middleware/user";
 import { SocialService } from "@api/services/social";
 import { UserAccountOutput } from "@dtos/outputs/UserAccountOutput";
+import { UserSummaryOutput } from "@dtos/outputs/UserSummaryOutput";
 
 /**
  * @openapi
@@ -23,6 +24,22 @@ import { UserAccountOutput } from "@dtos/outputs/UserAccountOutput";
  *       accountId:
  *         type: string
  *       email:
+ *         type: string
+ *       nickName:
+ *         type: string
+ *       name:
+ *         type: string
+ *       lastName:
+ *         type: string
+ *       language:
+ *         type: string
+ *       profilePicture:
+ *         type: string
+ *         nullable: true
+ *   UserSummaryOutput:
+ *     type: object
+ *     properties:
+ *       id:
  *         type: string
  *       nickName:
  *         type: string
@@ -53,10 +70,9 @@ class UsersRouter {
    *
    */
   private routes(): void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     this.router.get("/account", authMiddleware, this.getUserByAccountId);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     this.router.get("/", authMiddleware, userMiddleware, this.getUserById);
+    this.router.get("/:id/summary", this.getUserSummaryById);
   }
 
   /**
@@ -119,6 +135,35 @@ class UsersRouter {
     try {
       const socialService = Container.get<SocialService>(SocialService);
       const response = await socialService.getUserById(req.context.user.id);
+      res.send(response.data);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  /**
+   * @openapi
+   * /users/{id}/summary:
+   *   get:
+   *     summary: Returns a user summary.
+   *     tags: [User]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         type: string
+   *         required: true
+   *         description: ID of the user to get.
+   *     responses:
+   *       200:
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/UserSummaryOutput'
+   */
+  private async getUserSummaryById(req: Request, res: Response<UserSummaryOutput>, next: NextFunction) {
+    try {
+      const socialService = Container.get<SocialService>(SocialService);
+      const response = await socialService.getUserSummaryById(req.params.id);
       res.send(response.data);
     } catch (err) {
       next(err);
