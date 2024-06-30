@@ -23,5 +23,7 @@ const getRouter = (queryClient: QueryClient) => {
 export default getRouter;
 
 export { Route as HomePageRoute } from "./routes/_mainLayout/index.lazy";
+export { Route as PlansRoute } from "./routes/_mainLayout/plans.lazy";
 export { Route as ProfileRoute } from "./routes/_mainLayout/profile";
 export { Route as RecipeDetailRoute } from "./routes/_mainLayout/recipe.$id";
+export { Route as HomeManagementPageRoute } from "./routes/management/index.lazy";

@@ -1,9 +1,23 @@
 {
   "api": {
-    "default_error": "Hi ha hagut un error en accedir a l'API"
+    "default_error": "There has been an error while accessing API"
   },
   "common": {
     "of": "of"
+  },
+  "menu": {
+    "sidebar": {
+      "tabs": {
+        "application": "Application",
+        "management": "Management"
+      },
+      "home": "Home",
+      "plans": "Plans",
+      "purchase_list": "Purchase list",
+      "management_title": "Gestión",
+      "management": "Home",
+      "content_management": "Content"
+    }
   },
   "pages": {
     "home": {
@@ -13,6 +27,11 @@
       "recipe_preview": {
         "title": "Recipe of the day",
         "ingredients_title": "Ingredients"
+      }
+    },
+    "management": {
+      "index": {
+        "title": "Management"
       }
     },
     "profile": {

@@ -5,9 +5,9 @@ import { Avatar, Divider, Popover, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "@tanstack/react-router";
-import { useAuthContext } from "@/context/Auth";
 
 import config from "@/config";
+import { useAuthContext } from "@/context/Auth";
 
 const HeaderProfileMenu = () => {
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();

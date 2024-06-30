@@ -5,7 +5,7 @@
   "description": "Root project for rcp and plan",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "pnpm run --filter @rcp-and-plan/fe dev "
+    "dev": "pnpm run -r --parallel --if-present generate-swagger && pnpm run -r --parallel --if-present dev"
   },
   "keywords": [],
   "author": "Dani Garcia",

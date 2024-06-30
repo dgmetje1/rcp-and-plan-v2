@@ -1,16 +1,13 @@
 import { FC } from "react";
 import { Auth0Provider, Auth0ProviderOptions } from "@auth0/auth0-react";
 import { CssBaseline, GlobalStyles, ThemeProvider } from "@mui/material";
-import { createTheme } from "@mui/material/styles";
 import { QueryClientProvider } from "@tanstack/react-query";
 
 import App from "@/components/App";
 import config from "@/config";
 import getRouter from "@/config/routing";
-import themeOptions from "@/config/theme";
+import theme from "@/config/theme";
 import { queryClient } from "@/lib/core/queryClient";
-
-const theme = createTheme(themeOptions);
 
 const auth0configProps: Auth0ProviderOptions = {
   clientId: config.auth0ClientId,

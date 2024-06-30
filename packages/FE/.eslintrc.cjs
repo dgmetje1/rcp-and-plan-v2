@@ -1,11 +1,7 @@
 module.exports = {
   root: true,
   env: { browser: true, es2020: true },
-  extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended",
-  ],
+  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:react-hooks/recommended"],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
   plugins: ["react", "react-refresh", "import", "simple-import-sort"],
@@ -15,17 +11,8 @@ module.exports = {
       "warn",
       {
         groups: [
-          [
-            "^react",
-            "^\\u0000",
-            "^@\\w",
-            "^[^.]",
-            "^i18next.*",
-            "^@/lib/imports/.*$",
-          ],
-          [
-            "^@/(assets|components|config|data|i18n|lib|middleware|pages|queries|scripts|types)(.*|$)*",
-          ],
+          ["^react", "^\\u0000", "^@\\w", "^[^.]", "^i18next.*", "^@/lib/imports/.*$"],
+          ["^@/(assets|components|config|context|data|i18n|lib|middleware|pages|queries|scripts|types)(.*|$)*"],
           ["^\\."],
         ],
       },

@@ -2,11 +2,49 @@
   "api": {
     "default_error": "Hi ha hagut un error en accedir a l'API"
   },
+  "common": {
+    "of": "of"
+  },
+  "menu": {
+    "sidebar": {
+      "home": "Home",
+      "plans": "Planes",
+      "purchase_list": "Lista de la compra"
+    }
+  },
   "pages": {
     "home": {
       "searcher": {
-        "placeholder": "Search for recipes, categories or users"
+        "placeholder": "Busca por recetas, categorías o usuarios"
+      },
+      "recipe_preview": {
+        "title": "Receta del día",
+        "ingredients_title": "Ingredientes"
       }
+    },
+    "profile": {
+      "tabs": {
+        "details": "Details",
+        "recipes": "Recipes"
+      }
+    },
+    "recipe": {
+      "ingredients_title": "Ingredients",
+      "kitchenware_title": "Kitchenware",
+      "author_title": "Author",
+      "steps_title": "Steps"
+    }
+  },
+  "recipe": {
+    "fields": {
+      "difficulty": "Difficulty",
+      "time": "Time",
+      "portions": "Portions"
+    },
+    "difficulty": {
+      "1": "easy",
+      "2": "medium",
+      "3": "hard"
     }
   }
 }

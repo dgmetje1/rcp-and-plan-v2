@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ManagementImport } from './routes/management'
 import { Route as LoginImport } from './routes/login'
 import { Route as MainLayoutImport } from './routes/_mainLayout'
 import { Route as MainLayoutProfileImport } from './routes/_mainLayout/profile'
@@ -21,9 +22,16 @@ import { Route as MainLayoutRecipeIdImport } from './routes/_mainLayout/recipe.$
 
 // Create Virtual Routes
 
+const ManagementIndexLazyImport = createFileRoute('/management/')()
 const MainLayoutIndexLazyImport = createFileRoute('/_mainLayout/')()
+const MainLayoutPlansLazyImport = createFileRoute('/_mainLayout/plans')()
 
 // Create/Update Routes
+
+const ManagementRoute = ManagementImport.update({
+  path: '/management',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LoginRoute = LoginImport.update({
   path: '/login',
@@ -35,11 +43,25 @@ const MainLayoutRoute = MainLayoutImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ManagementIndexLazyRoute = ManagementIndexLazyImport.update({
+  path: '/',
+  getParentRoute: () => ManagementRoute,
+} as any).lazy(() =>
+  import('./routes/management/index.lazy').then((d) => d.Route),
+)
+
 const MainLayoutIndexLazyRoute = MainLayoutIndexLazyImport.update({
   path: '/',
   getParentRoute: () => MainLayoutRoute,
 } as any).lazy(() =>
   import('./routes/_mainLayout/index.lazy').then((d) => d.Route),
+)
+
+const MainLayoutPlansLazyRoute = MainLayoutPlansLazyImport.update({
+  path: '/plans',
+  getParentRoute: () => MainLayoutRoute,
+} as any).lazy(() =>
+  import('./routes/_mainLayout/plans.lazy').then((d) => d.Route),
 )
 
 const MainLayoutProfileRoute = MainLayoutProfileImport.update({
@@ -69,13 +91,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/management': {
+      preLoaderRoute: typeof ManagementImport
+      parentRoute: typeof rootRoute
+    }
     '/_mainLayout/profile': {
       preLoaderRoute: typeof MainLayoutProfileImport
+      parentRoute: typeof MainLayoutImport
+    }
+    '/_mainLayout/plans': {
+      preLoaderRoute: typeof MainLayoutPlansLazyImport
       parentRoute: typeof MainLayoutImport
     }
     '/_mainLayout/': {
       preLoaderRoute: typeof MainLayoutIndexLazyImport
       parentRoute: typeof MainLayoutImport
+    }
+    '/management/': {
+      preLoaderRoute: typeof ManagementIndexLazyImport
+      parentRoute: typeof ManagementImport
     }
     '/_mainLayout/recipe/$id': {
       preLoaderRoute: typeof MainLayoutRecipeIdImport
@@ -93,11 +127,13 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   MainLayoutRoute.addChildren([
     MainLayoutProfileRoute,
+    MainLayoutPlansLazyRoute,
     MainLayoutIndexLazyRoute,
     MainLayoutRecipeIdRoute,
     MainLayoutRecipeIndexRoute,
   ]),
   LoginRoute,
+  ManagementRoute.addChildren([ManagementIndexLazyRoute]),
 ])
 
 /* prettier-ignore-end */
