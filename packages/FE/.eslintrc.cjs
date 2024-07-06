@@ -11,7 +11,7 @@ module.exports = {
       "warn",
       {
         groups: [
-          ["^react", "^\\u0000", "^@\\w", "^[^.]", "^i18next.*", "^@/lib/imports/.*$"],
+          ["^(react$|react-dom)", "^\\u0000", "^@\\w", "^[^.]", "^i18next.*", "^@/lib/imports/.*$"],
           ["^@/(assets|components|config|context|data|i18n|lib|middleware|pages|queries|scripts|types)(.*|$)*"],
           ["^\\."],
         ],

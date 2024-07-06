@@ -1,7 +1,7 @@
-import { useTranslation } from "react-i18next";
 import { EggOutlined, PeopleOutline, RestaurantOutlined, ScaleOutlined } from "@mui/icons-material";
 import { Box, Container, Paper, Typography } from "@mui/material";
 import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 const SECTIONS = [
   {

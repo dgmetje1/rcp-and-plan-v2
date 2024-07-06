@@ -1,8 +1,8 @@
 import React, { forwardRef, PropsWithChildren, useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 import logo from "@/assets/Logo.svg";
 import Tabs, { Tab, TabContent, TabsHeader } from "@/components/common/Tabs";

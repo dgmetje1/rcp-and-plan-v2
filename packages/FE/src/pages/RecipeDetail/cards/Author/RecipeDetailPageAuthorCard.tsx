@@ -1,6 +1,6 @@
-import { useTranslation } from "react-i18next";
 import { Avatar, Box } from "@mui/material";
 import Typography from "@mui/material/Typography";
+import { useTranslation } from "react-i18next";
 
 import { RecipeDetailRoute } from "@/config/routing";
 import { useSuspenseGetRecipe } from "@/queries/recipes";
