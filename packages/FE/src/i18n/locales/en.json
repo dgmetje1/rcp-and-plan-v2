@@ -31,7 +31,13 @@
     },
     "management": {
       "index": {
-        "title": "Management"
+        "title": "Management",
+        "sections": {
+          "units": "Units",
+          "ingredients": "Ingredients",
+          "kitchenware": "Kitchenware",
+          "users": "Users"
+        }
       }
     },
     "profile": {
