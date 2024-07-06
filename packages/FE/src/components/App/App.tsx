@@ -1,10 +1,10 @@
 import { useEffect, useMemo } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { RouterProvider } from "@tanstack/react-router";
-import { useAuthContext } from "@/context/Auth";
 
 import withAuth from "@/components/hoc/Auth";
 import getRouter from "@/config/routing";
+import { useAuthContext } from "@/context/Auth";
 import i18n from "@/i18n";
 import { Api } from "@/lib/api";
 import { queryClient } from "@/lib/core/queryClient";

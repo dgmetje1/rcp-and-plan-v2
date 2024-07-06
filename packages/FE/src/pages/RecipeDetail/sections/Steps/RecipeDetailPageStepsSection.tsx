@@ -1,6 +1,6 @@
-import { useTranslation } from "react-i18next";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { useTranslation } from "react-i18next";
 
 import RichTextContent from "@/components/common/RichTextContent";
 import { RecipeDetailRoute } from "@/config/routing";

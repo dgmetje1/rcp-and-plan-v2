@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import SearchOutlined from "@mui/icons-material/SearchOutlined";
 import { Box, IconButton } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { debounce } from "@/lib/imports/lodash";
 
 import { useHomePageContext } from "../../Context";

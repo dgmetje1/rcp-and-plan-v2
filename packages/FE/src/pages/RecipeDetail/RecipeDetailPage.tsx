@@ -1,5 +1,5 @@
-import { useTranslation } from "react-i18next";
 import { Box, Container, Grid, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 import List from "@/components/common/List";
 import RichTextContent from "@/components/common/RichTextContent";

@@ -1,11 +1,11 @@
 import { memo, Suspense, useEffect, useMemo, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import AuthContext from "@/context/Auth/AuthContext";
+import { Navigate } from "@tanstack/react-router";
 
 import Loader from "@/components/common/Loader";
+import AuthContext from "@/context/Auth/AuthContext";
 import { Api } from "@/lib/api";
 import { useGetAccount } from "@/queries/users";
-import { Navigate } from "@tanstack/react-router";
 
 const withAuth = (Component: React.FC) => {
   return memo(props => {

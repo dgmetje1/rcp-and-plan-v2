@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import { Box, Chip, Grid, Paper, Typography } from "@mui/material";
 import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 import List from "@/components/common/List";
 import config from "@/config";

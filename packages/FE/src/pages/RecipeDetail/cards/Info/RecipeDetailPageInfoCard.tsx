@@ -1,7 +1,7 @@
-import { useTranslation } from "react-i18next";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
+import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
 
 import { RecipeDetailRoute } from "@/config/routing";
