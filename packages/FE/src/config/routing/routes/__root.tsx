@@ -7,6 +7,7 @@ import RootComponent from "@/components/routes/RootComponent";
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
   authContext: AuthRouterContextValues;
+  getTitle: () => string;
 }>()({
   component: RootComponent,
 });

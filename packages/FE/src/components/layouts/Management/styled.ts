@@ -6,6 +6,8 @@ export const StyledManagementLayout = styled("main", {
   open?: boolean;
   menuWidth: number;
 }>(({ theme, open, menuWidth }) => ({
+  display: "flex",
+  flexDirection: "column",
   flexGrow: 1,
   backgroundColor: theme.palette.primary.lighter,
   transition: theme.transitions.create("margin", {
