@@ -11,10 +11,7 @@ const HomePageBannerSearcher = () => {
   const { t } = useTranslation();
   const { setSearch } = useHomePageContext();
 
-  const debouncedChangeHandler = useMemo(
-    () => debounce(event => setSearch(event.target.value), 100),
-    [setSearch],
-  );
+  const debouncedChangeHandler = useMemo(() => debounce(event => setSearch(event.target.value), 100), [setSearch]);
 
   return (
     <Box position="relative">
@@ -25,11 +22,7 @@ const HomePageBannerSearcher = () => {
         placeholder={t("pages.home.searcher.placeholder")}
         variant="standard"
       />
-      <IconButton
-        size="small"
-        sx={{ position: "absolute", right: 0 }}
-        type="submit"
-      >
+      <IconButton size="small" sx={{ position: "absolute", right: 0 }} type="submit">
         <SearchOutlined color="primary" sx={{ color: "white" }} />
       </IconButton>
     </Box>

@@ -1,4 +1,4 @@
-import React, { forwardRef, PropsWithChildren, useMemo } from "react";
+import { forwardRef, PropsWithChildren, useMemo } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import { Link } from "@tanstack/react-router";
@@ -65,8 +65,8 @@ const Menu = forwardRef<HTMLDivElement, PropsWithChildren<MenuProps>>(
                 <Link activeOptions={{ exact: true }} onClick={toggleMenu(false)} to="/management">
                   {t("menu.sidebar.management")}
                 </Link>
-                <Link onClick={toggleMenu(false)} to="/management/content">
-                  {t("menu.sidebar.content_management")}
+                <Link onClick={toggleMenu(false)} to="/management/units">
+                  {t("menu.sidebar.units")}
                 </Link>
               </TabContent>
             </Tabs>

@@ -7,11 +7,7 @@ const TabsHeader = ({ children, ...rest }: TabsHeaderProps) => {
   const { index, onTabChange } = useTabsContext();
 
   return (
-    <MuiTabs
-      onChange={(_event, newTab) => onTabChange(newTab)}
-      value={index}
-      {...rest}
-    >
+    <MuiTabs onChange={(_event, newTab) => onTabChange(newTab)} value={index} {...rest}>
       {children}
     </MuiTabs>
   );

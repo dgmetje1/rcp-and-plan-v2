@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "pnpm run -r --parallel --if-present generate-swagger && pnpm run -r --parallel --if-present dev",
-    "dev:be": "pnpm run -r --parallel --if-present generate-swagger && pnpm run -r --parallel --filter=!@rcp-and-plan/fe --if-present dev"
+    "dev:be": "pnpm run -r --parallel --if-present generate-swagger && pnpm run -r --parallel --filter=!@rcp-and-plan/fe --if-present dev",
+    "prettier": "prettier --write . --ignore-path .gitignore",
+    "prettier:check": "prettier --check . --ignore-path .gitignore"
   },
   "keywords": [],
   "author": "Dani Garcia",

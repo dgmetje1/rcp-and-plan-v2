@@ -6,10 +6,7 @@ import { getUserOptions } from "@/queries/users";
 
 export const Route = createFileRoute("/_mainLayout/profile")({
   beforeLoad: ({ context, location }) => {
-    if (
-      !context.authContext.isAuthenticated &&
-      !context.authContext.isAuthenticatedLoading
-    ) {
+    if (!context.authContext.isAuthenticated && !context.authContext.isAuthenticatedLoading) {
       throw redirect({
         to: "/login",
         search: {

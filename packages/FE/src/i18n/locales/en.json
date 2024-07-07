@@ -16,7 +16,7 @@
       "purchase_list": "Purchase list",
       "management_title": "Gestión",
       "management": "Home",
-      "content_management": "Content"
+      "units": "Units"
     }
   },
   "pages": {
@@ -37,6 +37,15 @@
           "ingredients": "Ingredients",
           "kitchenware": "Kitchenware",
           "users": "Users"
+        }
+      },
+      "units": {
+        "table": {
+          "id": "ID",
+          "name": "Name",
+          "singular_name": "Singular name",
+          "short_name": "Short name",
+          "visibility": "Visibility"
         }
       }
     },

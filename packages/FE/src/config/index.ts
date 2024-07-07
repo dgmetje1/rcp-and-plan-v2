@@ -8,8 +8,7 @@ const isDefinedEnvironment = (value: string): value is Environment => {
   return Object.keys(Environments).includes(value);
 };
 
-if (!isDefinedEnvironment(definedEnvironment))
-  throw new Error("Environment not defined!!");
+if (!isDefinedEnvironment(definedEnvironment)) throw new Error("Environment not defined!!");
 
 const isDevEnvironment = () => definedEnvironment === Environments.local;
 

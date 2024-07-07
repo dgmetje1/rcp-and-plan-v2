@@ -7,16 +7,8 @@ import ProfilePageAccountTabs from "./AccountTabs";
 
 const ProfilePage = () => {
   return (
-    <Box
-      flexDirection="column"
-      sx={{ "> img": { maxHeight: "30vh", objectFit: "cover" } }}
-    >
-      <img
-        alt="profile banner with some cooks in a kitchen"
-        height="100%"
-        src={bannerImg}
-        width="100%"
-      />
+    <Box flexDirection="column" sx={{ "> img": { maxHeight: "30vh", objectFit: "cover" } }}>
+      <img alt="profile banner with some cooks in a kitchen" height="100%" src={bannerImg} width="100%" />
       <Container maxWidth="lg">
         <ProfilePageAccountDetails />
         <ProfilePageAccountTabs />

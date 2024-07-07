@@ -1,10 +1,7 @@
 import { type PropsWithChildren } from "react";
 import Paper, { type PaperProps } from "@mui/material/Paper";
 
-const RecipeDetailPageCard = ({
-  children,
-  ...rest
-}: PropsWithChildren<PaperProps>) => (
+const RecipeDetailPageCard = ({ children, ...rest }: PropsWithChildren<PaperProps>) => (
   <Paper
     component="section"
     sx={{

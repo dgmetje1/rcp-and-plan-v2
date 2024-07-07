@@ -7,6 +7,7 @@ import {
   RecipeResponse,
   RecipesListQueryRequest,
   RecipesListResponse,
+  UnitsListResponse,
 } from "@rcp-and-plan/bc_content";
 import { propagateHeaders } from "@rcp-and-plan/commons";
 import axios, { AxiosInstance } from "axios";
@@ -17,11 +18,14 @@ import { Service } from "typedi";
 export class ContentService {
   private static readonly _serviceName: string = "CONTENT";
   private readonly _client: AxiosInstance;
+
   constructor() {
     this._client = axios.create({
       baseURL: process.env[`SERVICE_${ContentService._serviceName}`],
     });
   }
+
+  //#region Recipes
   public getRecipes(queryRequest: RecipesListQueryRequest, headers: IncomingHttpHeaders) {
     return this._client.get<RecipesListResponse>("/recipes", {
       params: queryRequest,
@@ -51,4 +55,12 @@ export class ContentService {
   public addRecipeSteps(id: string, request: RecipeCreateStepsRequest) {
     return this._client.put(`/recipes/${id}/ingredients`, request);
   }
+  //#endregion
+
+  //#region Units
+
+  public getUnits() {
+    return this._client.get<UnitsListResponse>("/units");
+  }
+  //#endregion
 }
