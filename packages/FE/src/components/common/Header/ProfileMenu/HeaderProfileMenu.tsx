@@ -58,10 +58,7 @@ const HeaderProfileMenu = () => {
     [handleGoToProfile, handleLogout, user?.nickname],
   );
 
-  const anonymousProfileLinks = React.useMemo(
-    () => <MenuItem onClick={handleLogin}>Log in</MenuItem>,
-    [handleLogin],
-  );
+  const anonymousProfileLinks = React.useMemo(() => <MenuItem onClick={handleLogin}>Log in</MenuItem>, [handleLogin]);
 
   return (
     <>
@@ -73,10 +70,7 @@ const HeaderProfileMenu = () => {
         onClick={handleMenu}
       >
         {isAuthenticated && account?.profilePicture ? (
-          <Avatar
-            alt={`${account?.nickName} profile picture`}
-            src={`${config.cdnUrl}/${account.profilePicture}`}
-          />
+          <Avatar alt={`${account?.nickName} profile picture`} src={`${config.cdnUrl}/${account.profilePicture}`} />
         ) : (
           <AccountCircle fontSize="large" />
         )}

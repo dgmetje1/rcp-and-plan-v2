@@ -40,6 +40,4 @@ const options = {
 const openapiSpecification = swaggerJsdoc(options);
 const outPath = path.join(serviceBaseURI, outputFile);
 
-writeFile(outPath, JSON.stringify(openapiSpecification), () =>
-  console.log("Swagger documentation generated!"),
-);
+writeFile(outPath, JSON.stringify(openapiSpecification), () => console.log("Swagger documentation generated!"));

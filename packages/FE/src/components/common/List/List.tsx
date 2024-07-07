@@ -3,12 +3,7 @@ import Typography from "@mui/material/Typography";
 
 import { ListItem, ListProps } from "./types";
 
-const List = <T extends ListItem>({
-  items,
-  renderItem,
-  title,
-  shouldSeeMoreBeShown,
-}: ListProps<T>) => (
+const List = <T extends ListItem>({ items, renderItem, title, shouldSeeMoreBeShown }: ListProps<T>) => (
   <>
     {title}
     <Box component="ul" display="flex" flexDirection="column">

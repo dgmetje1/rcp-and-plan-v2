@@ -11,10 +11,6 @@ const Tabs = ({ children, defaultIndex = 0 }: TabsProps) => {
   };
 
   const contextValues = useMemo(() => ({ index, onTabChange }), [index]);
-  return (
-    <TabsContext.Provider value={contextValues}>
-      {children}
-    </TabsContext.Provider>
-  );
+  return <TabsContext.Provider value={contextValues}>{children}</TabsContext.Provider>;
 };
 export default Tabs;

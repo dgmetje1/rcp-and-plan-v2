@@ -24,7 +24,8 @@
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "paths": {
       "@api/*": ["./api/*"],
-      "@dtos/*": ["./dtos/*"]
+      "@dtos/*": ["./dtos/*"],
+      "@global_types/*": ["./types/*"]
     }
   },
   "include": ["src"],

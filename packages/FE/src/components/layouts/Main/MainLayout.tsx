@@ -8,12 +8,7 @@ const MainLayout = React.memo(() => {
   return (
     <Box>
       <Header />
-      <Box
-        component="main"
-        display="flex"
-        flexDirection="column"
-        minHeight="calc(100dvh - 64px)"
-      >
+      <Box component="main" display="flex" flexDirection="column" minHeight="calc(100dvh - 64px)">
         <Outlet />
       </Box>
     </Box>

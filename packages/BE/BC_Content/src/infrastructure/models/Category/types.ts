@@ -10,5 +10,4 @@ export interface CategoryAttributes {
   recipes: Recipe[];
 }
 
-export interface CategoryCreationAttributes
-  extends Optional<CategoryAttributes, "id"> {}
+export interface CategoryCreationAttributes extends Optional<CategoryAttributes, "id"> {}

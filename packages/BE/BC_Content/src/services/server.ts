@@ -11,6 +11,7 @@ import { Container } from "typedi";
 import swaggerDocument from "./documentation.json";
 import { errorHandler } from "./middlewares/errorHandler";
 import RecipesRouter from "./routes/recipes.route";
+import UnitsRouter from "./routes/units.route";
 
 const PORT = process.env.PORT || 3000;
 
@@ -47,6 +48,8 @@ class App {
   private async routes() {
     const recipeRouter = Container.get(RecipesRouter);
     recipeRouter.setupRouter(this.app);
+    const unitsRouter = Container.get(UnitsRouter);
+    unitsRouter.setupRouter(this.app);
   }
 
   private swagger(): void {

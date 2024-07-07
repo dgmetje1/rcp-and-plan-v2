@@ -14,12 +14,7 @@ const HomePageBanner = () => {
       position="relative"
       sx={{ "> img": { filter: "brightness(70%)" } }}
     >
-      <img
-        alt="homepage banner containing some ingredients"
-        height="100%"
-        src={bannerImg}
-        width="100%"
-      />
+      <img alt="homepage banner containing some ingredients" height="100%" src={bannerImg} width="100%" />
       <Box position="absolute" top="33%" width="100%">
         <Container maxWidth="md">
           <HomePageBannerSearcher />
