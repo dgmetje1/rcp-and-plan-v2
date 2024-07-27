@@ -18,7 +18,7 @@ const Header = () => (
     >
       <HeaderBurgerMenu />
       <Link to="/">
-        <img alt="logo Rcp & Plan" height={56} src={logo} />
+        <img alt="logo Rcp & Plan" height={56} src={logo} style={{ height: 56 }} />
       </Link>
       <HeaderProfileMenu />
     </Toolbar>
