@@ -1,11 +1,11 @@
-import { Box, styled } from "@mui/material";
+import { Box, BoxProps, styled } from "@mui/material";
 
-export const StyledRecipeCardOverlay = styled(Box)`
+const StyledRecipeCardOverlayBox = styled(Box)`
   background-color: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(4px);
 `;
 
-StyledRecipeCardOverlay.defaultProps = {
+const overlayDefaultProps: Partial<BoxProps> = {
   bottom: 0,
   display: "flex",
   position: "absolute",
@@ -14,7 +14,11 @@ StyledRecipeCardOverlay.defaultProps = {
   width: "100%",
 };
 
-const StyledRecipeCard = styled(Box)`
+export const StyledRecipeCardOverlay = (props: BoxProps) => (
+  <StyledRecipeCardOverlayBox {...overlayDefaultProps} {...props} />
+);
+
+const StyledRecipeCardBox = styled(Box)`
   a {
     width: 100%;
     height: 100%;
@@ -37,7 +41,7 @@ const StyledRecipeCard = styled(Box)`
   }
 `;
 
-StyledRecipeCard.defaultProps = {
+const cardDefaultProps: Partial<BoxProps> = {
   display: "flex",
   position: "relative",
   flex: "0 0 250px",
@@ -46,5 +50,7 @@ StyledRecipeCard.defaultProps = {
   borderRadius: 1,
   overflow: "hidden",
 };
+
+const StyledRecipeCard = (props: BoxProps) => <StyledRecipeCardBox {...cardDefaultProps} {...props} />;
 
 export default StyledRecipeCard;

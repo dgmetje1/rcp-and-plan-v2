@@ -42,11 +42,11 @@ const withAuth = (Component: React.FC) => {
     if (isLoading || isAccountLoading) return <Loader />;
     if (accessToken && !account) return <Navigate to="register" />;
     return (
-      <AuthContext.Provider value={contextValue}>
+      <AuthContext value={contextValue}>
         <Suspense fallback={<Loader />}>
           <Component {...props} />
         </Suspense>
-      </AuthContext.Provider>
+      </AuthContext>
     );
   });
 };

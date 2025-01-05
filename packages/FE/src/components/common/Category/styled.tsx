@@ -1,6 +1,6 @@
-import { Box, styled } from "@mui/material";
+import { Box, BoxProps, styled } from "@mui/material";
 
-const StyledCategory = styled(Box)`
+const StyledCategoryBox = styled(Box)`
   scrollbar-width: 3px;
 
   &::-webkit-scrollbar {
@@ -18,10 +18,12 @@ const StyledCategory = styled(Box)`
   }
 `;
 
-StyledCategory.defaultProps = {
+const defaultProps = {
   display: "flex",
   minHeight: 150,
   gap: 1,
 };
+
+const StyledCategory = (props: BoxProps) => <StyledCategoryBox {...defaultProps} {...props} />;
 
 export default StyledCategory;
