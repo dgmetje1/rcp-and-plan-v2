@@ -1,7 +1,10 @@
 import {
+  MutationFunction,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  useMutation,
+  UseMutationOptions,
   useQuery,
   useSuspenseQuery,
   UseSuspenseQueryOptions,
@@ -13,7 +16,6 @@ export const useApiQuery = <T,>(
   queryFn: QueryFunction<T>,
   queryConfig?: Omit<UndefinedInitialDataOptions<T>, "queryKey">,
 ) => {
-  console.log(actionKey);
   return useQuery({ queryKey, queryFn, ...queryConfig });
 };
 
@@ -21,6 +23,13 @@ export const useSuspenseApiQuery = <T, Q extends QueryKey>(
   actionKey: string,
   queryOptions: UseSuspenseQueryOptions<T, Error, T, Q>,
 ) => {
-  console.log(actionKey);
   return useSuspenseQuery(queryOptions);
+};
+
+export const useApiMutation = <T,>(
+  actionKey: string,
+  mutationFn: MutationFunction<unknown, T>,
+  mutationConfig?: Omit<UseMutationOptions<unknown, Error, T>, "mutationFn">,
+) => {
+  return useMutation({ mutationFn, ...mutationConfig });
 };

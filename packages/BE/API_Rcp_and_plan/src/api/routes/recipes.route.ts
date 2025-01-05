@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { Application, NextFunction, type Request, type Response, Router } from "express";
-import { EntityNotFoundError, EntityNotFoundErrorType, ExceptionErrorResponse } from "@rcp-and-plan/commons";
+import { EntityNotFoundErrorType, ExceptionErrorResponse } from "@rcp-and-plan/commons";
 import { AxiosError } from "axios";
 import Container, { Service } from "typedi";
 
@@ -323,13 +323,17 @@ class RecipesRouter {
   ) {
     try {
       const contentService = Container.get<ContentService>(ContentService);
-      const response = await contentService.getDailyRecipe();
+      const response = await contentService.getDailyRecipe(req.headers);
       res.send(response.data);
     } catch (err) {
-      if (err instanceof EntityNotFoundError) {
-        return res
-          .status(404)
-          .send({ type: EntityNotFoundErrorType, exceptionMessage: err.message, params: err.params });
+      const errorData = (err as AxiosError<ExceptionErrorResponse | object>)?.response?.data;
+      if (errorData && "type" in errorData && errorData.type === EntityNotFoundErrorType) {
+        const typedErrorData = errorData as ExceptionErrorResponse;
+        return res.status(404).send({
+          type: EntityNotFoundErrorType,
+          exceptionMessage: typedErrorData.exceptionMessage,
+          params: typedErrorData.params,
+        });
       }
       next(err);
     }
@@ -343,6 +347,7 @@ class RecipesRouter {
    *     tags: [Recipes]
    *     parameters:
    *       - $ref: '#/components/parameters/Accept-Language'
+   *       - $ref: '#/components/parameters/Access-By'
    *       - in: path
    *         name: id
    *         type: string
@@ -363,13 +368,17 @@ class RecipesRouter {
   private async getRecipeById(req: Request, res: Response<RecipeOutput | ExceptionErrorResponse>, next: NextFunction) {
     try {
       const recipesQueries = Container.get<ContentService>(ContentService);
-      const response = await recipesQueries.getRecipeById(req.params.id);
+      const response = await recipesQueries.getRecipeById(req.params.id, req.headers);
       res.send(response.data);
     } catch (err) {
-      if (err instanceof EntityNotFoundError) {
-        return res
-          .status(404)
-          .send({ type: EntityNotFoundErrorType, exceptionMessage: err.message, params: err.params });
+      const errorData = (err as AxiosError<ExceptionErrorResponse | object>)?.response?.data;
+      if (errorData && "type" in errorData && errorData.type === EntityNotFoundErrorType) {
+        const typedErrorData = errorData as ExceptionErrorResponse;
+        return res.status(404).send({
+          type: EntityNotFoundErrorType,
+          exceptionMessage: typedErrorData.exceptionMessage,
+          params: typedErrorData.params,
+        });
       }
       next(err);
     }
@@ -407,7 +416,7 @@ class RecipesRouter {
   private async createRecipe(req: Request<unknown, unknown, RecipeCreateEntry>, res: Response, next: NextFunction) {
     try {
       const contentService = Container.get<ContentService>(ContentService);
-      const response = await contentService.createRecipe({ ...req.body, author: req.context.user.id });
+      const response = await contentService.createRecipe({ ...req.body, author: req.context.user.id }, req.headers);
 
       const { data: recipeId } = response;
       res.status(201).send(recipeId);
@@ -462,7 +471,7 @@ class RecipesRouter {
   ) {
     try {
       const contentService = Container.get<ContentService>(ContentService);
-      await contentService.addRecipeIngredients(req.params.id, req.body);
+      await contentService.addRecipeIngredients(req.params.id, req.body, req.headers);
       res.status(204).send();
     } catch (err) {
       const errorData = (err as AxiosError<ExceptionErrorResponse | object>)?.response?.data;
@@ -515,7 +524,7 @@ class RecipesRouter {
   ) {
     try {
       const contentService = Container.get<ContentService>(ContentService);
-      await contentService.addRecipeKitchenware(req.params.id, req.body);
+      await contentService.addRecipeKitchenware(req.params.id, req.body, req.headers);
       res.status(204).send();
     } catch (err) {
       const errorData = (err as AxiosError<ExceptionErrorResponse | object>)?.response?.data;
@@ -568,7 +577,7 @@ class RecipesRouter {
   ) {
     try {
       const contentService = Container.get<ContentService>(ContentService);
-      await contentService.addRecipeSteps(req.params.id, req.body);
+      await contentService.addRecipeSteps(req.params.id, req.body, req.headers);
       res.status(204).send();
     } catch (err) {
       const errorData = (err as AxiosError<ExceptionErrorResponse | object>)?.response?.data;

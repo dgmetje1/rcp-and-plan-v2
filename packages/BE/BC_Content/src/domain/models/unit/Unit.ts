@@ -1,27 +1,35 @@
-import { ensureThat, InvalidParameterError, TranslationsNotFoundError } from "@rcp-and-plan/commons";
+import {
+  AggregateRoot,
+  ensureThat,
+  InvalidParameterError,
+  TranslationsNotFoundError,
+  UniqueEntityID,
+} from "@rcp-and-plan/commons";
 
 import { TranslatableContent } from "@domain/shared/TranslatableContent";
 import { AvailableLanguages, DEFAULT_LANGUAGE, Languages } from "@global_types/languages";
 
 import { UnitTranslatableContent } from "./types";
 
-export class Unit {
-  private _id: string;
+export class Unit extends AggregateRoot {
   private _content: TranslatableContent<UnitTranslatableContent>;
   private _isVisible: boolean;
 
-  public get id() {
-    return this._id;
-  }
   public get isVisible() {
     return this._isVisible;
   }
+  public get content() {
+    return this._content;
+  }
 
   private constructor(
-    id: string,
+    id: string | undefined,
+    isVisible: boolean,
     content: { language: string; name: string; shortName: string; singularName: string }[],
   ) {
-    this._id = id;
+    super(new UniqueEntityID(id));
+
+    this._isVisible = isVisible;
     this._content = new Map();
 
     content.forEach(({ language, name, shortName, singularName }) => {
@@ -42,9 +50,23 @@ export class Unit {
    */
   public static get(
     id: string,
+    isVisible: boolean,
     content: { language: string; name: string; shortName: string; singularName: string }[],
   ) {
-    return new Unit(id, content);
+    return new Unit(id, isVisible, content);
+  }
+  /**
+   * Creates a new instance of Unit with the provided id and content.
+   *
+   * @param id - The unique identifier for the Unit.
+   * @param content - An array of objects containing language, name, and description for the Unit.
+   * @returns A new instance of Unit initialized with the provided id and content.
+   */
+  public static create(
+    isVisible: boolean,
+    content: { language: string; name: string; shortName: string; singularName: string }[],
+  ) {
+    return new Unit(undefined, isVisible, content);
   }
 
   /**

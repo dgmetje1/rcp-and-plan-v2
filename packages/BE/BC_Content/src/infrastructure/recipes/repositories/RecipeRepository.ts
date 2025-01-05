@@ -109,7 +109,7 @@ export class RecipeRepository implements IRecipeRepository {
     await RecipeIngredientDB.create(
       {
         is_optional: recipeIngredient.isOptional,
-        unit_id: recipeIngredient.unit.id,
+        unit_id: recipeIngredient.unit.id.toString(),
         ingredient_id: recipeIngredient.ingredient.id,
         quantity: recipeIngredient.quantity,
         recipe_id: entity.id.toValue() as string,

@@ -1,6 +1,6 @@
-import swaggerJsdoc from "swagger-jsdoc";
-import path from "path";
 import { writeFile } from "fs";
+import path from "path";
+import swaggerJsdoc from "swagger-jsdoc";
 
 const __dirname = import.meta.dirname;
 
@@ -26,6 +26,12 @@ const options = {
             enum: ["en", "fr", "es", "ca"],
             default: "en",
           },
+        },
+        "Access-By": {
+          name: "Access-By",
+          in: "header",
+          description: "Requester identifier",
+          schema: { type: "string" },
         },
       },
       schemas: {

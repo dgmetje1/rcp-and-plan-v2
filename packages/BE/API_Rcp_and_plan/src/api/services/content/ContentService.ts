@@ -7,6 +7,7 @@ import {
   RecipeResponse,
   RecipesListQueryRequest,
   RecipesListResponse,
+  UnitCreateRequest,
   UnitsListResponse,
 } from "@rcp-and-plan/bc_content";
 import { propagateHeaders } from "@rcp-and-plan/commons";
@@ -32,35 +33,39 @@ export class ContentService {
       headers: propagateHeaders(headers),
     });
   }
-  public getRecipeById(id: string) {
-    return this._client.get<RecipeResponse>(`/recipes/${id}`);
+  public getRecipeById(id: string, headers: IncomingHttpHeaders) {
+    return this._client.get<RecipeResponse>(`/recipes/${id}`, { headers: propagateHeaders(headers) });
   }
 
-  public getDailyRecipe() {
-    return this._client.get<RecipeDailyResponse>("/recipes/daily");
+  public getDailyRecipe(headers: IncomingHttpHeaders) {
+    return this._client.get<RecipeDailyResponse>("/recipes/daily", { headers: propagateHeaders(headers) });
   }
 
-  public createRecipe(request: RecipeCreateRequest) {
-    return this._client.post("/recipes", request);
+  public createRecipe(request: RecipeCreateRequest, headers: IncomingHttpHeaders) {
+    return this._client.post("/recipes", request, { headers: propagateHeaders(headers) });
   }
 
-  public addRecipeKitchenware(id: string, request: RecipeKitchenwareRequest) {
-    return this._client.put(`/recipes/${id}/kitchenware`, request);
+  public addRecipeKitchenware(id: string, request: RecipeKitchenwareRequest, headers: IncomingHttpHeaders) {
+    return this._client.put(`/recipes/${id}/kitchenware`, request, { headers: propagateHeaders(headers) });
   }
 
-  public addRecipeIngredients(id: string, request: RecipeIngredientRequest) {
-    return this._client.put(`/recipes/${id}/ingredients`, request);
+  public addRecipeIngredients(id: string, request: RecipeIngredientRequest, headers: IncomingHttpHeaders) {
+    return this._client.put(`/recipes/${id}/ingredients`, request, { headers: propagateHeaders(headers) });
   }
 
-  public addRecipeSteps(id: string, request: RecipeCreateStepsRequest) {
-    return this._client.put(`/recipes/${id}/ingredients`, request);
+  public addRecipeSteps(id: string, request: RecipeCreateStepsRequest, headers: IncomingHttpHeaders) {
+    return this._client.put(`/recipes/${id}/ingredients`, request, { headers: propagateHeaders(headers) });
   }
   //#endregion
 
   //#region Units
 
-  public getUnits() {
-    return this._client.get<UnitsListResponse>("/units");
+  public getUnits(headers: IncomingHttpHeaders) {
+    return this._client.get<UnitsListResponse>("/units", { headers: propagateHeaders(headers) });
+  }
+
+  public createUnit(request: UnitCreateRequest, headers: IncomingHttpHeaders) {
+    return this._client.post("/units", request, { headers: propagateHeaders(headers) });
   }
   //#endregion
 }

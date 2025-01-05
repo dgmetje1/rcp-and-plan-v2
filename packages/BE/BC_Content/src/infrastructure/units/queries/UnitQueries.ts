@@ -18,6 +18,7 @@ export class UnitQueries implements IUnitQueries {
 
     return Unit.get(
       units[0]!.id,
+      units[0]!.is_visible,
       units.map(({ language, name, singular_name, short_name }) => ({
         language,
         name,

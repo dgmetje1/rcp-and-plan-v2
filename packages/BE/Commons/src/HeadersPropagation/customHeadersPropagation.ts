@@ -1,7 +1,7 @@
 import { AxiosHeaders } from "axios";
 import { IncomingHttpHeaders } from "http";
 
-const DEFAULT_PROPAGATED_HEADERS = ["accept-language"];
+const DEFAULT_PROPAGATED_HEADERS = ["accept-language", "access-by"];
 export const propagateHeaders = (
   incomingHeaders: IncomingHttpHeaders,
   selectedHeaders: string[] = DEFAULT_PROPAGATED_HEADERS,

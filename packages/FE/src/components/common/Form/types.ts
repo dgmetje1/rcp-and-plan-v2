@@ -1,10 +1,12 @@
 import { DetailedHTMLProps, FormHTMLAttributes } from "react";
-import { UseFormProps } from "react-hook-form";
+import { SubmitErrorHandler, SubmitHandler, UseFormProps } from "react-hook-form";
 
 export type Props<FormValues extends object> = {
-  readonly children: React.ReactNode;
   readonly defaultValues: UseFormProps<FormValues>["defaultValues"];
-  readonly onFormSubmit: (values: FormValues) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly validationSchema: any;
+  readonly onFormSubmit: (values: Parameters<SubmitHandler<FormValues>>[0]) => void;
+  readonly onFormSubmitError?: (errors: Parameters<SubmitErrorHandler<FormValues>>[0]) => void;
 };
 
 export type FormProps<FormValues extends object> = Props<FormValues> &
