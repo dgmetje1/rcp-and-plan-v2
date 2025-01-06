@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { Api } from "@/lib/api";
 import { useApiMutation } from "@/middleware/api";
-import { UnitCreateDTO } from "@/types/unit";
+import { Unit, UnitCreateDTO, UnitEditDTO } from "@/types/unit";
 
 import { getUnitsKeys } from "./keys";
 
@@ -21,4 +21,27 @@ export const useCreateUnit = () => {
       queryClient.invalidateQueries({ queryKey });
     },
   });
+};
+export const useEditUnit = () => {
+  // const queryClient = useQueryClient();
+  const editUnit = async (data: UnitEditDTO) => {
+    const api = new Api();
+    const response = await api.put("units", data, { withAuth: true });
+
+    return response;
+  };
+
+  return useApiMutation("", editUnit);
+};
+
+export const useDeleteUnit = () => {
+  // const queryClient = useQueryClient();
+  const deleteUnit = async (id: Unit["id"]) => {
+    const api = new Api();
+    const response = await api.delete(`units/${id}`, null, { withAuth: true });
+
+    return response;
+  };
+
+  return useApiMutation("", deleteUnit);
 };

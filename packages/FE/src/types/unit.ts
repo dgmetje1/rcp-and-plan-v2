@@ -11,3 +11,4 @@ export type UnitTranslatableContent = { name: string; singularName: string; shor
 export type UnitsDTO = Array<Unit>;
 
 export type UnitCreateDTO = Omit<Unit, "id">;
+export type UnitEditDTO = Unit;

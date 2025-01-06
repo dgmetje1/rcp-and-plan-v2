@@ -5,27 +5,32 @@ import { z } from "zod";
 
 import Form, { FormTextField } from "@/components/common/Form";
 import FormCheckbox from "@/components/common/Form/Checkbox";
-import useToggle from "@/lib/hooks/useToggle";
-import { useCreateUnit } from "@/queries/units";
+import { useCreateUnit, useEditUnit, useSuspenseGetUnits } from "@/queries/units";
 import { UnitCreateDTO } from "@/types/unit";
 import { languages } from "@/types/user";
+
+import { useManagementUnitsPageContext } from "../Context";
 
 const ManagementUnitsPageForm = () => {
   const { t } = useTranslation();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isFormOpen, toggleFormOpen, closeForm] = useToggle();
+  const { selectedUnit, isFormOpen, toggleFormOpen, closeForm } = useManagementUnitsPageContext();
 
-  const defaultValues = useMemo(
-    () => ({
-      isVisible: true,
-      content: languages.reduce(
-        (prev, lang) => ({ ...prev, [lang]: { name: "", singularName: "", shortName: "" } }),
-        {},
-      ),
-    }),
-    [],
-  );
+  const { data } = useSuspenseGetUnits();
+
+  const defaultValues = useMemo(() => {
+    const selectedUnitInfo = data.find(unit => unit.id === selectedUnit);
+
+    return selectedUnitInfo
+      ? selectedUnitInfo
+      : {
+          isVisible: true,
+          content: languages.reduce(
+            (prev, lang) => ({ ...prev, [lang]: { name: "", singularName: "", shortName: "" } }),
+            {},
+          ),
+        };
+  }, [data, selectedUnit]);
 
   const validationSchema = useMemo(
     () =>
@@ -43,10 +48,16 @@ const ManagementUnitsPageForm = () => {
     [],
   );
 
-  const { mutateAsync } = useCreateUnit();
+  const { mutateAsync: createAsync } = useCreateUnit();
+  const { mutateAsync: editAsync } = useEditUnit();
 
   const onFormSubmit = async (values: UnitCreateDTO) => {
-    await mutateAsync(values);
+    if (selectedUnit) {
+      await editAsync({ ...values, id: selectedUnit });
+    } else {
+      await createAsync(values);
+    }
+
     closeForm();
   };
 
