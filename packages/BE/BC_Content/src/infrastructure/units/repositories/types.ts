@@ -13,4 +13,10 @@ export interface IUnitRepository {
    * @param entity Unit domain entity
    */
   create(entity: Unit): void;
+
+  /**
+   * Requests a modification for the entity
+   * @param entity Unit domain entity
+   */
+  edit(entity: Unit): void;
 }

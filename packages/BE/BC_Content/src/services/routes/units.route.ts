@@ -4,7 +4,7 @@ import Container, { Service } from "typedi";
 
 import { IUnitApplication } from "@application/commands/units/IUnitApplication";
 import { UnitApplication } from "@application/commands/units/UnitApplication";
-import { UnitCreateRequest, UnitsListResponse } from "@dtos/index";
+import { UnitCreateRequest, UnitEditRequest, UnitsListResponse } from "@dtos/index";
 import { IUnitQueries, UnitQueries } from "@infrastructure/units/queries";
 
 /**
@@ -14,7 +14,7 @@ import { IUnitQueries, UnitQueries } from "@infrastructure/units/queries";
  *   description: Use cases for units content
  * components:
  *   schemas:
- *     UnitContentCreateRequest:
+ *     UnitLanguageRequest:
  *       type: object
  *       properties:
  *         name:
@@ -31,7 +31,18 @@ import { IUnitQueries, UnitQueries } from "@infrastructure/units/queries";
  *         content:
  *           type: object
  *           additionalProperties:
- *             $ref: '#/components/schemas/UnitContentCreateRequest'
+ *             $ref: '#/components/schemas/UnitLanguageRequest'
+ *     UnitEditRequest:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         isVisible:
+ *           type: boolean
+ *         content:
+ *           type: object
+ *           additionalProperties:
+ *             $ref: '#/components/schemas/UnitLanguageRequest'
  *     UnitsListResponse:
  *       type: array
  *       items:
@@ -79,6 +90,7 @@ class UnitsRouter {
   private routes(): void {
     this.router.get("/", this.getUnits);
     this.router.post("/", this.createUnit);
+    this.router.put("/", this.editUnit);
   }
 
   /**
@@ -132,6 +144,43 @@ class UnitsRouter {
       await unitApplication.createUnit(req.body);
 
       res.status(201).send();
+    } catch (err) {
+      if (err instanceof InvalidParameterError) {
+        return res.status(400).send({ type: err.type, exceptionMessage: err.message, params: err.params });
+      }
+      next(err);
+    }
+  }
+
+  /**
+   * @openapi
+   * /units:
+   *   put:
+   *     summary: Edits a unit.
+   *     tags: [Units]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/UnitEditRequest'
+   *     responses:
+   *       204:
+   *         description: Unit modified
+   *       400:
+   *         description: Error in request fields
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Exception'
+   */
+  private async editUnit(req: Request<unknown, unknown, UnitEditRequest>, res: Response, next: NextFunction) {
+    try {
+      const unitApplication = Container.get<IUnitApplication>(UnitApplication);
+
+      await unitApplication.editUnit(req.body);
+
+      res.status(204).send();
     } catch (err) {
       if (err instanceof InvalidParameterError) {
         return res.status(400).send({ type: err.type, exceptionMessage: err.message, params: err.params });

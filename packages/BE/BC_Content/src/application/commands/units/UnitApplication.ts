@@ -1,8 +1,9 @@
 import Container, { Service } from "typedi";
 
+import { IUnitQueries, UnitQueries } from "@application/queries/units/IUnitsQueries";
 import { IUnitRepository, UnitRepository } from "@domain/models/unit/IUnitRepository";
 import { Unit } from "@domain/models/unit/Unit";
-import { UnitCreateRequest } from "@dtos/index";
+import { UnitCreateRequest, UnitEditRequest } from "@dtos/index";
 
 import { IUnitApplication } from "./IUnitApplication";
 
@@ -19,6 +20,25 @@ export class UnitApplication implements IUnitApplication {
     const repository = Container.get<IUnitRepository>(UnitRepository);
 
     repository.create(unit);
+
+    await repository.unitOfWork.saveChangesAsync();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public async editUnit(request: UnitEditRequest): Promise<void> {
+    const unitQueries = Container.get<IUnitQueries>(UnitQueries);
+    const unit = await unitQueries.getEntity(request.id);
+
+    unit.edit(
+      request.isVisible,
+      Object.entries(request.content).map(([language, value]) => ({ language, ...value })),
+    );
+
+    const repository = Container.get<IUnitRepository>(UnitRepository);
+
+    repository.edit(unit);
 
     await repository.unitOfWork.saveChangesAsync();
   }

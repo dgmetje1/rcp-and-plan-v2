@@ -9,7 +9,7 @@ import {
 import { TranslatableContent } from "@domain/shared/TranslatableContent";
 import { AvailableLanguages, DEFAULT_LANGUAGE, Languages } from "@global_types/languages";
 
-import { UnitTranslatableContent } from "./types";
+import { UnitContent, UnitTranslatableContent } from "./types";
 
 export class Unit extends AggregateRoot {
   private _content: TranslatableContent<UnitTranslatableContent>;
@@ -22,23 +22,13 @@ export class Unit extends AggregateRoot {
     return this._content;
   }
 
-  private constructor(
-    id: string | undefined,
-    isVisible: boolean,
-    content: { language: string; name: string; shortName: string; singularName: string }[],
-  ) {
+  private constructor(id: string | undefined, isVisible: boolean, content: UnitContent) {
     super(new UniqueEntityID(id));
 
     this._isVisible = isVisible;
     this._content = new Map();
 
-    content.forEach(({ language, name, shortName, singularName }) => {
-      ensureThat(
-        language in AvailableLanguages,
-        new InvalidParameterError(`Language must be one of ${AvailableLanguages}`, "Unit", [{ language }]),
-      );
-      this._content.set(language as Languages, { name, shortName, singularName });
-    });
+    this._setContent(content);
   }
 
   /**
@@ -48,11 +38,7 @@ export class Unit extends AggregateRoot {
    * @param content - An array of objects containing language, name, and description for the Unit.
    * @returns A new instance of Unit initialized with the provided id and content.
    */
-  public static get(
-    id: string,
-    isVisible: boolean,
-    content: { language: string; name: string; shortName: string; singularName: string }[],
-  ) {
+  public static get(id: string, isVisible: boolean, content: UnitContent) {
     return new Unit(id, isVisible, content);
   }
   /**
@@ -62,11 +48,19 @@ export class Unit extends AggregateRoot {
    * @param content - An array of objects containing language, name, and description for the Unit.
    * @returns A new instance of Unit initialized with the provided id and content.
    */
-  public static create(
-    isVisible: boolean,
-    content: { language: string; name: string; shortName: string; singularName: string }[],
-  ) {
+  public static create(isVisible: boolean, content: UnitContent) {
     return new Unit(undefined, isVisible, content);
+  }
+
+  /**
+   * Updates the visibility and content of the Unit.
+   *
+   * @param isVisible - A boolean indicating whether the Unit should be visible.
+   * @param content - The new content to set for the Unit.
+   */
+  public edit(isVisible: boolean, content: UnitContent) {
+    this._isVisible = isVisible;
+    this._setContent(content);
   }
 
   /**
@@ -83,5 +77,15 @@ export class Unit extends AggregateRoot {
       throw new TranslationsNotFoundError("Unit translation not found", language, [{ id: this._id }]);
 
     return translatedContent;
+  }
+
+  private _setContent(content: UnitContent) {
+    content.forEach(({ language, name, shortName, singularName }) => {
+      ensureThat(
+        language in AvailableLanguages,
+        new InvalidParameterError(`Language must be one of ${AvailableLanguages}`, "Unit", [{ language }]),
+      );
+      this._content.set(language as Languages, { name, shortName, singularName });
+    });
   }
 }

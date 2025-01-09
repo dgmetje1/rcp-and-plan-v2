@@ -1,4 +1,4 @@
-import { UnitCreateRequest } from "@dtos/index";
+import { UnitCreateRequest, UnitEditRequest } from "@dtos/index";
 
 export interface IUnitApplication {
   /**
@@ -6,4 +6,9 @@ export interface IUnitApplication {
    * @param request Data to create a Unit
    */
   createUnit(request: UnitCreateRequest): Promise<void>;
+  /**
+   * Edits unit's information
+   * @param request Data to edit a Unit
+   */
+  editUnit(request: UnitEditRequest): Promise<void>;
 }
