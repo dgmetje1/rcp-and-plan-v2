@@ -8,6 +8,7 @@ import {
   RecipesListQueryRequest,
   RecipesListResponse,
   UnitCreateRequest,
+  UnitEditRequest,
   UnitsListResponse,
 } from "@rcp-and-plan/bc_content";
 import { propagateHeaders } from "@rcp-and-plan/commons";
@@ -66,6 +67,14 @@ export class ContentService {
 
   public createUnit(request: UnitCreateRequest, headers: IncomingHttpHeaders) {
     return this._client.post("/units", request, { headers: propagateHeaders(headers) });
+  }
+
+  public editUnit(request: UnitEditRequest, headers: IncomingHttpHeaders) {
+    return this._client.put("/units", request, { headers: propagateHeaders(headers) });
+  }
+
+  public deleteUnit(id: string, headers: IncomingHttpHeaders) {
+    return this._client.delete(`/units/${id}`, { headers: propagateHeaders(headers) });
   }
   //#endregion
 }

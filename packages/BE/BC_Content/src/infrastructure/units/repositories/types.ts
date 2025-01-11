@@ -19,4 +19,10 @@ export interface IUnitRepository {
    * @param entity Unit domain entity
    */
   edit(entity: Unit): void;
+
+  /**
+   * Requests a deletion for the entity
+   * @param entity Unit domain entity
+   */
+  delete(entity: Unit): void;
 }

@@ -15,6 +15,8 @@ import UnitsRouter from "./routes/units.route";
 
 const PORT = process.env.PORT || 3000;
 
+const eventHandlersRoutes = ["@application/commands/recipes/events", "@application/commands/units/events"];
+
 class App {
   public readonly app: express.Application;
 
@@ -57,10 +59,8 @@ class App {
   }
 
   private setupEventHandlers() {
-    import("@application/commands/recipes/events")
-      .then(({ default: eventHandlers }) => {
-        Container.import(eventHandlers);
-
+    Promise.all(eventHandlersRoutes.map(module => import(module)))
+      .then(() => {
         const handlers = Container.getMany(HandlerToken);
         handlers.forEach(handler => handler.initialize());
       })

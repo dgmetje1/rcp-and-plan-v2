@@ -91,6 +91,7 @@ class UnitsRouter {
     this.router.get("/", this.getUnits);
     this.router.post("/", this.createUnit);
     this.router.put("/", this.editUnit);
+    this.router.delete("/:id", this.deleteUnit);
   }
 
   /**
@@ -179,6 +180,43 @@ class UnitsRouter {
       const unitApplication = Container.get<IUnitApplication>(UnitApplication);
 
       await unitApplication.editUnit(req.body);
+
+      res.status(204).send();
+    } catch (err) {
+      if (err instanceof InvalidParameterError) {
+        return res.status(400).send({ type: err.type, exceptionMessage: err.message, params: err.params });
+      }
+      next(err);
+    }
+  }
+
+  /**
+   * @openapi
+   * /units/{id}:
+   *   delete:
+   *     summary: Deletes a unit.
+   *     tags: [Units]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         type: string
+   *         required: true
+   *         description: ID of the recipe to get.
+   *     responses:
+   *       204:
+   *         description: Unit deleted
+   *       400:
+   *         description: Error in request fields
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Exception'
+   */
+  private async deleteUnit(req: Request<{ id: string }>, res: Response, next: NextFunction) {
+    try {
+      const unitApplication = Container.get<IUnitApplication>(UnitApplication);
+
+      await unitApplication.deleteUnit(req.params.id);
 
       res.status(204).send();
     } catch (err) {

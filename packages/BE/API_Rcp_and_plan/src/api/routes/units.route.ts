@@ -7,6 +7,7 @@ import checkAuthentication from "@api/middleware/auth";
 import { userMiddleware } from "@api/middleware/user";
 import { ContentService } from "@api/services/content";
 import { UnitCreateEntry } from "@dtos/entries/units/UnitCreateEntry";
+import { UnitEditEntry } from "@dtos/entries/units/UnitEditEntry";
 import { UnitsListOutput } from "@dtos/outputs";
 
 /**
@@ -16,7 +17,7 @@ import { UnitsListOutput } from "@dtos/outputs";
  *   description: Use cases for units content
  * components:
  *   schemas:
- *     UnitContentCreateEntry:
+ *     UnitContentEntry:
  *       type: object
  *       properties:
  *         name:
@@ -33,7 +34,18 @@ import { UnitsListOutput } from "@dtos/outputs";
  *         content:
  *           type: object
  *           additionalProperties:
- *             $ref: '#/components/schemas/UnitContentCreateEntry'
+ *             $ref: '#/components/schemas/UnitContentEntry'
+ *     UnitEditEntry:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         isVisible:
+ *           type: boolean
+ *         content:
+ *           type: object
+ *           additionalProperties:
+ *             $ref: '#/components/schemas/UnitContentEntry'
  *     UnitsListOutput:
  *       type: array
  *       items:
@@ -81,6 +93,8 @@ class UnitsRouter {
   private routes(): void {
     this.router.get("/", this.getUnits);
     this.router.post("/", checkAuthentication, userMiddleware, this.createUnit);
+    this.router.put("/", checkAuthentication, userMiddleware, this.editUnit);
+    this.router.delete("/:id", checkAuthentication, userMiddleware, this.deleteUnit);
   }
 
   /**
@@ -134,6 +148,96 @@ class UnitsRouter {
       await contentService.createUnit(req.body, req.headers);
 
       res.status(201).send();
+    } catch (err) {
+      const errorData = (err as AxiosError<ExceptionErrorResponse | object>)?.response?.data;
+      if (errorData && "type" in errorData && errorData.type === InvalidParameterErrorType) {
+        const typedErrorData = errorData as ExceptionErrorResponse;
+        return res.status(400).send({
+          type: InvalidParameterErrorType,
+          exceptionMessage: typedErrorData.exceptionMessage,
+          params: typedErrorData.params,
+        });
+      }
+      next(err);
+    }
+  }
+
+  /**
+   * @openapi
+   * /units:
+   *   put:
+   *     summary: Edits a unit.
+   *     tags: [Units]
+   *     security:
+   *       - bearerAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/UnitEditEntry'
+   *     responses:
+   *       204:
+   *         description: Unit modified
+   *       400:
+   *         description: Error in request fields
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Exception'
+   */
+
+  private async editUnit(req: Request<unknown, unknown, UnitEditEntry>, res: Response, next: NextFunction) {
+    try {
+      const contentService = Container.get<ContentService>(ContentService);
+      await contentService.editUnit(req.body, req.headers);
+
+      res.status(204).send();
+    } catch (err) {
+      const errorData = (err as AxiosError<ExceptionErrorResponse | object>)?.response?.data;
+      if (errorData && "type" in errorData && errorData.type === InvalidParameterErrorType) {
+        const typedErrorData = errorData as ExceptionErrorResponse;
+        return res.status(400).send({
+          type: InvalidParameterErrorType,
+          exceptionMessage: typedErrorData.exceptionMessage,
+          params: typedErrorData.params,
+        });
+      }
+      next(err);
+    }
+  }
+
+  /**
+   * @openapi
+   * /units/{id}:
+   *   delete:
+   *     summary: Deletes a unit.
+   *     tags: [Units]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         type: string
+   *         required: true
+   *         description: ID of the recipe to get.
+   *     responses:
+   *       204:
+   *         description: Unit deleted
+   *       400:
+   *         description: Error in request fields
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Exception'
+   */
+
+  private async deleteUnit(req: Request<{ id: string }>, res: Response, next: NextFunction) {
+    try {
+      const contentService = Container.get<ContentService>(ContentService);
+      await contentService.deleteUnit(req.params.id, req.headers);
+
+      res.status(204).send();
     } catch (err) {
       const errorData = (err as AxiosError<ExceptionErrorResponse | object>)?.response?.data;
       if (errorData && "type" in errorData && errorData.type === InvalidParameterErrorType) {

@@ -9,15 +9,15 @@ importers:
   .:
     dependencies:
       axios:
-        specifier: ^1.6.8
-        version: 1.6.8
+        specifier: ^1.7.9
+        version: 1.7.9
     devDependencies:
-      '@tsconfig/node20':
-        specifier: ^20.1.2
-        version: 20.1.4
+      '@tsconfig/node22':
+        specifier: ^22.0.0
+        version: 22.0.0
       '@types/node':
-        specifier: 20.11.25
-        version: 20.11.25
+        specifier: 22.10.5
+        version: 22.10.5
       '@typescript-eslint/eslint-plugin':
         specifier: 7.2.0
         version: 7.2.0(@typescript-eslint/parser@7.7.1(eslint@8.57.0)(typescript@5.4.2))(eslint@8.57.0)(typescript@5.4.2)
@@ -44,10 +44,10 @@ importers:
         version: 3.2.5
       ts-node:
         specifier: 10.9.2
-        version: 10.9.2(@types/node@20.11.25)(typescript@5.4.2)
+        version: 10.9.2(@types/node@22.10.5)(typescript@5.4.2)
       ts-node-dev:
         specifier: 2.0.0
-        version: 2.0.0(@types/node@20.11.25)(typescript@5.4.2)
+        version: 2.0.0(@types/node@22.10.5)(typescript@5.4.2)
       tsc-alias:
         specifier: 1.8.8
         version: 1.8.8
@@ -165,7 +165,7 @@ importers:
         version: 6.37.1(mysql2@3.9.8)
       sequelize-typescript:
         specifier: 2.1.6
-        version: 2.1.6(@types/node@20.12.12)(@types/validator@13.11.9)(reflect-metadata@0.2.2)(sequelize@6.37.1)
+        version: 2.1.6(@types/node@22.10.5)(@types/validator@13.11.9)(reflect-metadata@0.2.2)(sequelize@6.37.1(mysql2@3.9.8))
 
   packages/BE/BC_Social:
     dependencies:
@@ -180,7 +180,7 @@ importers:
         version: 6.37.3(mysql2@3.9.7)
       sequelize-typescript:
         specifier: ^2.1.6
-        version: 2.1.6(@types/node@20.12.12)(@types/validator@13.11.9)(reflect-metadata@0.2.2)(sequelize@6.37.3(mysql2@3.9.7))
+        version: 2.1.6(@types/node@22.10.5)(@types/validator@13.11.9)(reflect-metadata@0.2.2)(sequelize@6.37.3(mysql2@3.9.7))
 
   packages/BE/Commons:
     dependencies:
@@ -283,7 +283,7 @@ importers:
         version: 2.6.0
       tailwindcss-animate:
         specifier: ^1.0.7
-        version: 1.0.7(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.12.12)(typescript@5.4.2)))
+        version: 1.0.7(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.4.2)))
       zod:
         specifier: 3.24.1
         version: 3.24.1
@@ -296,7 +296,7 @@ importers:
         version: 5.62.15(@tanstack/react-query@5.62.15(react@19.0.0))(react@19.0.0)
       '@tanstack/router-vite-plugin':
         specifier: ^1.95.1
-        version: 1.95.1(@tanstack/react-router@1.95.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(vite@6.0.7(@types/node@20.12.12)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5))
+        version: 1.95.1(@tanstack/react-router@1.95.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(vite@6.0.7(@types/node@22.10.5)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5))
       '@types/lodash':
         specifier: ^4.17.0
         version: 4.17.0
@@ -314,7 +314,7 @@ importers:
         version: 7.7.1(eslint@8.57.0)(typescript@5.4.2)
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.3.4(vite@6.0.7(@types/node@20.12.12)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5))
+        version: 4.3.4(vite@6.0.7(@types/node@22.10.5)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5))
       autoprefixer:
         specifier: 10.4.19
         version: 10.4.19(postcss@8.4.39)
@@ -335,16 +335,16 @@ importers:
         version: 8.4.39
       tailwindcss:
         specifier: 3.4.17
-        version: 3.4.17(ts-node@10.9.2(@types/node@20.12.12)(typescript@5.4.2))
+        version: 3.4.17(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.4.2))
       typescript:
         specifier: ^5.2.2
         version: 5.4.2
       vite:
         specifier: ^6.0.7
-        version: 6.0.7(@types/node@20.12.12)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5)
+        version: 6.0.7(@types/node@22.10.5)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5)
       vite-tsconfig-paths:
         specifier: ^5.1.4
-        version: 5.1.4(typescript@5.4.2)(vite@6.0.7(@types/node@20.12.12)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5))
+        version: 5.1.4(typescript@5.4.2)(vite@6.0.7(@types/node@22.10.5)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5))
 
 packages:
 
@@ -1554,8 +1554,8 @@ packages:
   '@tsconfig/node16@1.0.4':
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
 
-  '@tsconfig/node20@20.1.4':
-    resolution: {integrity: sha512-sqgsT69YFeLWf5NtJ4Xq/xAF8p4ZQHlmGW74Nu2tD4+g5fAsposc4ZfaaPixVu4y01BEiDCWLRDCvDM5JOsRxg==}
+  '@tsconfig/node22@22.0.0':
+    resolution: {integrity: sha512-twLQ77zevtxobBOD4ToAtVmuYrpeYUh3qh+TEp+08IWhpsrIflVHqQ1F1CiPxQGL7doCdBIOOCF+1Tm833faNg==}
 
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -1635,11 +1635,11 @@ packages:
   '@types/ms@0.7.34':
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
 
-  '@types/node@20.11.25':
-    resolution: {integrity: sha512-TBHyJxk2b7HceLVGFcpAUjsa5zIdsPWlR6XHfyGzd0SFu+/NFgQgMAl96MSDZgQDvJAvV6BKsFOrt6zIL09JDw==}
-
   '@types/node@20.12.12':
     resolution: {integrity: sha512-eWLDGF/FOSPtAvEqeRAQ4C8LSA7M1I7i0ky1I8U7kD1J5ITyW3AsRhQrKVoWf5pFKZ2kILsEGJhsI9r93PYnOw==}
+
+  '@types/node@22.10.5':
+    resolution: {integrity: sha512-F8Q+SeGimwOo86fiovQh8qiXfFEh2/ocYv7tU5pJ3EXMSSxk1Joj5wefpFK2fHTf/N6HKGSxIDBT9f3gCxXPkQ==}
 
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
@@ -1906,8 +1906,8 @@ packages:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
 
-  axios@1.6.8:
-    resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
+  axios@1.7.9:
+    resolution: {integrity: sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==}
 
   babel-dead-code-elimination@1.0.8:
     resolution: {integrity: sha512-og6HQERk0Cmm+nTT4Od2wbPtgABXFMPaHACjbKLulZIFMkYyXZLkUGuAxdgpMJBrxyt/XFpSz++lNzjbcMnPkQ==}
@@ -4076,6 +4076,9 @@ packages:
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
 
+  undici-types@6.20.0:
+    resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
+
   unpipe@1.0.0:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
@@ -5307,7 +5310,7 @@ snapshots:
     optionalDependencies:
       '@tanstack/react-router': 1.95.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
-  '@tanstack/router-plugin@1.95.1(@tanstack/react-router@1.95.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(vite@6.0.7(@types/node@20.12.12)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5))':
+  '@tanstack/router-plugin@1.95.1(@tanstack/react-router@1.95.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(vite@6.0.7(@types/node@22.10.5)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5))':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/generator': 7.26.3
@@ -5328,14 +5331,14 @@ snapshots:
       unplugin: 1.16.0
       zod: 3.24.1
     optionalDependencies:
-      vite: 6.0.7(@types/node@20.12.12)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5)
+      vite: 6.0.7(@types/node@22.10.5)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5)
     transitivePeerDependencies:
       - '@tanstack/react-router'
       - supports-color
 
-  '@tanstack/router-vite-plugin@1.95.1(@tanstack/react-router@1.95.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(vite@6.0.7(@types/node@20.12.12)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5))':
+  '@tanstack/router-vite-plugin@1.95.1(@tanstack/react-router@1.95.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(vite@6.0.7(@types/node@22.10.5)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5))':
     dependencies:
-      '@tanstack/router-plugin': 1.95.1(@tanstack/react-router@1.95.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(vite@6.0.7(@types/node@20.12.12)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5))
+      '@tanstack/router-plugin': 1.95.1(@tanstack/react-router@1.95.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(vite@6.0.7(@types/node@22.10.5)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5))
     transitivePeerDependencies:
       - '@rsbuild/core'
       - '@tanstack/react-router'
@@ -5357,7 +5360,7 @@ snapshots:
 
   '@tsconfig/node16@1.0.4': {}
 
-  '@tsconfig/node20@20.1.4': {}
+  '@tsconfig/node22@22.0.0': {}
 
   '@types/babel__core@7.20.5':
     dependencies:
@@ -5387,18 +5390,18 @@ snapshots:
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
 
   '@types/cacheable-request@6.0.3':
     dependencies:
       '@types/http-cache-semantics': 4.0.4
       '@types/keyv': 3.1.4
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
       '@types/responselike': 1.0.3
 
   '@types/cls-hooked@4.3.8':
     dependencies:
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
 
   '@types/compression@1.7.5':
     dependencies:
@@ -5406,11 +5409,11 @@ snapshots:
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
 
   '@types/cors@2.8.17':
     dependencies:
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
 
   '@types/debug@4.1.12':
     dependencies:
@@ -5420,7 +5423,7 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.0':
     dependencies:
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
       '@types/qs': 6.9.15
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -5435,7 +5438,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
 
   '@types/http-cache-semantics@4.0.4': {}
 
@@ -5447,11 +5450,11 @@ snapshots:
 
   '@types/jsonwebtoken@9.0.6':
     dependencies:
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
 
   '@types/lodash@4.17.0': {}
 
@@ -5461,13 +5464,13 @@ snapshots:
 
   '@types/ms@0.7.34': {}
 
-  '@types/node@20.11.25':
-    dependencies:
-      undici-types: 5.26.5
-
   '@types/node@20.12.12':
     dependencies:
       undici-types: 5.26.5
+
+  '@types/node@22.10.5':
+    dependencies:
+      undici-types: 6.20.0
 
   '@types/parse-json@4.0.2': {}
 
@@ -5492,23 +5495,23 @@ snapshots:
   '@types/response-time@2.3.8':
     dependencies:
       '@types/express': 4.17.21
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
 
   '@types/semver@7.5.8': {}
 
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
 
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
       '@types/send': 0.17.4
 
   '@types/strip-bom@3.0.0': {}
@@ -5637,14 +5640,14 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitejs/plugin-react@4.3.4(vite@6.0.7(@types/node@20.12.12)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5))':
+  '@vitejs/plugin-react@4.3.4(vite@6.0.7(@types/node@22.10.5)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5))':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.0)
       '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.0)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 6.0.7(@types/node@20.12.12)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5)
+      vite: 6.0.7(@types/node@22.10.5)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5)
     transitivePeerDependencies:
       - supports-color
 
@@ -5793,7 +5796,7 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.0.0
 
-  axios@1.6.8:
+  axios@1.7.9:
     dependencies:
       follow-redirects: 1.15.6
       form-data: 4.0.0
@@ -7463,13 +7466,13 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.4.49
 
-  postcss-load-config@4.0.2(postcss@8.4.49)(ts-node@10.9.2(@types/node@20.12.12)(typescript@5.4.2)):
+  postcss-load-config@4.0.2(postcss@8.4.49)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.4.2)):
     dependencies:
       lilconfig: 3.1.3
       yaml: 2.4.5
     optionalDependencies:
       postcss: 8.4.49
-      ts-node: 10.9.2(@types/node@20.12.12)(typescript@5.4.2)
+      ts-node: 10.9.2(@types/node@22.10.5)(typescript@5.4.2)
 
   postcss-nested@6.2.0(postcss@8.4.49):
     dependencies:
@@ -7762,9 +7765,17 @@ snapshots:
       reflect-metadata: 0.2.2
       sequelize: 6.37.1(mysql2@3.9.8)
 
-  sequelize-typescript@2.1.6(@types/node@20.12.12)(@types/validator@13.11.9)(reflect-metadata@0.2.2)(sequelize@6.37.3(mysql2@3.9.7)):
+  sequelize-typescript@2.1.6(@types/node@22.10.5)(@types/validator@13.11.9)(reflect-metadata@0.2.2)(sequelize@6.37.1(mysql2@3.9.8)):
     dependencies:
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
+      '@types/validator': 13.11.9
+      glob: 7.2.0
+      reflect-metadata: 0.2.2
+      sequelize: 6.37.1(mysql2@3.9.8)
+
+  sequelize-typescript@2.1.6(@types/node@22.10.5)(@types/validator@13.11.9)(reflect-metadata@0.2.2)(sequelize@6.37.3(mysql2@3.9.7)):
+    dependencies:
+      '@types/node': 22.10.5
       '@types/validator': 13.11.9
       glob: 7.2.0
       reflect-metadata: 0.2.2
@@ -7991,11 +8002,11 @@ snapshots:
 
   tailwind-merge@2.6.0: {}
 
-  tailwindcss-animate@1.0.7(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.12.12)(typescript@5.4.2))):
+  tailwindcss-animate@1.0.7(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.4.2))):
     dependencies:
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@20.12.12)(typescript@5.4.2))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.4.2))
 
-  tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.12.12)(typescript@5.4.2)):
+  tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.4.2)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -8014,7 +8025,7 @@ snapshots:
       postcss: 8.4.49
       postcss-import: 15.1.0(postcss@8.4.49)
       postcss-js: 4.0.1(postcss@8.4.49)
-      postcss-load-config: 4.0.2(postcss@8.4.49)(ts-node@10.9.2(@types/node@20.12.12)(typescript@5.4.2))
+      postcss-load-config: 4.0.2(postcss@8.4.49)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.4.2))
       postcss-nested: 6.2.0(postcss@8.4.49)
       postcss-selector-parser: 6.1.2
       resolve: 1.22.8
@@ -8054,7 +8065,7 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  ts-node-dev@2.0.0(@types/node@20.11.25)(typescript@5.4.2):
+  ts-node-dev@2.0.0(@types/node@22.10.5)(typescript@5.4.2):
     dependencies:
       chokidar: 3.6.0
       dynamic-dedupe: 0.3.0
@@ -8064,7 +8075,7 @@ snapshots:
       rimraf: 2.7.1
       source-map-support: 0.5.21
       tree-kill: 1.2.2
-      ts-node: 10.9.2(@types/node@20.11.25)(typescript@5.4.2)
+      ts-node: 10.9.2(@types/node@22.10.5)(typescript@5.4.2)
       tsconfig: 7.0.0
       typescript: 5.4.2
     transitivePeerDependencies:
@@ -8072,14 +8083,14 @@ snapshots:
       - '@swc/wasm'
       - '@types/node'
 
-  ts-node@10.9.2(@types/node@20.11.25)(typescript@5.4.2):
+  ts-node@10.9.2(@types/node@22.10.5)(typescript@5.4.2):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 20.11.25
+      '@types/node': 22.10.5
       acorn: 8.11.3
       acorn-walk: 8.3.2
       arg: 4.1.3
@@ -8089,25 +8100,6 @@ snapshots:
       typescript: 5.4.2
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-
-  ts-node@10.9.2(@types/node@20.12.12)(typescript@5.4.2):
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.11
-      '@tsconfig/node12': 1.0.11
-      '@tsconfig/node14': 1.0.3
-      '@tsconfig/node16': 1.0.4
-      '@types/node': 20.12.12
-      acorn: 8.11.3
-      acorn-walk: 8.3.2
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      typescript: 5.4.2
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
-    optional: true
 
   tsc-alias@1.8.8:
     dependencies:
@@ -8211,6 +8203,8 @@ snapshots:
 
   undici-types@5.26.5: {}
 
+  undici-types@6.20.0: {}
+
   unpipe@1.0.0: {}
 
   unplugin@1.16.0:
@@ -8267,24 +8261,24 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite-tsconfig-paths@5.1.4(typescript@5.4.2)(vite@6.0.7(@types/node@20.12.12)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5)):
+  vite-tsconfig-paths@5.1.4(typescript@5.4.2)(vite@6.0.7(@types/node@22.10.5)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5)):
     dependencies:
       debug: 4.3.4
       globrex: 0.1.2
       tsconfck: 3.0.3(typescript@5.4.2)
     optionalDependencies:
-      vite: 6.0.7(@types/node@20.12.12)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5)
+      vite: 6.0.7(@types/node@22.10.5)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5)
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  vite@6.0.7(@types/node@20.12.12)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5):
+  vite@6.0.7(@types/node@22.10.5)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.4.5):
     dependencies:
       esbuild: 0.24.2
       postcss: 8.4.49
       rollup: 4.29.2
     optionalDependencies:
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
       fsevents: 2.3.3
       jiti: 1.21.6
       tsx: 4.19.2
@@ -8338,7 +8332,7 @@ snapshots:
 
   wkx@0.5.0:
     dependencies:
-      '@types/node': 20.12.12
+      '@types/node': 22.10.5
 
   word-wrap@1.2.5: {}
 

@@ -5,6 +5,7 @@ const isEntity = (v: unknown): v is Entity => {
 };
 
 export abstract class Entity {
+  public static readonly entityName: string = this.constructor.name;
   protected readonly _id: UniqueEntityID;
 
   constructor(id?: UniqueEntityID) {

@@ -323,7 +323,7 @@ class RecipesRouter {
    *              schema:
    *                $ref: '#/components/schemas/Exception'
    */
-  private async getRecipeById(req: Request, res: Response, next: NextFunction) {
+  private async getRecipeById(req: Request<{ id: string }>, res: Response, next: NextFunction) {
     try {
       const recipesQueries = Container.get<IRecipeQueries>(RecipeQueries);
       const response = await recipesQueries.getDataById(

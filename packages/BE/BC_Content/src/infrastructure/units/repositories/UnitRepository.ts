@@ -37,6 +37,13 @@ export class UnitRepository implements IUnitRepository {
   }
 
   /**
+   * @inheritdoc
+   */
+  public delete(entity: Unit) {
+    this._context.addCommand(t => this.deleteUnit(t, entity), entity);
+  }
+
+  /**
    * Inserts a unit into the database transactionally.
    *
    * @param t - The transaction object for database operations.
@@ -80,5 +87,15 @@ export class UnitRepository implements IUnitRepository {
         { where: { id: id.toString(), language: key }, transaction: t },
       );
     }
+  }
+
+  /**
+   * Deletes a unit from the database transactionally.
+   *
+   * @param t - The transaction object for database operations.
+   * @param id - The unique identifier of the unit to be deleted.
+   */
+  private async deleteUnit(t: Transaction, { id }: Unit) {
+    await UnitDB.destroy({ where: { id: id.toString() }, transaction: t });
   }
 }

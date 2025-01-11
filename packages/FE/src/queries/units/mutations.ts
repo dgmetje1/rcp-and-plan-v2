@@ -23,7 +23,7 @@ export const useCreateUnit = () => {
   });
 };
 export const useEditUnit = () => {
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   const editUnit = async (data: UnitEditDTO) => {
     const api = new Api();
     const response = await api.put("units", data, { withAuth: true });
@@ -31,11 +31,16 @@ export const useEditUnit = () => {
     return response;
   };
 
-  return useApiMutation("", editUnit);
+  return useApiMutation("", editUnit, {
+    onSuccess: () => {
+      const { queryKey } = getUnitsKeys();
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
 };
 
 export const useDeleteUnit = () => {
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   const deleteUnit = async (id: Unit["id"]) => {
     const api = new Api();
     const response = await api.delete(`units/${id}`, null, { withAuth: true });
@@ -43,5 +48,10 @@ export const useDeleteUnit = () => {
     return response;
   };
 
-  return useApiMutation("", deleteUnit);
+  return useApiMutation("", deleteUnit, {
+    onSuccess: () => {
+      const { queryKey } = getUnitsKeys();
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
 };

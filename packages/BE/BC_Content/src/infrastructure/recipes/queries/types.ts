@@ -13,6 +13,14 @@ export interface IRecipeQueries {
    * @returns Recipe entity
    */
   getEntity: (id: string) => Promise<Recipe>;
+
+  /**
+   * Gets the Recipes that contains igredients with the unit identified by id
+   * @param id Recipe identifier
+   * @returns Recipe entities
+   */
+  getEntitiesContainingUnit: (id: string) => Promise<Array<{ recipe: Recipe; ingredientIds: Array<string> }>>;
+
   getData: (params: RecipesListQueryRequest, language: Languages) => Promise<RecipesListResponse>;
   getDataById: (id: string, language: Languages) => Promise<RecipeResponse>;
   /**

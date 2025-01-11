@@ -46,17 +46,26 @@ export class RecipeRepository implements IRecipeRepository {
   public addIngredient(entity: Recipe, ingredient: RecipeIngredient): void {
     this._context.addCommand(t => this.insertRecipeIngredient(t, entity, ingredient), entity);
   }
+
   /**
    * @inheritdoc
    */
   public addKitchenware(entity: Recipe, kitchenware: RecipeKitchenware): void {
     this._context.addCommand(t => this.insertRecipeKitchenware(t, entity, kitchenware), entity);
   }
+
   /**
    * @inheritdoc
    */
   public addStep(entity: Recipe, step: RecipeStep): void {
     this._context.addCommand(t => this.insertRecipeStep(t, entity, step), entity);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public removeIngredient(entity: Recipe, ingredient: RecipeIngredient): void {
+    this._context.addCommand(t => this.removeRecipeIngredient(t, entity, ingredient), entity);
   }
 
   /**
@@ -153,5 +162,18 @@ export class RecipeRepository implements IRecipeRepository {
 
     for (const { language, title, body } of recipeStep.content.values())
       await RecipeStepContentDB.create({ id: recipeStep.id, language, title, body }, { transaction: t });
+  }
+
+  /**
+   * Removes a recipe ingredient from the database.
+   *
+   * @param entity The Recipe entity to which the ingredient belongs.
+   * @param recipeIngredient The RecipeIngredient object representing the ingredient to be deleted.
+   */
+  private async removeRecipeIngredient(t: Transaction, entity: Recipe, recipeIngredient: RecipeIngredient) {
+    await RecipeIngredientDB.destroy({
+      where: { recipe_id: entity.id.toString(), ingredient_id: recipeIngredient.ingredient.id },
+      transaction: t,
+    });
   }
 }

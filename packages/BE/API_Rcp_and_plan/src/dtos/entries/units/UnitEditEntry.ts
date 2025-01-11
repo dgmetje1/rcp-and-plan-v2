@@ -1,6 +1,7 @@
 import { UnitLanguageEntry } from "./UnitLanguageEntry";
 
-export type UnitCreateEntry = {
+export type UnitEditEntry = {
+  id: string;
   isVisible: boolean;
   content: Record<string, UnitLanguageEntry>;
 };

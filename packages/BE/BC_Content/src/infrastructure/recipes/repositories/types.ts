@@ -37,4 +37,11 @@ export interface IRecipeRepository {
    * @param kitchenware Step aggregate
    */
   addStep(entity: Recipe, step: RecipeStep): void;
+
+  /**
+   * Requests a deletion for the an ingredient entry to the recipe entity
+   * @param entity Recipe domain entity
+   * @param ingredient Ingredient aggregate
+   */
+  removeIngredient(entity: Recipe, ingredient: RecipeIngredient): void;
 }
