@@ -14,12 +14,12 @@
   "author": "Dani Garcia",
   "license": "ISC",
   "engines": {
-    "node": ">=20.11.1"
+    "node": ">=22.x.x"
   },
   "type": "module",
   "devDependencies": {
-    "@tsconfig/node20": "^20.1.2",
-    "@types/node": "20.11.25",
+    "@tsconfig/node22": "^22.0.0",
+    "@types/node": "22.10.5",
     "@typescript-eslint/eslint-plugin": "7.2.0",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
@@ -34,6 +34,6 @@
     "typescript": "5.4.2"
   },
   "dependencies": {
-    "axios": "^1.6.8"
+    "axios": "^1.7.9"
   }
 }

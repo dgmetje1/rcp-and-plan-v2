@@ -21,6 +21,15 @@ export class Api {
   public async get<T>(url: string, config?: RequestConfig) {
     return this.request<T>("GET", url, config);
   }
+  public async post<T>(url: string, data: unknown, config?: RequestConfig) {
+    return this.request<T>("POST", url, { ...config, data });
+  }
+  public async put<T>(url: string, data: unknown, config?: RequestConfig) {
+    return this.request<T>("PUT", url, { ...config, data });
+  }
+  public async delete<T>(url: string, data: unknown, config?: RequestConfig) {
+    return this.request<T>("DELETE", url, { ...config, data });
+  }
 
   public async request<T>(method: string, url: string, config?: RequestConfig, retry: number = 0): Promise<T> {
     try {

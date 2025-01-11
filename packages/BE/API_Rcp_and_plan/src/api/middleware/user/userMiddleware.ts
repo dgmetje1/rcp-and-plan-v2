@@ -27,6 +27,7 @@ export const userMiddleware: RequestHandler = async (req: Request, res: Response
       await client.set(cacheKey, JSON.stringify(account), { EX: 3600 });
     }
 
+    req.headers["access-by"] = account.id;
     req.context.user = account;
 
     next();

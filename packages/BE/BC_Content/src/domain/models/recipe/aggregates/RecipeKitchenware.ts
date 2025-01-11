@@ -1,7 +1,9 @@
+import { PartialEntity } from "@rcp-and-plan/commons";
+
 import { Kitchenware } from "@domain/models/kitchenware/Kitchenware";
 
 export class RecipeKitchenware {
-  private _kitchenware: Kitchenware;
+  private _kitchenware: Kitchenware | PartialEntity;
   private _quantity: number;
 
   public get kitchenware() {
@@ -12,7 +14,7 @@ export class RecipeKitchenware {
     return this._quantity;
   }
 
-  private constructor(kitchenware: Kitchenware, quantity: number) {
+  private constructor(kitchenware: Kitchenware | PartialEntity, quantity: number) {
     this._kitchenware = kitchenware;
     this._quantity = quantity;
   }
@@ -24,7 +26,7 @@ export class RecipeKitchenware {
    * @param quantity - The numerical value representing the quantity of the kitchenware.
    * @returns A new instance of RecipeKitchenware initialized with the provided parameters.
    */
-  public static create(kitchenware: Kitchenware, quantity: number) {
+  public static create(kitchenware: Kitchenware | PartialEntity, quantity: number) {
     return new RecipeKitchenware(kitchenware, quantity);
   }
 
@@ -35,7 +37,7 @@ export class RecipeKitchenware {
    * @param quantity - The numerical value representing the quantity of the kitchenware.
    * @returns An instance of RecipeKitchenware initialized with the provided parameters.
    */
-  public static get(kitchenware: Kitchenware, quantity: number) {
+  public static get(kitchenware: Kitchenware | PartialEntity, quantity: number) {
     return new RecipeKitchenware(kitchenware, quantity);
   }
 }

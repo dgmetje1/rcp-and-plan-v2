@@ -1,4 +1,4 @@
-import { AggregateRoot, ensureThat, InvalidParameterError, UniqueEntityID } from "@rcp-and-plan/commons";
+import { AggregateRoot, ensureThat, InvalidParameterError, PartialEntity, UniqueEntityID } from "@rcp-and-plan/commons";
 
 import { Category } from "@domain/models/category/Category";
 import { Ingredient } from "@domain/models/ingredient/Ingredient";
@@ -91,8 +91,11 @@ export class Recipe extends AggregateRoot {
   ) {
     super(new UniqueEntityID(id));
 
-    ensureThat(time > 0, new InvalidParameterError("time must be greater than 0", "Recipe", [{ time }]));
-    ensureThat(!!categories.length, new InvalidParameterError("Recipe must belong to at least one category", "Recipe"));
+    ensureThat(time > 0, new InvalidParameterError("time must be greater than 0", Recipe.entityName, [{ time }]));
+    ensureThat(
+      !!categories.length,
+      new InvalidParameterError("Recipe must belong to at least one category", Recipe.entityName),
+    );
 
     this._difficulty = difficulty;
     this._time = time;
@@ -173,8 +176,13 @@ export class Recipe extends AggregateRoot {
     publicationDate: Date,
     publications: Record<string, { id: string; title: string; description: string }>,
     categories: Array<Category>,
-    ingredients: Array<{ ingredient: Ingredient; unit: Unit; quantity: number; isOptional: boolean }>,
-    kitchenware: Array<{ kitchenware: Kitchenware; quantity: number }>,
+    ingredients: Array<{
+      ingredient: Ingredient | PartialEntity;
+      unit: Unit | PartialEntity;
+      quantity: number;
+      isOptional: boolean;
+    }>,
+    kitchenware: Array<{ kitchenware: Kitchenware | PartialEntity; quantity: number }>,
     steps: Array<{ id: string; number: number; content: Record<string, { title: string; body: string }> }>,
   ) {
     const publicationsMap = new Map();
@@ -206,11 +214,16 @@ export class Recipe extends AggregateRoot {
     return recipe;
   }
 
-  public setIngredient(ingredient: Ingredient, unit: Unit, quantity: number, isOptional: boolean) {
+  public setIngredient(
+    ingredient: Ingredient | PartialEntity,
+    unit: Unit | PartialEntity,
+    quantity: number,
+    isOptional: boolean,
+  ) {
     const recipeIngredient = RecipeIngredient.create(ingredient, unit, quantity, isOptional);
     ensureThat(
       !this._ingredients.find(ingredient => ingredient.ingredient.id === recipeIngredient.ingredient.id),
-      new InvalidParameterError("Ingredient already present", "Recipe", [
+      new InvalidParameterError("Ingredient already present", Recipe.entityName, [
         { id: this.id.toValue(), ingredientId: recipeIngredient.ingredient.id },
       ]),
     );
@@ -219,11 +232,11 @@ export class Recipe extends AggregateRoot {
     return recipeIngredient;
   }
 
-  public setKitchenware(kitchenware: Kitchenware, quantity: number) {
+  public setKitchenware(kitchenware: Kitchenware | PartialEntity, quantity: number) {
     const recipeKitchenware = RecipeKitchenware.create(kitchenware, quantity);
     ensureThat(
       !this._kitchenware.find(kitchenware => kitchenware.kitchenware.id === recipeKitchenware.kitchenware.id),
-      new InvalidParameterError("Tool already present", "Recipe", [
+      new InvalidParameterError("Tool already present", Recipe.entityName, [
         { id: this.id.toValue(), toolId: recipeKitchenware.kitchenware.id },
       ]),
     );
@@ -257,5 +270,11 @@ export class Recipe extends AggregateRoot {
   public addStep(number: number, content: Record<string, { title: string; body: string }>): void {
     const recipeStep = this.setStep(number, content);
     this.addDomainEvent(new RecipeStepAddedDomainEvent(this._id, recipeStep));
+  }
+
+  public removeIngredient(ingredientId: string) {
+    const ingrdientIndex = this._ingredients.findIndex(ingredient => ingredient.ingredient.id === ingredientId);
+    if (ingrdientIndex < 0) throw new InvalidParameterError("Unexpected ingredient to remove", Recipe.entityName);
+    return this._ingredients[ingrdientIndex];
   }
 }

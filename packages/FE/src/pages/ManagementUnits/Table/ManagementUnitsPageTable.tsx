@@ -26,7 +26,7 @@ const ManagementUnitsPageTable = <TData, TValue>({ columns, data }: ManagementUn
           <TableRow key={headerGroup.id}>
             {headerGroup.headers.map(header => {
               return (
-                <TableHead key={header.id}>
+                <TableHead key={header.id} style={{ maxWidth: header.column.columnDef.size }}>
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                 </TableHead>
               );
@@ -39,7 +39,9 @@ const ManagementUnitsPageTable = <TData, TValue>({ columns, data }: ManagementUn
           table.getRowModel().rows.map(row => (
             <TableRow data-state={row.getIsSelected() && "selected"} key={row.id}>
               {row.getVisibleCells().map(cell => (
-                <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                <TableCell key={cell.id} style={{ maxWidth: cell.column.columnDef.size }}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
               ))}
             </TableRow>
           ))

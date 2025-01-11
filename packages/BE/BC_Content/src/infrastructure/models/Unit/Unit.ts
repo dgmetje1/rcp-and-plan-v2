@@ -3,7 +3,7 @@ import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 import { UnitAttributes, UnitCreationAttributes } from "./types";
 
-@Table({ timestamps: false, tableName: "units" })
+@Table({ tableName: "units" })
 export class Unit extends Model<UnitAttributes, UnitCreationAttributes> {
   @PrimaryKey
   @Column(DataTypes.STRING)

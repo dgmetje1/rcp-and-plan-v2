@@ -1,7 +1,10 @@
-import { Application, Request, Response, Router } from "express";
+import { InvalidParameterError } from "@rcp-and-plan/commons";
+import { Application, NextFunction, Request, Response, Router } from "express";
 import Container, { Service } from "typedi";
 
-import { UnitsListResponse } from "@dtos/index";
+import { IUnitApplication } from "@application/commands/units/IUnitApplication";
+import { UnitApplication } from "@application/commands/units/UnitApplication";
+import { UnitCreateRequest, UnitEditRequest, UnitsListResponse } from "@dtos/index";
 import { IUnitQueries, UnitQueries } from "@infrastructure/units/queries";
 
 /**
@@ -11,6 +14,35 @@ import { IUnitQueries, UnitQueries } from "@infrastructure/units/queries";
  *   description: Use cases for units content
  * components:
  *   schemas:
+ *     UnitLanguageRequest:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *         singularName:
+ *           type: string
+ *         shortName:
+ *           type: string
+ *     UnitCreateRequest:
+ *       type: object
+ *       properties:
+ *         isVisible:
+ *           type: boolean
+ *         content:
+ *           type: object
+ *           additionalProperties:
+ *             $ref: '#/components/schemas/UnitLanguageRequest'
+ *     UnitEditRequest:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         isVisible:
+ *           type: boolean
+ *         content:
+ *           type: object
+ *           additionalProperties:
+ *             $ref: '#/components/schemas/UnitLanguageRequest'
  *     UnitsListResponse:
  *       type: array
  *       items:
@@ -57,6 +89,9 @@ class UnitsRouter {
    */
   private routes(): void {
     this.router.get("/", this.getUnits);
+    this.router.post("/", this.createUnit);
+    this.router.put("/", this.editUnit);
+    this.router.delete("/:id", this.deleteUnit);
   }
 
   /**
@@ -65,6 +100,8 @@ class UnitsRouter {
    *   get:
    *     summary: Returns a list of units.
    *     tags: [Units]
+   *     parameters:
+   *       - $ref: '#/components/parameters/Accept-Language'
    *     responses:
    *       200:
    *         content:
@@ -77,6 +114,117 @@ class UnitsRouter {
     const response = await unitQueries.getData();
 
     res.send(response);
+  }
+
+  /**
+   * @openapi
+   * /units:
+   *   post:
+   *     summary: Creates a new unit.
+   *     tags: [Units]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/UnitCreateRequest'
+   *     responses:
+   *       201:
+   *         description: Unit created
+   *       400:
+   *         description: Error in request fields
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Exception'
+   */
+  private async createUnit(req: Request<unknown, unknown, UnitCreateRequest>, res: Response, next: NextFunction) {
+    try {
+      const unitApplication = Container.get<IUnitApplication>(UnitApplication);
+
+      await unitApplication.createUnit(req.body);
+
+      res.status(201).send();
+    } catch (err) {
+      if (err instanceof InvalidParameterError) {
+        return res.status(400).send({ type: err.type, exceptionMessage: err.message, params: err.params });
+      }
+      next(err);
+    }
+  }
+
+  /**
+   * @openapi
+   * /units:
+   *   put:
+   *     summary: Edits a unit.
+   *     tags: [Units]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/UnitEditRequest'
+   *     responses:
+   *       204:
+   *         description: Unit modified
+   *       400:
+   *         description: Error in request fields
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Exception'
+   */
+  private async editUnit(req: Request<unknown, unknown, UnitEditRequest>, res: Response, next: NextFunction) {
+    try {
+      const unitApplication = Container.get<IUnitApplication>(UnitApplication);
+
+      await unitApplication.editUnit(req.body);
+
+      res.status(204).send();
+    } catch (err) {
+      if (err instanceof InvalidParameterError) {
+        return res.status(400).send({ type: err.type, exceptionMessage: err.message, params: err.params });
+      }
+      next(err);
+    }
+  }
+
+  /**
+   * @openapi
+   * /units/{id}:
+   *   delete:
+   *     summary: Deletes a unit.
+   *     tags: [Units]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         type: string
+   *         required: true
+   *         description: ID of the recipe to get.
+   *     responses:
+   *       204:
+   *         description: Unit deleted
+   *       400:
+   *         description: Error in request fields
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Exception'
+   */
+  private async deleteUnit(req: Request<{ id: string }>, res: Response, next: NextFunction) {
+    try {
+      const unitApplication = Container.get<IUnitApplication>(UnitApplication);
+
+      await unitApplication.deleteUnit(req.params.id);
+
+      res.status(204).send();
+    } catch (err) {
+      if (err instanceof InvalidParameterError) {
+        return res.status(400).send({ type: err.type, exceptionMessage: err.message, params: err.params });
+      }
+      next(err);
+    }
   }
 }
 

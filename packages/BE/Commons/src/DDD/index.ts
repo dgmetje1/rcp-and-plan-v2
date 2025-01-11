@@ -5,4 +5,5 @@ export * from "./events/EventDispatcher";
 export * from "./events/Handle";
 export * from "./events/IHandle";
 export * from "./Indentifier";
+export * from "./PartialEntity";
 export * from "./UniqueEntityID";

@@ -1,9 +1,11 @@
+import { PartialEntity } from "@rcp-and-plan/commons";
+
 import { Ingredient } from "@domain/models/ingredient/Ingredient";
 import { Unit } from "@domain/models/unit/Unit";
 
 export class RecipeIngredient {
-  private _ingredient: Ingredient;
-  private _unit: Unit;
+  private _ingredient: Ingredient | PartialEntity;
+  private _unit: Unit | PartialEntity;
   private _quantity: number;
   private _isOptional: boolean;
 
@@ -23,7 +25,12 @@ export class RecipeIngredient {
     return this._isOptional;
   }
 
-  private constructor(ingredient: Ingredient, unit: Unit, quantity: number, isOptional: boolean) {
+  private constructor(
+    ingredient: Ingredient | PartialEntity,
+    unit: Unit | PartialEntity,
+    quantity: number,
+    isOptional: boolean,
+  ) {
     this._ingredient = ingredient;
     this._unit = unit;
     this._quantity = quantity;
@@ -39,7 +46,12 @@ export class RecipeIngredient {
    * @param isOptional - A boolean flag indicating if the ingredient is optional. Defaults to false.
    * @returns A new instance of RecipeIngredient initialized with the provided parameters.
    */
-  public static create(ingredient: Ingredient, unit: Unit, quantity: number, isOptional: boolean = false) {
+  public static create(
+    ingredient: Ingredient | PartialEntity,
+    unit: Unit | PartialEntity,
+    quantity: number,
+    isOptional: boolean = false,
+  ) {
     return new RecipeIngredient(ingredient, unit, quantity, isOptional);
   }
 
@@ -52,7 +64,12 @@ export class RecipeIngredient {
    * @param isOptional - A boolean flag indicating if the ingredient is optional.
    * @returns An instance of RecipeIngredient initialized with the provided parameters.
    */
-  public static get(ingredient: Ingredient, unit: Unit, quantity: number, isOptional: boolean) {
+  public static get(
+    ingredient: Ingredient | PartialEntity,
+    unit: Unit | PartialEntity,
+    quantity: number,
+    isOptional: boolean,
+  ) {
     return new RecipeIngredient(ingredient, unit, quantity, isOptional);
   }
 }

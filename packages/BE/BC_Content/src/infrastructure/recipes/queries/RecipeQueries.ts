@@ -11,7 +11,7 @@ import { RecipeDailyResponse } from "@dtos/responses/RecipeDailyResponse";
 import { RecipeResponse } from "@dtos/responses/RecipeResponse";
 import { RecipesListResponse } from "@dtos/responses/RecipesListResponse";
 import { DEFAULT_LANGUAGE, Languages } from "@global_types/languages";
-import { Category, Recipe } from "@infrastructure/models";
+import { Category, Recipe, RecipeIngredient } from "@infrastructure/models";
 import { Ingredient } from "@infrastructure/models/Ingredient";
 import { Kitchenware } from "@infrastructure/models/Kitchenware";
 import { RecipePublication } from "@infrastructure/models/Recipe";
@@ -25,7 +25,7 @@ import { IRecipeQueries } from "./types";
 
 @Service()
 export class RecipeQueries implements IRecipeQueries {
-  async getEntity(id: string): Promise<RecipeModel> {
+  public async getEntity(id: string, shouldRetrieveRelatedEntities: boolean = true) {
     const result = await Recipe.findByPk(id, {
       include: [
         { model: Category, required: true },
@@ -62,18 +62,44 @@ export class RecipeQueries implements IRecipeQueries {
       result.categories.map(({ id, language, name, description }) =>
         CategoryModel.get(id, [{ language, name, description }]),
       ),
-      await getRecipeIngredients(result.dataValues.ingredients),
-      await getRecipeKitchenware(result.dataValues.kitchenware),
+      await getRecipeIngredients(result.dataValues.ingredients, shouldRetrieveRelatedEntities),
+      await getRecipeKitchenware(result.dataValues.kitchenware, shouldRetrieveRelatedEntities),
       getRecipeSteps(result.dataValues.steps),
     );
 
     return recipe;
   }
 
+  public async getEntitiesContainingUnit(id: string) {
+    const results = await RecipeIngredient.findAll({
+      attributes: ["recipe_id", "ingredient_id"],
+      where: { unit_id: id },
+    });
+
+    const processedResults = new Map<string, string[]>();
+
+    for (const result of results) {
+      const { recipe_id, ingredient_id } = result.dataValues;
+      if (processedResults.has(recipe_id)) {
+        const ingredientsList = processedResults.get(recipe_id)!;
+        ingredientsList.push(ingredient_id);
+      } else {
+        processedResults.set(recipe_id, [ingredient_id]);
+      }
+    }
+
+    return await Promise.all(
+      [...processedResults.keys()].map(async id => ({
+        recipe: await this.getEntity(id, false),
+        ingredientIds: processedResults.get(id)!,
+      })),
+    );
+  }
+
   /**
    *  @inheritdoc
    */
-  async getData(params: RecipesListQueryRequest, language: Languages): Promise<RecipesListResponse> {
+  public async getData(params: RecipesListQueryRequest, language: Languages): ReturnType<IRecipeQueries["getData"]> {
     try {
       const result = await Recipe.findAll({ ...processRecipesListParamsQuery(params, language) });
 

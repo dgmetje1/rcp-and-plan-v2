@@ -3,6 +3,8 @@ export * from "./requests/RecipeCreateStepRequest";
 export * from "./requests/RecipeIngredientRequest";
 export * from "./requests/RecipeKitchenwareRequest";
 export * from "./requests/RecipesListQueryRequest";
+export * from "./requests/units/UnitCreateRequest";
+export * from "./requests/units/UnitEditRequest";
 export * from "./responses/RecipeCategoryResponse";
 export * from "./responses/RecipeDailyResponse";
 export * from "./responses/RecipeIngredientResponse";

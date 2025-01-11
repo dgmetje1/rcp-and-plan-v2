@@ -27,6 +27,12 @@ const options = {
             default: "en",
           },
         },
+        "Access-By": {
+          name: "Access-By",
+          in: "header",
+          description: "Requester identifier",
+          schema: { type: "string" },
+        },
       },
       securitySchemes: {
         bearerAuth: {

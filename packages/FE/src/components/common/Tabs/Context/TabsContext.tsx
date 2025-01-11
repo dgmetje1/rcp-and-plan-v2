@@ -4,6 +4,6 @@ import { TabsContextValues } from "./types";
 
 const TabsContext = createContext<TabsContextValues>({} as never);
 
-export const useTabsContext = () => useContext<TabsContextValues>(TabsContext);
+export const useTabsContext = () => useContext(TabsContext);
 
 export default TabsContext;

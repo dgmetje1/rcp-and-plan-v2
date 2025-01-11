@@ -1,4 +1,6 @@
-import { get, isUndefined, omitBy } from "@/lib/imports/lodash";
+import { get } from "radash";
+
+import { isUndefined, omitBy } from "@/lib/utils";
 
 import { Config, Environment, Environments } from "./types";
 
@@ -33,6 +35,7 @@ const envConfig: Partial<Config> = omitBy(
   },
   isUndefined,
 );
+console.log(envConfig);
 
 export default {
   ...config,

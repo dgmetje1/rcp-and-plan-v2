@@ -2,8 +2,18 @@
   "api": {
     "default_error": "There has been an error while accessing API"
   },
+  "languages": {
+    "en": "English",
+    "es": "Spanish",
+    "ca": "Catalan",
+    "fr": "French"
+  },
   "common": {
-    "of": "of"
+    "of": "of",
+    "buttons": {
+      "save": "Save",
+      "cancel": "Cancel"
+    }
   },
   "menu": {
     "sidebar": {
@@ -40,6 +50,15 @@
         }
       },
       "units": {
+        "form": {
+          "button": "Create new unit",
+          "fields": {
+            "name": "Name",
+            "singular_name": "Singular name",
+            "short_name": "Short name",
+            "is_visible": "Visibility"
+          }
+        },
         "table": {
           "id": "ID",
           "name": "Name",

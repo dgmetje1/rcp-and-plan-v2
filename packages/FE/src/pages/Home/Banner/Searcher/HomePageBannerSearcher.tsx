@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import SearchOutlined from "@mui/icons-material/SearchOutlined";
 import { Box, IconButton } from "@mui/material";
+import { debounce } from "radash";
 import { useTranslation } from "react-i18next";
-import { debounce } from "@/lib/imports/lodash";
 
 import { useHomePageContext } from "../../Context";
 import StyledHomePageBannerSearcherTextField from "./styled";
@@ -11,7 +11,10 @@ const HomePageBannerSearcher = () => {
   const { t } = useTranslation();
   const { setSearch } = useHomePageContext();
 
-  const debouncedChangeHandler = useMemo(() => debounce(event => setSearch(event.target.value), 100), [setSearch]);
+  const debouncedChangeHandler = useMemo(
+    () => debounce({ delay: 100 }, event => setSearch(event.target.value)),
+    [setSearch],
+  );
 
   return (
     <Box position="relative">
