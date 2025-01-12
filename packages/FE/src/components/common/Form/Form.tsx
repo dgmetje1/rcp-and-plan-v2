@@ -11,6 +11,7 @@ const Form = <FormValues extends object>({
   onFormSubmit,
   onFormSubmitError,
   validationSchema,
+  ref,
   ...rest
 }: PropsWithChildren<FormProps<FormValues>>) => {
   const formProps = useMemo(
@@ -27,7 +28,7 @@ const Form = <FormValues extends object>({
   const { handleSubmit, reset } = methods;
 
   const onFormSubmitValid = useCallback<typeof onFormSubmit>(
-    values => {
+    (values: FormValues) => {
       onFormSubmit(values);
       reset();
     },
@@ -45,7 +46,7 @@ const Form = <FormValues extends object>({
 
   return (
     <FormProvider {...methods}>
-      <form {...rest} onSubmit={onSubmitted}>
+      <form {...rest} onSubmit={onSubmitted} ref={ref}>
         {children}
       </form>
     </FormProvider>
