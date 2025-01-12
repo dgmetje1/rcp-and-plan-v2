@@ -1,5 +1,5 @@
-import { Fragment, useMemo } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Fragment, useMemo, useState } from "react";
+import { Box, Button, Grow, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
@@ -15,6 +15,7 @@ const ManagementUnitsPageForm = () => {
   const { t } = useTranslation();
 
   const { selectedUnit, isFormOpen, toggleFormOpen, closeForm } = useManagementUnitsPageContext();
+  const [isFormMounted, setIsFormMounted] = useState(isFormOpen);
 
   const { data } = useSuspenseGetUnits();
 
@@ -71,44 +72,49 @@ const ManagementUnitsPageForm = () => {
       >
         {t("pages.management.units.form.button")}
       </Button>
-      {isFormOpen && (
-        <Form defaultValues={defaultValues} onFormSubmit={onFormSubmit} validationSchema={validationSchema}>
-          <Box
-            alignItems="center"
-            boxShadow="1px 4px 6px #aaa"
-            columnGap={3}
-            display="grid"
-            gridTemplateColumns="minmax(70px,max-content) repeat(2,minmax(120px, max-content)) auto"
-            mt={2}
-            p={3}
-            rowGap={2}
-          >
-            {languages.map(language => (
-              <Fragment key={language}>
-                <Typography fontWeight="bold">{t(`languages.${language}`)}</Typography>
-                <FormTextField label={t("pages.management.units.form.fields.name")} name={`content.${language}.name`} />
-                <FormTextField
-                  label={t("pages.management.units.form.fields.singular_name")}
-                  name={`content.${language}.singularName`}
-                />
-                <FormTextField
-                  label={t("pages.management.units.form.fields.short_name")}
-                  name={`content.${language}.shortName`}
-                  sx={{ maxWidth: "140px" }}
-                />
-              </Fragment>
-            ))}
-            <FormCheckbox label={t("pages.management.units.form.fields.is_visible")} name="isVisible" />
-            <Box display="flex" gap={2} gridColumn="1 / 1">
-              <Button color="secondary" onClick={closeForm} size="large">
-                {t("common.buttons.cancel")}
-              </Button>
-              <Button size="large" type="submit" variant="contained">
-                {t("common.buttons.save")}
-              </Button>
+      {(isFormOpen || isFormMounted) && (
+        <Grow in={isFormOpen} onEnter={() => setIsFormMounted(true)} onExited={() => setIsFormMounted(false)}>
+          <Form defaultValues={defaultValues} onFormSubmit={onFormSubmit} validationSchema={validationSchema}>
+            <Box
+              alignItems="center"
+              boxShadow="1px 4px 6px #aaa"
+              columnGap={3}
+              display="grid"
+              gridTemplateColumns="minmax(70px,max-content) repeat(2,minmax(120px, max-content)) auto"
+              mt={2}
+              p={3}
+              rowGap={2}
+            >
+              {languages.map(language => (
+                <Fragment key={language}>
+                  <Typography fontWeight="bold">{t(`languages.${language}`)}</Typography>
+                  <FormTextField
+                    label={t("pages.management.units.form.fields.name")}
+                    name={`content.${language}.name`}
+                  />
+                  <FormTextField
+                    label={t("pages.management.units.form.fields.singular_name")}
+                    name={`content.${language}.singularName`}
+                  />
+                  <FormTextField
+                    label={t("pages.management.units.form.fields.short_name")}
+                    name={`content.${language}.shortName`}
+                    sx={{ maxWidth: "140px" }}
+                  />
+                </Fragment>
+              ))}
+              <FormCheckbox label={t("pages.management.units.form.fields.is_visible")} name="isVisible" />
+              <Box display="flex" gap={2} gridColumn="1 / 1">
+                <Button color="secondary" onClick={closeForm} size="large">
+                  {t("common.buttons.cancel")}
+                </Button>
+                <Button size="large" type="submit" variant="contained">
+                  {t("common.buttons.save")}
+                </Button>
+              </Box>
             </Box>
-          </Box>
-        </Form>
+          </Form>
+        </Grow>
       )}
     </Box>
   );
