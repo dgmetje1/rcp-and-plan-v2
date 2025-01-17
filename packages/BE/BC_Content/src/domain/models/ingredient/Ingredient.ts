@@ -1,32 +1,28 @@
-import { ensureThat, InvalidParameterError, TranslationsNotFoundError } from "@rcp-and-plan/commons";
+import {
+  AggregateRoot,
+  ensureThat,
+  InvalidParameterError,
+  TranslationsNotFoundError,
+  UniqueEntityID,
+} from "@rcp-and-plan/commons";
 
 import { TranslatableContent } from "@domain/shared/TranslatableContent";
 import { AvailableLanguages, DEFAULT_LANGUAGE, Languages } from "@global_types/languages";
 
-import { IngredientTranslatableContent } from "./types";
+import { IngredientContent, IngredientTranslatableContent } from "./types";
 
-export class Ingredient {
-  private _id: string;
+export class Ingredient extends AggregateRoot {
   private _content: TranslatableContent<IngredientTranslatableContent>;
 
-  public get id() {
-    return this._id;
+  public get content() {
+    return this._content;
   }
 
-  private constructor(id: string, content: { language: string; name: string; singularName: string }[]) {
-    this._id = id;
+  private constructor(id: string | undefined, content: IngredientContent) {
+    super(new UniqueEntityID(id));
     this._content = new Map();
 
-    content.forEach(({ language, name, singularName }) => {
-      ensureThat(
-        language in AvailableLanguages,
-        new InvalidParameterError(`Language must be one of ${Object.values(AvailableLanguages)}`, "Ingredient", [
-          { language },
-        ]),
-      );
-
-      this._content.set(language as Languages, { name, singularName });
-    });
+    this._setContent(content);
   }
 
   /**
@@ -36,8 +32,17 @@ export class Ingredient {
    * @param content - An array of objects containing language, name, and singularName for the Ingredient.
    * @returns A new instance of Ingredient initialized with the provided id and content.
    */
-  public static get(id: string, content: { language: string; name: string; singularName: string }[]) {
+  public static get(id: string, content: IngredientContent) {
     return new Ingredient(id, content);
+  }
+  /**
+   * Creates a new instance of Ingredient with the provided content.
+   *
+   * @param content - An array of objects containing language, name, and singularName for the Ingredient.
+   * @returns A new instance of Ingredient initialized with the provided id and content.
+   */
+  public static create(content: IngredientContent) {
+    return new Ingredient(undefined, content);
   }
 
   /**
@@ -54,5 +59,34 @@ export class Ingredient {
       throw new TranslationsNotFoundError("Ingredient translation not found", language, [{ id: this._id }]);
 
     return translatedContent;
+  }
+
+  /**
+   * Updates the content of the Ingredient with the provided content.
+   *
+   * @param content - An array of objects containing language, name, and singularName for the Ingredient.
+   */
+  public edit(content: IngredientContent) {
+    const currentLanguages = [...this._content.keys()];
+    this._setContent(content);
+    return currentLanguages;
+  }
+
+  /**
+   * Deletes the Ingredient.
+   */
+  public delete() {}
+
+  private _setContent(content: IngredientContent) {
+    content.forEach(({ language, name, singularName }) => {
+      ensureThat(
+        language in AvailableLanguages,
+        new InvalidParameterError(`Language must be one of ${Object.values(AvailableLanguages)}`, "Ingredient", [
+          { language },
+        ]),
+      );
+
+      this._content.set(language as Languages, { name, singularName });
+    });
   }
 }

@@ -5,7 +5,7 @@ import { routeTree } from "./routeTree.gen";
 
 let singletonRouter: ReturnType<typeof createRouter> | null = null;
 
-const getRouter = (queryClient: QueryClient) => {
+const getRouter = (queryClient: QueryClient): typeof singletonRouter => {
   if (singletonRouter) return singletonRouter;
 
   singletonRouter = createRouter({

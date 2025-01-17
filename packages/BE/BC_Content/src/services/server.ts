@@ -10,6 +10,7 @@ import { Container } from "typedi";
 
 import swaggerDocument from "./documentation.json";
 import { errorHandler } from "./middlewares/errorHandler";
+import IngredientsRouter from "./routes/ingredients.route";
 import RecipesRouter from "./routes/recipes.route";
 import UnitsRouter from "./routes/units.route";
 
@@ -52,6 +53,8 @@ class App {
     recipeRouter.setupRouter(this.app);
     const unitsRouter = Container.get(UnitsRouter);
     unitsRouter.setupRouter(this.app);
+    const ingredientsRouter = Container.get(IngredientsRouter);
+    ingredientsRouter.setupRouter(this.app);
   }
 
   private swagger(): void {

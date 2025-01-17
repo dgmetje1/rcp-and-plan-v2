@@ -119,7 +119,7 @@ export class RecipeRepository implements IRecipeRepository {
       {
         is_optional: recipeIngredient.isOptional,
         unit_id: recipeIngredient.unit.id.toString(),
-        ingredient_id: recipeIngredient.ingredient.id,
+        ingredient_id: recipeIngredient.ingredient.id.toString(),
         quantity: recipeIngredient.quantity,
         recipe_id: entity.id.toValue() as string,
       },
@@ -172,7 +172,7 @@ export class RecipeRepository implements IRecipeRepository {
    */
   private async removeRecipeIngredient(t: Transaction, entity: Recipe, recipeIngredient: RecipeIngredient) {
     await RecipeIngredientDB.destroy({
-      where: { recipe_id: entity.id.toString(), ingredient_id: recipeIngredient.ingredient.id },
+      where: { recipe_id: entity.id.toString(), ingredient_id: recipeIngredient.ingredient.id.toString() },
       transaction: t,
     });
   }

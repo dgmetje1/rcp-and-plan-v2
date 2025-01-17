@@ -32,6 +32,23 @@ const Menu = forwardRef<HTMLDivElement, PropsWithChildren<MenuProps>>(
       [t, toggleMenu],
     );
 
+    const managementLinks = useMemo(
+      () => (
+        <>
+          <Link activeOptions={{ exact: true }} onClick={toggleMenu(false)} to="/management">
+            {t("menu.sidebar.management")}
+          </Link>
+          <Link onClick={toggleMenu(false)} to="/management/units">
+            {t("menu.sidebar.units")}
+          </Link>
+          <Link onClick={toggleMenu(false)} to="/management/ingredients">
+            {t("menu.sidebar.ingredients")}
+          </Link>
+        </>
+      ),
+      [t, toggleMenu],
+    );
+
     return (
       <Drawer anchor="left" onClose={toggleMenu(false)} open={open} {...drawerProps} PaperProps={{ ref: ref }}>
         <Box display="flex" justifyContent="center" m={2} mb={4}>
@@ -62,12 +79,7 @@ const Menu = forwardRef<HTMLDivElement, PropsWithChildren<MenuProps>>(
                 {regularLinks}
               </TabContent>
               <TabContent contentIndex={1} display="flex" flexDirection="column" rowGap={2}>
-                <Link activeOptions={{ exact: true }} onClick={toggleMenu(false)} to="/management">
-                  {t("menu.sidebar.management")}
-                </Link>
-                <Link onClick={toggleMenu(false)} to="/management/units">
-                  {t("menu.sidebar.units")}
-                </Link>
+                {managementLinks}
               </TabContent>
             </Tabs>
           ) : (

@@ -9,12 +9,18 @@ import { useCreateUnit, useEditUnit, useSuspenseGetUnits } from "@/queries/units
 import { UnitCreateDTO } from "@/types/unit";
 import { languages } from "@/types/user";
 
-import { useManagementUnitsPageContext } from "../Context";
+import { useManagementItemsPageContext } from "../../../context/ManagementItemsPage";
 
 const ManagementUnitsPageForm = () => {
   const { t } = useTranslation();
 
-  const { selectedUnit, isFormOpen, toggleFormOpen, closeForm } = useManagementUnitsPageContext();
+  const {
+    selectedItem: selectedUnit,
+    setSelectedItem,
+    isFormOpen,
+    toggleFormOpen,
+    closeForm,
+  } = useManagementItemsPageContext();
   const [isFormMounted, setIsFormMounted] = useState(isFormOpen);
 
   const { data } = useSuspenseGetUnits();
@@ -62,11 +68,16 @@ const ManagementUnitsPageForm = () => {
     closeForm();
   };
 
+  const onCreateButtonClicked = () => {
+    setSelectedItem(undefined);
+    toggleFormOpen();
+  };
+
   return (
     <Box display="flex" flexDirection="column" py={3}>
       <Button
         disabled={isFormOpen}
-        onClick={() => toggleFormOpen()}
+        onClick={onCreateButtonClicked}
         sx={{ color: "grey.800", ml: "auto", fontWeight: 600 }}
         variant="contained"
       >

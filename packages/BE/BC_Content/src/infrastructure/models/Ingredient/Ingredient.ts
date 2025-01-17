@@ -11,14 +11,15 @@ export class Ingredient extends Model<IngredientAttributes, IngredientCreationAt
   @Column(DataTypes.STRING)
   declare id: string;
 
+  @PrimaryKey
+  @Column(DataTypes.STRING)
+  declare language: string;
+
   @Column(DataTypes.STRING)
   declare name: string;
 
   @Column(DataTypes.STRING)
   declare singular_name: string;
-
-  @Column(DataTypes.STRING)
-  declare language: string;
 
   @BelongsToMany(() => Recipe, () => RecipeIngredient)
   declare recipes: Recipe[];

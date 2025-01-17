@@ -1,4 +1,5 @@
 import { Ingredient } from "@domain/models/ingredient/Ingredient";
+import { IngredientsListResponse } from "@dtos/index";
 
 export interface IIngredientQueries {
   /**
@@ -6,4 +7,6 @@ export interface IIngredientQueries {
    * @param id Entity identifier
    */
   getEntity(id: string): Promise<Ingredient>;
+
+  getData(): Promise<IngredientsListResponse>;
 }
