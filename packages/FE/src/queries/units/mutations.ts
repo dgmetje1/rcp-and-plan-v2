@@ -10,7 +10,7 @@ export const useCreateUnit = () => {
   const queryClient = useQueryClient();
   const createUnit = async (data: UnitCreateDTO) => {
     const api = new Api();
-    const response = await api.post("units", data, { withAuth: true });
+    const response = await api.post("units", data);
 
     return response;
   };
@@ -22,11 +22,12 @@ export const useCreateUnit = () => {
     },
   });
 };
+
 export const useEditUnit = () => {
   const queryClient = useQueryClient();
   const editUnit = async (data: UnitEditDTO) => {
     const api = new Api();
-    const response = await api.put("units", data, { withAuth: true });
+    const response = await api.put("units", data);
 
     return response;
   };
@@ -43,7 +44,7 @@ export const useDeleteUnit = () => {
   const queryClient = useQueryClient();
   const deleteUnit = async (id: Unit["id"]) => {
     const api = new Api();
-    const response = await api.delete(`units/${id}`, null, { withAuth: true });
+    const response = await api.delete(`units/${id}`, null);
 
     return response;
   };

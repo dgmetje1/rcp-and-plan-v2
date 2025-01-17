@@ -1,3 +1,4 @@
+export * from "./ingredients/IngredientsListOutput";
 export * from "./RecipeCategoryOutput";
 export * from "./RecipeDailyOutput";
 export * from "./RecipeIngredientOutput";

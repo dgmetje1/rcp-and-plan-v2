@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { Info } from "@mui/icons-material";
 import { flexRender, getCoreRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-import { ManagementUnitsPageTableProps } from "./types";
+import { DataTableProps } from "./types";
 
-const ManagementUnitsPageTable = <TData, TValue>({ columns, data }: ManagementUnitsPageTableProps<TData, TValue>) => {
+const DataTable = <TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
@@ -47,8 +48,11 @@ const ManagementUnitsPageTable = <TData, TValue>({ columns, data }: ManagementUn
           ))
         ) : (
           <TableRow>
-            <TableCell className="h-24 text-center" colSpan={columns.length}>
-              No results.
+            <TableCell className="h-48 text-center" colSpan={columns.length}>
+              <div className="flex gap-1 w-full justify-center items-center text-gray-500">
+                <Info />
+                No results
+              </div>
             </TableCell>
           </TableRow>
         )}
@@ -56,4 +60,4 @@ const ManagementUnitsPageTable = <TData, TValue>({ columns, data }: ManagementUn
     </Table>
   );
 };
-export default ManagementUnitsPageTable;
+export default DataTable;

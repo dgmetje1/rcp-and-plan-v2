@@ -7,6 +7,7 @@ import { ApiException } from "./apiException";
 import { RequestConfig } from "./types";
 
 const MAX_RETRIES = 3;
+const defaultConfig: RequestConfig = { withAuth: true };
 
 export class Api {
   private static _accessToken: string | null;
@@ -33,10 +34,12 @@ export class Api {
 
   public async request<T>(method: string, url: string, config?: RequestConfig, retry: number = 0): Promise<T> {
     try {
+      const requestConfig = { ...defaultConfig, ...config };
       const headers: AxiosRequestConfig["headers"] = {
         "Accept-Language": Api._lang,
       };
-      if (config?.withAuth) {
+
+      if (requestConfig.withAuth) {
         if (!Api._accessToken) throw new ApiException("missing-user-token", "Missing user token");
         headers.Authorization = `Bearer ${Api._accessToken}`;
       }
@@ -44,7 +47,7 @@ export class Api {
         method,
         url,
         headers,
-        ...config,
+        ...requestConfig,
       });
       return response.data;
     } catch (err: unknown) {

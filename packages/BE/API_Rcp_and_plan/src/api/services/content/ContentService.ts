@@ -1,4 +1,7 @@
 import {
+  IngredientCreateRequest,
+  IngredientEditRequest,
+  IngredientsListResponse,
   RecipeCreateRequest,
   RecipeCreateStepsRequest,
   RecipeDailyResponse,
@@ -75,6 +78,25 @@ export class ContentService {
 
   public deleteUnit(id: string, headers: IncomingHttpHeaders) {
     return this._client.delete(`/units/${id}`, { headers: propagateHeaders(headers) });
+  }
+  //#endregion
+
+  //#region Ingredients
+
+  public getIngredients(headers: IncomingHttpHeaders) {
+    return this._client.get<IngredientsListResponse>("/ingredients", { headers: propagateHeaders(headers) });
+  }
+
+  public createIngredient(request: IngredientCreateRequest, headers: IncomingHttpHeaders) {
+    return this._client.post("/ingredients", request, { headers: propagateHeaders(headers) });
+  }
+
+  public editIngredient(request: IngredientEditRequest, headers: IncomingHttpHeaders) {
+    return this._client.put("/ingredients", request, { headers: propagateHeaders(headers) });
+  }
+
+  public deleteIngredient(id: string, headers: IncomingHttpHeaders) {
+    return this._client.delete(`/ingredients/${id}`, { headers: propagateHeaders(headers) });
   }
   //#endregion
 }

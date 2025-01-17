@@ -1,6 +1,8 @@
 import { Category } from "./category";
 import { Ingredient } from "./ingredients";
 import { Tool } from "./kitchenware";
+import { Unit } from "./unit";
+import { Language } from "./user";
 
 export enum RecipeDifficulty {
   EASY = 1,
@@ -23,10 +25,17 @@ export type Recipe = {
   author: string;
   publicationDate: Date;
   categories: Category[];
-  ingredients: Ingredient[];
+  ingredients: RecipeIngredient[];
   kitchenware: Tool[];
   steps: RecipeStep[];
 };
+
+export type RecipeIngredient = Pick<Ingredient, "id"> &
+  Ingredient["content"][Language] & {
+    quantity: number;
+    optional: boolean;
+    units: Pick<Unit, "id" | "isVisible"> & Unit["content"][Language];
+  };
 
 export type RecipeStep = {
   id: string;

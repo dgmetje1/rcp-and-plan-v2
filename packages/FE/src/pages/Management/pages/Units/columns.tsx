@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { Unit } from "@/types/unit";
 
-import ManagementUnitsPageTableActions from "./Table/Actions";
+import ManagementUnitsPageTableActions from "./TableActions";
 
 export const columns: ColumnDef<Unit>[] = [
   {

@@ -26,7 +26,8 @@
       "purchase_list": "Purchase list",
       "management_title": "Gestión",
       "management": "Home",
-      "units": "Units"
+      "units": "Units",
+      "ingredients": "Ingredients"
     }
   },
   "pages": {
@@ -47,6 +48,20 @@
           "ingredients": "Ingredients",
           "kitchenware": "Kitchenware",
           "users": "Users"
+        }
+      },
+      "ingredients": {
+        "form": {
+          "button": "Create new ingredient",
+          "fields": {
+            "name": "Name",
+            "singular_name": "Singular name"
+          }
+        },
+        "table": {
+          "id": "ID",
+          "name": "Name",
+          "singular_name": "Singular name"
         }
       },
       "units": {

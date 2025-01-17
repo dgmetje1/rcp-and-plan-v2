@@ -1,14 +1,14 @@
+import { Language } from "./user";
+
 export type Ingredient = {
   id: string;
-  name: string;
-  singularName: string;
-  quantity: number;
-  optional: boolean;
-  units: IngredientUnits;
+  content: Partial<Record<Language, IngredientTranslatableContent>>;
 };
 
-export type IngredientUnits = {
-  id: string;
-  name: string;
-  shortName: string;
-};
+export type IngredientTranslatableContent = { name: string; singularName: string };
+
+export type IngredientsDTO = Ingredient[];
+
+export type IngredientCreateDTO = Omit<Ingredient, "id">;
+
+export type IngredientEditDTO = Ingredient;

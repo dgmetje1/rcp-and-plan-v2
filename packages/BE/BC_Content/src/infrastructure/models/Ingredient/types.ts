@@ -10,4 +10,4 @@ export interface IngredientAttributes {
   recipes: Recipe[];
 }
 
-export interface IngredientCreationAttributes extends Optional<IngredientAttributes, "id"> {}
+export interface IngredientCreationAttributes extends Optional<IngredientAttributes, "id" | "recipes"> {}

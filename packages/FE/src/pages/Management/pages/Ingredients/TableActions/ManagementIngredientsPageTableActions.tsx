@@ -7,24 +7,26 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDeleteUnit } from "@/queries/units";
 
-import { useManagementUnitsPageContext } from "../../Context";
-import { ManagementUnitsPageTableActionsProps } from "./types";
+import { useManagementItemsPageContext } from "../../../context/ManagementItemsPage";
+import { ManagementIngredientsPageTableActionsProps } from "./types";
 
-const ManagementUnitsPageTableActions = ({ id }: ManagementUnitsPageTableActionsProps) => {
-  const { setSelectedUnit, toggleFormOpen } = useManagementUnitsPageContext();
-
-  const { mutateAsync: deleteAsync } = useDeleteUnit();
+const ManagementIngredientsPageTableActions = ({ id }: ManagementIngredientsPageTableActionsProps) => {
+  const {
+    setSelectedItem: setSelectedIngredient,
+    toggleFormOpen,
+    toggleConfirmModalOpen,
+  } = useManagementItemsPageContext();
 
   const onEditClicked = useCallback(() => {
-    setSelectedUnit(id);
+    setSelectedIngredient(id);
     toggleFormOpen();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const onDeleteClicked = useCallback(() => {
-    deleteAsync(id);
+    setSelectedIngredient(id);
+    toggleConfirmModalOpen();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
@@ -43,4 +45,4 @@ const ManagementUnitsPageTableActions = ({ id }: ManagementUnitsPageTableActions
   );
 };
 
-export default ManagementUnitsPageTableActions;
+export default ManagementIngredientsPageTableActions;
