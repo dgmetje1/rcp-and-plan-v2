@@ -68,7 +68,8 @@
         "table": {
           "id": "ID",
           "name": "Name",
-          "singular_name": "Singular name"
+          "singular_name": "Singular name",
+          "translated": "Translated"
         }
       },
       "units": {
