@@ -1,20 +1,32 @@
+import { useMemo } from "react";
 import Box from "@mui/material/Box";
 import { Trans, useTranslation } from "react-i18next";
 
 import DataTable from "@/components/common/DataTable";
 import { useDeleteIngredient, useSuspenseGetIngredients } from "@/queries/ingredients";
+import { languages } from "@/types/user";
 
 import ManagementItemsPageContext, { useManagementItemsGetContextValues } from "../../context/ManagementItemsPage";
 import ManagementPageConfirmDeleteModal from "../../modals/ConfirmDelete";
 import { columns } from "./columns";
 import ManagementIngredientsPageForm from "./Form";
+import { ManagementIngredientValue } from "./types";
 
 const ManagementIngredientsPage = () => {
   const { t } = useTranslation();
   const contextValues = useManagementItemsGetContextValues();
   const { isConfirmModalOpen, selectedItem, closeConfirmModal } = contextValues;
 
-  const { data: ingredients } = useSuspenseGetIngredients();
+  const { data } = useSuspenseGetIngredients();
+
+  const ingredients = useMemo<ManagementIngredientValue[]>(
+    () =>
+      data.map(ingredient => ({
+        ...ingredient,
+        isFullyTranslated: Object.keys(ingredient.content).length === languages.length,
+      })),
+    [data],
+  );
 
   const { mutateAsync: deleteAsync } = useDeleteIngredient();
 
