@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import { Trans, useTranslation } from "react-i18next";
 
 import DataTable from "@/components/common/DataTable";
 import { useDeleteUnit, useSuspenseGetUnits } from "@/queries/units";
@@ -9,6 +10,7 @@ import { columns } from "./columns";
 import ManagementUnitsPageForm from "./Form";
 
 const ManagementUnitsPage = () => {
+  const { t } = useTranslation();
   const contextValues = useManagementItemsGetContextValues();
   const { isConfirmModalOpen, selectedItem, closeConfirmModal } = contextValues;
 
@@ -27,12 +29,12 @@ const ManagementUnitsPage = () => {
         <ManagementUnitsPageForm />
         <DataTable columns={columns} data={units} />
         <ManagementPageConfirmDeleteModal
-          buttonText="Confirm"
-          description="This action cannot be undone. Are you sure you want to permanently delete this file from our servers?"
+          buttonText={t("pages.management.units.modals.confirm_delete.button_text")}
+          description={<Trans i18nKey="pages.management.units.modals.confirm_delete.description" />}
           onButtonClicked={onConfirmClicked}
           onOpenChange={closeConfirmModal}
           open={isConfirmModalOpen}
-          title="Are you absolutely sure?"
+          title={t("pages.management.units.modals.confirm_delete.title")}
         />
       </ManagementItemsPageContext>
     </Box>

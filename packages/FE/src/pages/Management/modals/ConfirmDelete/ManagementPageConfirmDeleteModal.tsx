@@ -24,7 +24,7 @@ const ManagementPageConfirmDeleteModal = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description} </DialogDescription>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button onClick={onButtonClicked} type="submit">
