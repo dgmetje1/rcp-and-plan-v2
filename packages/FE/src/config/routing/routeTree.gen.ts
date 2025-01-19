@@ -25,6 +25,9 @@ import { Route as MainLayoutRecipeIdImport } from './routes/_mainLayout/recipe.$
 const ManagementIndexLazyImport = createFileRoute('/management/')()
 const MainLayoutIndexLazyImport = createFileRoute('/_mainLayout/')()
 const ManagementUnitsLazyImport = createFileRoute('/management/units')()
+const ManagementKitchenwareLazyImport = createFileRoute(
+  '/management/kitchenware',
+)()
 const ManagementIngredientsLazyImport = createFileRoute(
   '/management/ingredients',
 )()
@@ -71,6 +74,14 @@ const ManagementUnitsLazyRoute = ManagementUnitsLazyImport.update({
   getParentRoute: () => ManagementRoute,
 } as any).lazy(() =>
   import('./routes/management/units.lazy').then((d) => d.Route),
+)
+
+const ManagementKitchenwareLazyRoute = ManagementKitchenwareLazyImport.update({
+  id: '/kitchenware',
+  path: '/kitchenware',
+  getParentRoute: () => ManagementRoute,
+} as any).lazy(() =>
+  import('./routes/management/kitchenware.lazy').then((d) => d.Route),
 )
 
 const ManagementIngredientsLazyRoute = ManagementIngredientsLazyImport.update({
@@ -153,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagementIngredientsLazyImport
       parentRoute: typeof ManagementImport
     }
+    '/management/kitchenware': {
+      id: '/management/kitchenware'
+      path: '/kitchenware'
+      fullPath: '/management/kitchenware'
+      preLoaderRoute: typeof ManagementKitchenwareLazyImport
+      parentRoute: typeof ManagementImport
+    }
     '/management/units': {
       id: '/management/units'
       path: '/units'
@@ -215,12 +233,14 @@ const MainLayoutRouteWithChildren = MainLayoutRoute._addFileChildren(
 
 interface ManagementRouteChildren {
   ManagementIngredientsLazyRoute: typeof ManagementIngredientsLazyRoute
+  ManagementKitchenwareLazyRoute: typeof ManagementKitchenwareLazyRoute
   ManagementUnitsLazyRoute: typeof ManagementUnitsLazyRoute
   ManagementIndexLazyRoute: typeof ManagementIndexLazyRoute
 }
 
 const ManagementRouteChildren: ManagementRouteChildren = {
   ManagementIngredientsLazyRoute: ManagementIngredientsLazyRoute,
+  ManagementKitchenwareLazyRoute: ManagementKitchenwareLazyRoute,
   ManagementUnitsLazyRoute: ManagementUnitsLazyRoute,
   ManagementIndexLazyRoute: ManagementIndexLazyRoute,
 }
@@ -236,6 +256,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof MainLayoutProfileRoute
   '/plans': typeof MainLayoutPlansLazyRoute
   '/management/ingredients': typeof ManagementIngredientsLazyRoute
+  '/management/kitchenware': typeof ManagementKitchenwareLazyRoute
   '/management/units': typeof ManagementUnitsLazyRoute
   '/': typeof MainLayoutIndexLazyRoute
   '/management/': typeof ManagementIndexLazyRoute
@@ -248,6 +269,7 @@ export interface FileRoutesByTo {
   '/profile': typeof MainLayoutProfileRoute
   '/plans': typeof MainLayoutPlansLazyRoute
   '/management/ingredients': typeof ManagementIngredientsLazyRoute
+  '/management/kitchenware': typeof ManagementKitchenwareLazyRoute
   '/management/units': typeof ManagementUnitsLazyRoute
   '/': typeof MainLayoutIndexLazyRoute
   '/management': typeof ManagementIndexLazyRoute
@@ -263,6 +285,7 @@ export interface FileRoutesById {
   '/_mainLayout/profile': typeof MainLayoutProfileRoute
   '/_mainLayout/plans': typeof MainLayoutPlansLazyRoute
   '/management/ingredients': typeof ManagementIngredientsLazyRoute
+  '/management/kitchenware': typeof ManagementKitchenwareLazyRoute
   '/management/units': typeof ManagementUnitsLazyRoute
   '/_mainLayout/': typeof MainLayoutIndexLazyRoute
   '/management/': typeof ManagementIndexLazyRoute
@@ -279,6 +302,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/plans'
     | '/management/ingredients'
+    | '/management/kitchenware'
     | '/management/units'
     | '/'
     | '/management/'
@@ -290,6 +314,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/plans'
     | '/management/ingredients'
+    | '/management/kitchenware'
     | '/management/units'
     | '/'
     | '/management'
@@ -303,6 +328,7 @@ export interface FileRouteTypes {
     | '/_mainLayout/profile'
     | '/_mainLayout/plans'
     | '/management/ingredients'
+    | '/management/kitchenware'
     | '/management/units'
     | '/_mainLayout/'
     | '/management/'
@@ -355,6 +381,7 @@ export const routeTree = rootRoute
       "filePath": "management.tsx",
       "children": [
         "/management/ingredients",
+        "/management/kitchenware",
         "/management/units",
         "/management/"
       ]
@@ -369,6 +396,10 @@ export const routeTree = rootRoute
     },
     "/management/ingredients": {
       "filePath": "management/ingredients.lazy.tsx",
+      "parent": "/management"
+    },
+    "/management/kitchenware": {
+      "filePath": "management/kitchenware.lazy.tsx",
       "parent": "/management"
     },
     "/management/units": {

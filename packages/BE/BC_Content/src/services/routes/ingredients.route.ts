@@ -4,13 +4,13 @@ import Container, { Service } from "typedi";
 
 import { IIngredientApplication } from "@application/commands/ingredients/IIngredientApplication";
 import { IngredientApplication } from "@application/commands/ingredients/IngredientApplication";
+import { IIngredientQueries, IngredientQueries } from "@application/queries/ingredients/IIngredientQueries";
 import {
   IngredientCreateRequest,
   IngredientEditRequest,
   IngredientMergeRequest,
   IngredientsListResponse,
 } from "@dtos/index";
-import { IIngredientQueries, IngredientQueries } from "@infrastructure/ingredients/queries";
 
 /**
  * @openapi

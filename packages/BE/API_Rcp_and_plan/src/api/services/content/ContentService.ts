@@ -3,6 +3,10 @@ import {
   IngredientEditRequest,
   IngredientMergeRequest,
   IngredientsListResponse,
+  KitchenwareCreateRequest,
+  KitchenwareEditRequest,
+  KitchenwareListResponse,
+  KitchenwareMergeRequest,
   RecipeCreateRequest,
   RecipeCreateStepsRequest,
   RecipeDailyResponse,
@@ -102,6 +106,29 @@ export class ContentService {
 
   public mergeIngredients(request: IngredientMergeRequest, headers: IncomingHttpHeaders) {
     return this._client.post("/ingredients/merge", request, { headers: propagateHeaders(headers) });
+  }
+  //#endregion
+
+  //#region Kitchenware
+
+  public getKitchenware(headers: IncomingHttpHeaders) {
+    return this._client.get<KitchenwareListResponse>("/kitchenware", { headers: propagateHeaders(headers) });
+  }
+
+  public createKitchenware(request: KitchenwareCreateRequest, headers: IncomingHttpHeaders) {
+    return this._client.post("/kitchenware", request, { headers: propagateHeaders(headers) });
+  }
+
+  public editKitchenware(request: KitchenwareEditRequest, headers: IncomingHttpHeaders) {
+    return this._client.put("/kitchenware", request, { headers: propagateHeaders(headers) });
+  }
+
+  public deleteKitchenware(id: string, headers: IncomingHttpHeaders) {
+    return this._client.delete(`/kitchenware/${id}`, { headers: propagateHeaders(headers) });
+  }
+
+  public mergeKitchenware(request: KitchenwareMergeRequest, headers: IncomingHttpHeaders) {
+    return this._client.post("/kitchenware/merge", request, { headers: propagateHeaders(headers) });
   }
   //#endregion
 }

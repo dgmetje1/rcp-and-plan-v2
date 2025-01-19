@@ -30,7 +30,8 @@
       "management_title": "Gestión",
       "management": "Home",
       "units": "Units",
-      "ingredients": "Ingredients"
+      "ingredients": "Ingredients",
+      "kitchenware": "Kitchenware"
     }
   },
   "pages": {
@@ -66,6 +67,31 @@
         },
         "form": {
           "button": "Create new ingredient",
+          "fields": {
+            "name": "Name",
+            "singular_name": "Singular name"
+          }
+        },
+        "table": {
+          "id": "ID",
+          "name": "Name",
+          "singular_name": "Singular name",
+          "translated": "Translated"
+        }
+      },
+      "kitchenware": {
+        "modals": {
+          "confirm_delete": {
+            "title": "Do you want to delete this tool?",
+            "description": "Deleting this tool may lead some recipes to be incomplete. <br/>Do you want to proceed?",
+            "button_text": "Confirm"
+          },
+          "merge": {
+            "title": "Merge kitchenware"
+          }
+        },
+        "form": {
+          "button": "Create new tool",
           "fields": {
             "name": "Name",
             "singular_name": "Singular name"

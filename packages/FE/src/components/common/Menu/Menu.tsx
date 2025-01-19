@@ -44,6 +44,9 @@ const Menu = forwardRef<HTMLDivElement, PropsWithChildren<MenuProps>>(
           <Link onClick={toggleMenu(false)} to="/management/ingredients">
             {t("menu.sidebar.ingredients")}
           </Link>
+          <Link onClick={toggleMenu(false)} to="/management/kitchenware">
+            {t("menu.sidebar.kitchenware")}
+          </Link>
         </>
       ),
       [t, toggleMenu],

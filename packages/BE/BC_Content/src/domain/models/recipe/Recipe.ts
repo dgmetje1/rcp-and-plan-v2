@@ -298,4 +298,16 @@ export class Recipe extends AggregateRoot {
 
     return [oldRecipeIngredient, newRecipeIngredient];
   }
+
+  public replaceKitchenware(oldTool: Kitchenware, newTool: Kitchenware) {
+    const toolIndex = this._kitchenware.findIndex(tool => tool.kitchenware.id.equals(oldTool.id));
+    if (toolIndex < 0) throw new InvalidParameterError("Unexpected ingredient to replace", Recipe.entityName);
+
+    const oldRecipeKitchenware = this._kitchenware[toolIndex];
+    const newRecipeKitchenware = RecipeKitchenware.create(newTool, oldRecipeKitchenware.quantity);
+
+    this._kitchenware.splice(toolIndex, 1, newRecipeKitchenware);
+
+    return [oldRecipeKitchenware, newRecipeKitchenware];
+  }
 }
