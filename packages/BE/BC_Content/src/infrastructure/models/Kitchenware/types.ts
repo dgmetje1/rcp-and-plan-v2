@@ -10,4 +10,4 @@ export interface KitchenwareAttributes {
   recipes: Recipe[];
 }
 
-export interface KitchenwareCreationAttributes extends Optional<KitchenwareAttributes, "id"> {}
+export interface KitchenwareCreationAttributes extends Optional<KitchenwareAttributes, "id" | "recipes"> {}

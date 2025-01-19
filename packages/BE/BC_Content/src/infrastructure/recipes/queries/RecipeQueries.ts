@@ -11,7 +11,7 @@ import { RecipeDailyResponse } from "@dtos/responses/RecipeDailyResponse";
 import { RecipeResponse } from "@dtos/responses/RecipeResponse";
 import { RecipesListResponse } from "@dtos/responses/RecipesListResponse";
 import { DEFAULT_LANGUAGE, Languages } from "@global_types/languages";
-import { Category, Recipe, RecipeIngredient } from "@infrastructure/models";
+import { Category, Recipe, RecipeIngredient, RecipeKitchenware } from "@infrastructure/models";
 import { Ingredient } from "@infrastructure/models/Ingredient";
 import { Kitchenware } from "@infrastructure/models/Kitchenware";
 import { RecipePublication } from "@infrastructure/models/Recipe";
@@ -100,6 +100,15 @@ export class RecipeQueries implements IRecipeQueries {
     const results = await RecipeIngredient.findAll({
       attributes: ["recipe_id"],
       where: { ingredient_id: id },
+    });
+
+    return await Promise.all(results.map(({ dataValues: { recipe_id: id } }) => this.getEntity(id)));
+  }
+
+  public async getEntitiesContainingKitchenware(id: string) {
+    const results = await RecipeKitchenware.findAll({
+      attributes: ["recipe_id"],
+      where: { tool_id: id },
     });
 
     return await Promise.all(results.map(({ dataValues: { recipe_id: id } }) => this.getEntity(id)));

@@ -23,10 +23,17 @@ export interface IRecipeQueries {
 
   /**
    * Gets the Recipes that contains the ingredient identified by id
-   * @param id Recipe identifier
+   * @param id Ingredient identifier
    * @returns Recipe entities
    */
   getEntitiesContainingIngredient: (id: string) => Promise<Array<Recipe>>;
+
+  /**
+   * Gets the Recipes that contains the tool identified by id
+   * @param id Tool identifier
+   * @returns Recipe entities
+   */
+  getEntitiesContainingKitchenware: (id: string) => Promise<Array<Recipe>>;
 
   /**
    * Gets the recipes list matching the params specified

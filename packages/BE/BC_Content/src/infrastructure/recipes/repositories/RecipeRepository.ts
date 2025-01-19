@@ -76,6 +76,17 @@ export class RecipeRepository implements IRecipeRepository {
   }
 
   /**
+   * @inheritdoc
+   */
+  public replaceKitchenware(
+    entity: Recipe,
+    oldKitchenware: RecipeKitchenware,
+    newKitchenware: RecipeKitchenware,
+  ): void {
+    this._context.addCommand(t => this.replaceRecipeKitchenware(t, entity, oldKitchenware, newKitchenware), entity);
+  }
+
+  /**
    * Inserts a new recipe into the database.
    *
    * @param id The ID of the recipe.
@@ -188,8 +199,8 @@ export class RecipeRepository implements IRecipeRepository {
    * Replaces a recipe ingredient from the database.
    *
    * @param entity The Recipe entity to which the ingredient belongs.
-   * @param oldRecipeIngredient The RecipeIngredient object representing the ingredient to be deleted.
-   * @param newRecipeIngredient The RecipeIngredient object representing the ingredient to be deleted.
+   * @param oldRecipeIngredient The RecipeIngredient object representing the ingredient to be replaced.
+   * @param newRecipeIngredient The RecipeIngredient object representing the ingredient to replace.
    */
   private async replaceRecipeIngredient(
     t: Transaction,
@@ -201,6 +212,28 @@ export class RecipeRepository implements IRecipeRepository {
       { ingredient_id: newRecipeIngredient.ingredient.id.toString() },
       {
         where: { recipe_id: entity.id.toString(), ingredient_id: oldRecipeIngredient.ingredient.id.toString() },
+        transaction: t,
+      },
+    );
+  }
+
+  /**
+   * Replaces a recipe kitchenware from the database.
+   *
+   * @param entity The Recipe entity to which the kitchenware belongs.
+   * @param oldRecipeTool The RecipeKitchenware object representing the kitchenware to be replaced.
+   * @param newRecipeTool The RecipeKitchenware object representing the kitchenware to be replace.
+   */
+  private async replaceRecipeKitchenware(
+    t: Transaction,
+    entity: Recipe,
+    oldRecipeTool: RecipeKitchenware,
+    newRecipeTool: RecipeKitchenware,
+  ) {
+    await RecipeKitchenwareDB.update(
+      { tool_id: newRecipeTool.kitchenware.id.toString() },
+      {
+        where: { recipe_id: entity.id.toString(), tool_id: oldRecipeTool.kitchenware.id.toString() },
         transaction: t,
       },
     );

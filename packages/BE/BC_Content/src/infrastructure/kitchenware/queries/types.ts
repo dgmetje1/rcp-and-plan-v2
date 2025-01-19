@@ -1,4 +1,5 @@
 import { Kitchenware } from "@domain/models/kitchenware/Kitchenware";
+import { KitchenwareListResponse } from "@dtos/index";
 
 export interface IKitchenwareQueries {
   /**
@@ -6,4 +7,6 @@ export interface IKitchenwareQueries {
    * @param id Entity identifier
    */
   getEntity(id: string): Promise<Kitchenware>;
+
+  getData(): Promise<KitchenwareListResponse>;
 }
