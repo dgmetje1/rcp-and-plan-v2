@@ -96,6 +96,15 @@ export class RecipeQueries implements IRecipeQueries {
     );
   }
 
+  public async getEntitiesContainingIngredient(id: string) {
+    const results = await RecipeIngredient.findAll({
+      attributes: ["recipe_id"],
+      where: { ingredient_id: id },
+    });
+
+    return await Promise.all(results.map(({ dataValues: { recipe_id: id } }) => this.getEntity(id)));
+  }
+
   /**
    *  @inheritdoc
    */

@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { Api } from "@/lib/api";
 import { useApiMutation } from "@/middleware/api";
-import { Ingredient, IngredientCreateDTO, IngredientEditDTO } from "@/types/ingredients";
+import { Ingredient, IngredientCreateDTO, IngredientEditDTO, IngredientMergeDTO } from "@/types/ingredients";
 
 import { getIngredientsKeys } from "./keys";
 
@@ -50,6 +50,23 @@ export const useDeleteIngredient = () => {
   };
 
   return useApiMutation("", deleteIngredient, {
+    onSuccess: () => {
+      const { queryKey } = getIngredientsKeys();
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
+};
+
+export const useMergeIngredients = () => {
+  const queryClient = useQueryClient();
+  const mergeIngredients = async (data: IngredientMergeDTO) => {
+    const api = new Api();
+    const response = await api.post("ingredients/merge", data);
+
+    return response;
+  };
+
+  return useApiMutation("", mergeIngredients, {
     onSuccess: () => {
       const { queryKey } = getIngredientsKeys();
       queryClient.invalidateQueries({ queryKey });

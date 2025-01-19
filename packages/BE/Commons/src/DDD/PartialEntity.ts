@@ -7,6 +7,6 @@ export class PartialEntity extends Entity {
   }
 
   public get id() {
-    return this._id.toString();
+    return this._id;
   }
 }

@@ -1,4 +1,4 @@
-import { IngredientCreateRequest, IngredientEditRequest } from "@dtos/index";
+import { IngredientCreateRequest, IngredientEditRequest, IngredientMergeRequest } from "@dtos/index";
 
 export interface IIngredientApplication {
   /**
@@ -18,4 +18,10 @@ export interface IIngredientApplication {
    * @param id Ingredient identifier
    */
   deleteIngredient(id: string): Promise<void>;
+
+  /**
+   * Merges the ingredients into the target
+   * @param request Data to merge the Ingredients
+   */
+  mergeIngredients(request: IngredientMergeRequest): Promise<void>;
 }

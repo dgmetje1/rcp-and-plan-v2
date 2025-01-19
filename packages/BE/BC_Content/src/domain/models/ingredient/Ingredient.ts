@@ -9,6 +9,7 @@ import {
 import { TranslatableContent } from "@domain/shared/TranslatableContent";
 import { AvailableLanguages, DEFAULT_LANGUAGE, Languages } from "@global_types/languages";
 
+import { IngredientMergedDomainEvent } from "./events/IngredientMergedDomainEvent";
 import { IngredientContent, IngredientTranslatableContent } from "./types";
 
 export class Ingredient extends AggregateRoot {
@@ -76,6 +77,19 @@ export class Ingredient extends AggregateRoot {
    * Deletes the Ingredient.
    */
   public delete() {}
+
+  public merge(otherIngredient: Ingredient) {
+    const currentLanguages = [...this._content.keys()];
+    otherIngredient.content.forEach((value, key) => {
+      if (!this._content.has(key)) {
+        this._content.set(key, value);
+      }
+    });
+
+    this.addDomainEvent(new IngredientMergedDomainEvent(this.id, this, otherIngredient));
+
+    return currentLanguages;
+  }
 
   private _setContent(content: IngredientContent) {
     content.forEach(({ language, name, singularName }) => {

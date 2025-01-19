@@ -1,20 +1,21 @@
-import { ensureThat, InvalidParameterError, TranslationsNotFoundError } from "@rcp-and-plan/commons";
+import {
+  AggregateRoot,
+  ensureThat,
+  InvalidParameterError,
+  TranslationsNotFoundError,
+  UniqueEntityID,
+} from "@rcp-and-plan/commons";
 
 import { TranslatableContent } from "@domain/shared/TranslatableContent";
 import { AvailableLanguages, DEFAULT_LANGUAGE, Languages } from "@global_types/languages";
 
 import { KitchenwareTranslatableContent } from "./types";
 
-export class Kitchenware {
-  private _id: string;
+export class Kitchenware extends AggregateRoot {
   private _content: TranslatableContent<KitchenwareTranslatableContent>;
 
-  public get id() {
-    return this._id;
-  }
-
   private constructor(id: string, content: { language: string; name: string; singularName: string }[]) {
-    this._id = id;
+    super(new UniqueEntityID(id));
     this._content = new Map();
 
     content.forEach(({ language, name, singularName }) => {

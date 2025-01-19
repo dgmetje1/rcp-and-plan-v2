@@ -44,4 +44,11 @@ export interface IRecipeRepository {
    * @param ingredient Ingredient aggregate
    */
   removeIngredient(entity: Recipe, ingredient: RecipeIngredient): void;
+
+  /**
+   * Requests a replace for the an ingredient entry to the recipe entity
+   * @param entity Recipe domain entity
+   * @param ingredient Ingredient aggregate
+   */
+  replaceIngredient(entity: Recipe, oldIngredient: RecipeIngredient, newIngredient: RecipeIngredient): void;
 }

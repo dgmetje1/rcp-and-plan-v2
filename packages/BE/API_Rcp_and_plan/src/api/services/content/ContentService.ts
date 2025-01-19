@@ -1,6 +1,7 @@
 import {
   IngredientCreateRequest,
   IngredientEditRequest,
+  IngredientMergeRequest,
   IngredientsListResponse,
   RecipeCreateRequest,
   RecipeCreateStepsRequest,
@@ -97,6 +98,10 @@ export class ContentService {
 
   public deleteIngredient(id: string, headers: IncomingHttpHeaders) {
     return this._client.delete(`/ingredients/${id}`, { headers: propagateHeaders(headers) });
+  }
+
+  public mergeIngredients(request: IngredientMergeRequest, headers: IncomingHttpHeaders) {
+    return this._client.post("/ingredients/merge", request, { headers: propagateHeaders(headers) });
   }
   //#endregion
 }
