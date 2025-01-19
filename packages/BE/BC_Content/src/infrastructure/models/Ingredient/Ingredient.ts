@@ -5,7 +5,7 @@ import { Recipe } from "../Recipe";
 import { RecipeIngredient } from "../RecipeIngredient";
 import { IngredientAttributes, IngredientCreationAttributes } from "./types";
 
-@Table({ tableName: "ingredients" })
+@Table({ tableName: "ingredients", paranoid: true })
 export class Ingredient extends Model<IngredientAttributes, IngredientCreationAttributes> {
   @PrimaryKey
   @Column(DataTypes.STRING)

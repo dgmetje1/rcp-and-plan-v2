@@ -6,8 +6,7 @@ import Container, { Service } from "typedi";
 import checkAuthentication from "@api/middleware/auth";
 import { userMiddleware } from "@api/middleware/user";
 import { ContentService } from "@api/services/content";
-import { IngredientCreateEntry } from "@dtos/entries/ingredients/IngredientCreateEntry";
-import { IngredientEditEntry } from "@dtos/entries/ingredients/IngredientEditEntry";
+import { IngredientCreateEntry, IngredientEditEntry, IngredientMergeEntry } from "@dtos/entries";
 import { IngredientsListOutput } from "@dtos/outputs";
 
 /**
@@ -31,6 +30,15 @@ import { IngredientsListOutput } from "@dtos/outputs";
  *           type: object
  *           additionalProperties:
  *             $ref: '#/components/schemas/IngredientContentEntry'
+ *     IngredientMergeEntry:
+ *       type: object
+ *       properties:
+ *         targetId:
+ *           type: string
+ *         ingredientIds:
+ *           type: array
+ *           items:
+ *             type: string
  *     IngredientEditEntry:
  *       type: object
  *       properties:
@@ -85,6 +93,7 @@ class IngredientsRouter {
     this.router.post("/", checkAuthentication, userMiddleware, this.createIngredient);
     this.router.put("/", checkAuthentication, userMiddleware, this.editIngredient);
     this.router.delete("/:id", checkAuthentication, userMiddleware, this.deleteIngredient);
+    this.router.post("/merge", checkAuthentication, userMiddleware, this.mergeIngredients);
   }
 
   /**
@@ -230,6 +239,55 @@ class IngredientsRouter {
     try {
       const contentService = Container.get<ContentService>(ContentService);
       await contentService.deleteIngredient(req.params.id, req.headers);
+
+      res.status(204).send();
+    } catch (err) {
+      const errorData = (err as AxiosError<ExceptionErrorResponse | object>)?.response?.data;
+      if (errorData && "type" in errorData && errorData.type === InvalidParameterErrorType) {
+        const typedErrorData = errorData as ExceptionErrorResponse;
+        return res.status(400).send({
+          type: InvalidParameterErrorType,
+          exceptionMessage: typedErrorData.exceptionMessage,
+          params: typedErrorData.params,
+        });
+      }
+      next(err);
+    }
+  }
+
+  /**
+   * @openapi
+   * /ingredients/merge:
+   *   post:
+   *     summary: Merges two or more ingredients.
+   *     tags: [Ingredients]
+   *     security:
+   *       - bearerAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/IngredientMergeEntry'
+   *     responses:
+   *       204:
+   *         description: Ingredients merged
+   *       400:
+   *         description: Error in request fields
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Exception'
+   */
+
+  private async mergeIngredients(
+    req: Request<unknown, unknown, IngredientMergeEntry>,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const contentService = Container.get<ContentService>(ContentService);
+      await contentService.mergeIngredients(req.body, req.headers);
 
       res.status(204).send();
     } catch (err) {

@@ -273,8 +273,29 @@ export class Recipe extends AggregateRoot {
   }
 
   public removeIngredient(ingredientId: string) {
-    const ingrdientIndex = this._ingredients.findIndex(ingredient => ingredient.ingredient.id === ingredientId);
-    if (ingrdientIndex < 0) throw new InvalidParameterError("Unexpected ingredient to remove", Recipe.entityName);
-    return this._ingredients[ingrdientIndex];
+    const ingredientIndex = this._ingredients.findIndex(
+      ingredient => ingredient.ingredient.id.toString() === ingredientId,
+    );
+    if (ingredientIndex < 0) throw new InvalidParameterError("Unexpected ingredient to remove", Recipe.entityName);
+    return this._ingredients[ingredientIndex];
+  }
+
+  public replaceIngredient(oldIngredient: Ingredient, newIngredient: Ingredient) {
+    const ingredientIndex = this._ingredients.findIndex(ingredient =>
+      ingredient.ingredient.id.equals(oldIngredient.id),
+    );
+    if (ingredientIndex < 0) throw new InvalidParameterError("Unexpected ingredient to replace", Recipe.entityName);
+
+    const oldRecipeIngredient = this._ingredients[ingredientIndex];
+    const newRecipeIngredient = RecipeIngredient.create(
+      newIngredient,
+      oldRecipeIngredient.unit,
+      oldRecipeIngredient.quantity,
+      oldRecipeIngredient.isOptional,
+    );
+
+    this._ingredients.splice(ingredientIndex, 1, newRecipeIngredient);
+
+    return [oldRecipeIngredient, newRecipeIngredient];
   }
 }

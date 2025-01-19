@@ -1,5 +1,6 @@
 export * from "./requests/ingredients/IngredientCreateRequest";
 export * from "./requests/ingredients/IngredientEditRequest";
+export * from "./requests/ingredients/IngredientMergeRequest";
 export * from "./requests/RecipeCreateRequest";
 export * from "./requests/RecipeCreateStepRequest";
 export * from "./requests/RecipeIngredientRequest";

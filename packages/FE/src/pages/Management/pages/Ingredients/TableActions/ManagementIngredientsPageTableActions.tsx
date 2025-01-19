@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { MoreVert } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 import {
   DropdownMenu,
@@ -9,14 +10,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useManagementItemsPageContext } from "../../../context/ManagementItemsPage";
+import { useManagementIngredientsPageContext } from "../Context";
 import { ManagementIngredientsPageTableActionsProps } from "./types";
 
 const ManagementIngredientsPageTableActions = ({ id }: ManagementIngredientsPageTableActionsProps) => {
+  const { t } = useTranslation();
   const {
     setSelectedItem: setSelectedIngredient,
     toggleFormOpen,
     toggleConfirmModalOpen,
   } = useManagementItemsPageContext();
+  const { toggleMergeModalOpen } = useManagementIngredientsPageContext();
 
   const onEditClicked = useCallback(() => {
     setSelectedIngredient(id);
@@ -30,6 +34,12 @@ const ManagementIngredientsPageTableActions = ({ id }: ManagementIngredientsPage
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  const onMergeClicked = useCallback(() => {
+    setSelectedIngredient(id);
+    toggleMergeModalOpen();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
   return (
     <DropdownMenu>
       <div className="flex justify-end">
@@ -38,8 +48,9 @@ const ManagementIngredientsPageTableActions = ({ id }: ManagementIngredientsPage
         </DropdownMenuTrigger>
       </div>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={onEditClicked}>Edit</DropdownMenuItem>
-        <DropdownMenuItem onClick={onDeleteClicked}>Delete</DropdownMenuItem>
+        <DropdownMenuItem onClick={onEditClicked}>{t("common.buttons.edit")}</DropdownMenuItem>
+        <DropdownMenuItem onClick={onDeleteClicked}>{t("common.buttons.delete")}</DropdownMenuItem>
+        <DropdownMenuItem onClick={onMergeClicked}>{t("common.buttons.merge")}</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -69,6 +69,13 @@ export class RecipeRepository implements IRecipeRepository {
   }
 
   /**
+   * @inheritdoc
+   */
+  public replaceIngredient(entity: Recipe, oldIngredient: RecipeIngredient, newIngredient: RecipeIngredient): void {
+    this._context.addCommand(t => this.replaceRecipeIngredient(t, entity, oldIngredient, newIngredient), entity);
+  }
+
+  /**
    * Inserts a new recipe into the database.
    *
    * @param id The ID of the recipe.
@@ -136,7 +143,7 @@ export class RecipeRepository implements IRecipeRepository {
   private async insertRecipeKitchenware(t: Transaction, entity: Recipe, recipeKitchenware: RecipeKitchenware) {
     await RecipeKitchenwareDB.create(
       {
-        tool_id: recipeKitchenware.kitchenware.id,
+        tool_id: recipeKitchenware.kitchenware.id.toString(),
         quantity: recipeKitchenware.quantity,
         recipe_id: entity.id.toValue() as string,
       },
@@ -175,5 +182,27 @@ export class RecipeRepository implements IRecipeRepository {
       where: { recipe_id: entity.id.toString(), ingredient_id: recipeIngredient.ingredient.id.toString() },
       transaction: t,
     });
+  }
+
+  /**
+   * Replaces a recipe ingredient from the database.
+   *
+   * @param entity The Recipe entity to which the ingredient belongs.
+   * @param oldRecipeIngredient The RecipeIngredient object representing the ingredient to be deleted.
+   * @param newRecipeIngredient The RecipeIngredient object representing the ingredient to be deleted.
+   */
+  private async replaceRecipeIngredient(
+    t: Transaction,
+    entity: Recipe,
+    oldRecipeIngredient: RecipeIngredient,
+    newRecipeIngredient: RecipeIngredient,
+  ) {
+    await RecipeIngredientDB.update(
+      { ingredient_id: newRecipeIngredient.ingredient.id.toString() },
+      {
+        where: { recipe_id: entity.id.toString(), ingredient_id: oldRecipeIngredient.ingredient.id.toString() },
+        transaction: t,
+      },
+    );
   }
 }
