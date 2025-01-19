@@ -7,9 +7,9 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@rcp-and-plan/commons": "workspace:*",
+    "mysql2": "^3.12.0",
     "sequelize": "^6.37.1",
-    "sequelize-typescript": "^2.1.6",
-    "mysql2": "^3.9.3"
+    "sequelize-typescript": "^2.1.6"
   },
   "scripts": {
     "start": "pnpm run build && pnpm run generate-swagger && node dist/services/index.js",
